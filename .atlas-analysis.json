@@ -1,0 +1,195 @@
+{
+  "projectType": "frontend",
+  "projectName": "coss ui",
+  "projectDescription": "A modern, accessible React UI component library built on Base UI primitives and styled with Tailwind CSS, featuring copy-paste components, particles, and API-enhanced atoms.",
+  "theme": "willow",
+  "primaryColor": "#7bd2dc",
+  "lightColor": "#69696a",
+  "darkColor": "#d9e0e1",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "get-started",
+              "styling",
+              "roadmap"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/contributing",
+              "guides/radix-migration",
+              "guides/llm-usage"
+            ]
+          },
+          {
+            "group": "Hooks",
+            "pages": [
+              "hooks/use-copy-to-clipboard",
+              "hooks/use-media-query"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Components",
+        "groups": [
+          {
+            "group": "Layout",
+            "pages": [
+              "components/card",
+              "components/separator",
+              "components/scroll-area",
+              "components/frame"
+            ]
+          },
+          {
+            "group": "Typography & Display",
+            "pages": [
+              "components/badge",
+              "components/avatar",
+              "components/skeleton",
+              "components/spinner"
+            ]
+          },
+          {
+            "group": "Inputs & Forms",
+            "pages": [
+              "components/button",
+              "components/input",
+              "components/input-group",
+              "components/textarea",
+              "components/checkbox",
+              "components/checkbox-group",
+              "components/radio-group",
+              "components/switch",
+              "components/select",
+              "components/slider",
+              "components/number-field",
+              "components/label",
+              "components/field",
+              "components/fieldset",
+              "components/form"
+            ]
+          },
+          {
+            "group": "Overlays & Popups",
+            "pages": [
+              "components/dialog",
+              "components/alert-dialog",
+              "components/sheet",
+              "components/popover",
+              "components/tooltip",
+              "components/menu",
+              "components/preview-card",
+              "components/toast"
+            ]
+          },
+          {
+            "group": "Navigation",
+            "pages": [
+              "components/tabs",
+              "components/breadcrumb",
+              "components/pagination",
+              "components/toolbar",
+              "components/toggle",
+              "components/toggle-group",
+              "components/group"
+            ]
+          },
+          {
+            "group": "Data Display",
+            "pages": [
+              "components/table",
+              "components/accordion",
+              "components/collapsible",
+              "components/alert",
+              "components/progress",
+              "components/meter",
+              "components/empty"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": [
+              "components/autocomplete",
+              "components/combobox",
+              "components/command",
+              "components/calendar",
+              "components/date-picker",
+              "components/kbd"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Particles",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "particles/overview"
+            ]
+          },
+          {
+            "group": "Buttons",
+            "pages": [
+              "particles/buttons"
+            ]
+          },
+          {
+            "group": "Inputs",
+            "pages": [
+              "particles/inputs"
+            ]
+          },
+          {
+            "group": "Forms",
+            "pages": [
+              "particles/forms"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "50+ accessible UI primitives built on Base UI",
+    "Copy-paste component philosophy — own your code",
+    "Pre-assembled Particles for common UI patterns",
+    "API-enhanced Atoms for external integrations",
+    "Tailwind CSS v4 styling with semantic color tokens",
+    "shadcn CLI support for easy installation",
+    "Migration guide from Radix UI / shadcn/ui",
+    "AI-friendly documentation with llms.txt",
+    "Production-tested patterns from Cal.com",
+    "Full TypeScript support"
+  ],
+  "publicApiSurface": [
+    "@coss/ui/components/button",
+    "@coss/ui/components/input",
+    "@coss/ui/components/dialog",
+    "@coss/ui/components/menu",
+    "@coss/ui/components/select",
+    "@coss/ui/components/tabs",
+    "@coss/ui/components/table",
+    "@coss/ui/components/form",
+    "@coss/ui/components/card",
+    "@coss/ui/components/avatar",
+    "@coss/ui/components/badge",
+    "@coss/ui/components/toast",
+    "@coss/ui/components/tooltip",
+    "@coss/ui/hooks/use-copy-to-clipboard",
+    "@coss/ui/hooks/use-media-query",
+    "@coss/ui/base-ui/use-render",
+    "@coss/ui/base-ui/merge-props",
+    "npx shadcn@latest init @coss/style",
+    "npx shadcn@latest add @coss/ui"
+  ]
+}
