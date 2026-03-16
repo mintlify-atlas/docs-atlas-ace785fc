@@ -1,0 +1,144 @@
+---
+title: Skeleton
+description: An animated placeholder that mimics content layout during loading states.
+---
+
+## Overview
+
+`Skeleton` is a lightweight `<div>` with a shimmer animation that you use to represent content that is still loading. Place it in the same position and approximate size as the real content to reduce perceived load time and prevent layout shifts. Because it only adds a class and an animation, you control the shape entirely through Tailwind utilities.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/skeleton
+```
+
+## Basic usage
+
+```tsx
+import { Skeleton } from "@/components/ui/skeleton"
+
+export default function Example() {
+  return (
+    <div className="flex items-center gap-3">
+      <Skeleton className="size-10 rounded-full" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-3 w-24" />
+      </div>
+    </div>
+  )
+}
+```
+
+## Variants
+
+`Skeleton` has no CVA variants. Shape, size, and layout are entirely controlled via `className`.
+
+<Tabs>
+  <Tab title="Circle">
+    ```tsx
+    <Skeleton className="size-10 rounded-full" />
+    ```
+  </Tab>
+  <Tab title="Text line">
+    ```tsx
+    <Skeleton className="h-4 w-48" />
+    ```
+  </Tab>
+  <Tab title="Card block">
+    ```tsx
+    <Skeleton className="h-32 w-full rounded-2xl" />
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+`Skeleton` accepts all standard `<div>` props.
+
+<ParamField path="className" type="string">
+  CSS classes that define the skeleton's dimensions and shape. Use Tailwind `h-*`, `w-*`, `size-*`, and `rounded-*` utilities to match the content being loaded.
+</ParamField>
+
+## Examples
+
+### User card skeleton
+
+```tsx
+import { Skeleton } from "@/components/ui/skeleton"
+
+export function UserCardSkeleton() {
+  return (
+    <div className="flex items-center gap-4 rounded-2xl border p-4">
+      <Skeleton className="size-12 rounded-full" />
+      <div className="flex-1 space-y-2">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-3 w-24" />
+      </div>
+      <Skeleton className="h-8 w-20 rounded-md" />
+    </div>
+  )
+}
+```
+
+### Table row skeletons
+
+```tsx
+import { Skeleton } from "@/components/ui/skeleton"
+
+export function TableSkeleton() {
+  return (
+    <div className="space-y-2">
+      {Array.from({ length: 5 }, (_, i) => (
+        <div key={i} className="flex items-center gap-4">
+          <Skeleton className="h-4 w-4" />
+          <Skeleton className="h-4 flex-1" />
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+### Replacing a card when loading
+
+Render a skeleton tree that matches the real card's layout, then swap it out once data loads.
+
+```tsx
+import { Skeleton } from "@/components/ui/skeleton"
+import { Card, CardHeader, CardPanel, CardTitle, CardDescription } from "@/components/ui/card"
+
+export function ProfileCard({ isLoading, user }) {
+  if (isLoading) {
+    return (
+      <Card className="max-w-sm">
+        <CardHeader>
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-3 w-48" />
+        </CardHeader>
+        <CardPanel>
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="mt-2 h-4 w-3/4" />
+        </CardPanel>
+      </Card>
+    )
+  }
+
+  return (
+    <Card className="max-w-sm">
+      <CardHeader>
+        <CardTitle>{user.name}</CardTitle>
+        <CardDescription>{user.email}</CardDescription>
+      </CardHeader>
+      <CardPanel>{user.bio}</CardPanel>
+    </Card>
+  )
+}
+```
+
+<Note>
+  `Skeleton` is a custom component — it does not wrap a Base UI primitive. The shimmer effect uses a CSS gradient animation defined in the theme via `animate-skeleton`.
+</Note>

@@ -1,0 +1,118 @@
+---
+title: Label
+description: An accessible label that can wrap or be associated with a form control.
+---
+
+<ComponentPreview name="p-input-6" />
+
+## Overview
+
+`Label` is a thin wrapper built on Base UI's `useRender` hook. It renders a styled `<label>` element and can be swapped for any element via the `render` prop. When wrapping a form control (checkbox, radio, switch), it handles the label-control association automatically.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/label
+```
+
+## Basic usage
+
+```tsx
+import { Label } from "@/components/ui/label"
+```
+
+**Wrapping a control:**
+
+```tsx
+<Label>
+  <Checkbox />
+  Accept terms and conditions
+</Label>
+```
+
+**Associating via `htmlFor`:**
+
+```tsx
+<Label htmlFor="email">Email</Label>
+<Input id="email" type="email" />
+```
+
+## When to use `Label` vs `FieldLabel`
+
+| Component    | Use when                                                         |
+| ------------ | ---------------------------------------------------------------- |
+| `Label`      | Labelling checkboxes, radio buttons, and switches                |
+| `FieldLabel` | Labelling inputs, selects, and textareas inside a `Field`        |
+
+For inputs that need validation messages, prefer `FieldLabel` inside a `Field`. See [Field](/components/field).
+
+## Props
+
+<ParamField path="htmlFor" type="string">
+  Associates the label with an input by its `id`.
+</ParamField>
+
+<ParamField path="render" type="React.ReactElement">
+  Render the label as a different element.
+</ParamField>
+
+<ParamField path="...props" type="React.LabelHTMLAttributes<HTMLLabelElement>">
+  All standard `label` HTML attributes are supported.
+</ParamField>
+
+## Examples
+
+### With input
+
+```tsx
+import { useId } from "react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+export function EmailField() {
+  const id = useId()
+  return (
+    <div className="flex flex-col gap-2">
+      <Label htmlFor={id}>Email</Label>
+      <Input id={id} type="email" placeholder="your@email.com" />
+    </div>
+  )
+}
+```
+
+### With checkbox
+
+```tsx
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+
+<Label>
+  <Checkbox />
+  Accept terms and conditions
+</Label>
+```
+
+### With description text
+
+When additional description text sits outside the label, use `useId` to link the elements:
+
+```tsx
+import { useId } from "react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+
+export function TermsCheckbox() {
+  const id = useId()
+  return (
+    <div className="flex items-start gap-2">
+      <Checkbox id={id} />
+      <div className="flex flex-col gap-1">
+        <Label htmlFor={id}>Accept terms and conditions</Label>
+        <p className="text-muted-foreground text-xs">
+          By checking this box you agree to the terms of service.
+        </p>
+      </div>
+    </div>
+  )
+}
+```

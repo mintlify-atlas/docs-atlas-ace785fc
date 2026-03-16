@@ -1,0 +1,104 @@
+---
+title: Slider
+description: An input for selecting a numeric value within a range.
+---
+
+<ComponentPreview name="p-slider-1" />
+
+## Overview
+
+`Slider` wraps Base UI's `Slider` primitive family. It renders a draggable thumb (or multiple thumbs for range sliders) on a track, with a filled indicator showing the selected range.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/slider
+```
+
+## Basic usage
+
+```tsx
+import { Slider, SliderValue } from "@/components/ui/slider"
+```
+
+```tsx
+<Slider defaultValue={40} />
+```
+
+## Props
+
+### Slider
+
+<ParamField path="value" type="number | number[]">
+  Controlled value. Pass an array for a range slider.
+</ParamField>
+
+<ParamField path="defaultValue" type="number | number[]">
+  Initial value for uncontrolled usage. Pass an array for a range slider.
+</ParamField>
+
+<ParamField path="min" type="number">
+  Minimum value. Defaults to `0`.
+</ParamField>
+
+<ParamField path="max" type="number">
+  Maximum value. Defaults to `100`.
+</ParamField>
+
+<ParamField path="step" type="number">
+  Increment between valid values. Defaults to `1`.
+</ParamField>
+
+<ParamField path="orientation" type='"horizontal" | "vertical"'>
+  Slider orientation. Defaults to `"horizontal"`.
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: number | number[]) => void">
+  Callback fired as the value changes during drag.
+</ParamField>
+
+<ParamField path="onValueCommitted" type="(value: number | number[]) => void">
+  Callback fired when the user releases the thumb.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Prevents interaction and applies reduced opacity.
+</ParamField>
+
+<ParamField path="...props" type="SliderPrimitive.Root.Props">
+  All props from Base UI's `Slider.Root` are supported.
+</ParamField>
+
+### SliderValue
+
+Displays the current numeric value as text.
+
+<ParamField path="...props" type="SliderPrimitive.Value.Props">
+  All props from Base UI's `Slider.Value` are supported.
+</ParamField>
+
+<Note>
+  The component sets `thumbAlignment="edge"` internally, which pins thumbs to the edge of the track rather than centering them over it.
+</Note>
+
+## Examples
+
+For accessible labelling and validation, wrap sliders with the `Field` component. See the related example: [Slider field](/components/field#slider-field).
+
+### With label and value
+
+<ComponentPreview name="p-slider-2" />
+
+### Range slider
+
+Pass an array to `defaultValue` to create a slider with two thumbs.
+
+<ComponentPreview name="p-slider-3" />
+
+### Vertical
+
+<ComponentPreview name="p-slider-4" />
+
+### Form integration
+
+<ComponentPreview name="p-slider-5" />

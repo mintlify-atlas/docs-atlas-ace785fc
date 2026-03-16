@@ -1,0 +1,161 @@
+---
+title: Group
+description: A container that visually connects a series of related controls into a single unit.
+---
+
+## Overview
+
+Group merges adjacent controls (buttons, inputs, selects) into a visually connected strip by removing borders and rounding between them. Use it for compound actions, URL input prefixes, search bars with filters, and similar patterns.
+
+<Warning>
+  `GroupSeparator` is always required between every pair of controls. This applies to outline buttons as well.
+</Warning>
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/group
+```
+
+## Basic usage
+
+```tsx
+import { Button } from "@/components/ui/button"
+import { Group, GroupSeparator, GroupText } from "@/components/ui/group"
+```
+
+```tsx
+<Group aria-label="View controls">
+  <Button variant="outline">List</Button>
+  <GroupSeparator />
+  <Button variant="outline">Grid</Button>
+  <GroupSeparator />
+  <Button variant="outline">Table</Button>
+</Group>
+```
+
+## Sub-components
+
+### Group
+
+Container that applies connected-control styling to its children. Renders as a `<div role="group">`.
+
+<ParamField path="props.orientation" type="'horizontal' | 'vertical'" default="'horizontal'">
+  Determines whether controls are arranged side by side or stacked.
+</ParamField>
+
+<ParamField path="props.aria-label" type="string">
+  Accessible label for the group. Always provide this to describe the group's purpose to screen reader users.
+</ParamField>
+
+### GroupSeparator
+
+Divider between two controls in a group. Required between every adjacent pair of children.
+
+<ParamField path="props.orientation" type="'horizontal' | 'vertical'" default="'vertical'">
+  Orientation of the separator line.
+</ParamField>
+
+### GroupText
+
+A styled static text label inside a group. Use it for URL prefixes, unit labels, or other non-interactive annotations. Supports the `render` prop to change the underlying element.
+
+<ParamField path="props.render" type="React.ReactElement">
+  Render as a different element (e.g., `<Label>` for form accessibility).
+</ParamField>
+
+## Accessibility
+
+- `Group` has `role="group"` and should always have an `aria-label` or `aria-labelledby`.
+- Use `Tab` to navigate between controls inside a group.
+- `GroupSeparator` is `aria-hidden` and purely decorative.
+
+```tsx
+<Group aria-label="Pagination controls">
+  <Button variant="outline" aria-label="Previous page">
+    <ChevronLeftIcon aria-hidden="true" />
+  </Button>
+  <GroupSeparator />
+  <Button variant="outline" aria-label="Next page">
+    <ChevronRightIcon aria-hidden="true" />
+  </Button>
+</Group>
+```
+
+## Group vs ToggleGroup
+
+| Use case | Component |
+|---|---|
+| Controls that perform actions (submit, navigate) | `Group` |
+| Controls that toggle a persistent state (bold, view mode) | `ToggleGroup` |
+
+## Examples
+
+### With input prefix
+
+```tsx
+<Group aria-label="Domain input">
+  <GroupText>https://</GroupText>
+  <GroupSeparator />
+  <Input placeholder="example.com" type="text" />
+</Group>
+```
+
+### With labeled prefix
+
+Use `render` on `GroupText` to render it as a `<Label>` for screen readers:
+
+```tsx
+<Group aria-label="Domain">
+  <GroupText render={<Label htmlFor="domain" aria-label="Domain" />}>
+    https://
+  </GroupText>
+  <GroupSeparator />
+  <Input id="domain" placeholder="example.com" type="text" />
+</Group>
+```
+
+### Vertical group
+
+```tsx
+<Group orientation="vertical" aria-label="Text alignment">
+  <Button variant="outline">Top</Button>
+  <GroupSeparator orientation="horizontal" />
+  <Button variant="outline">Middle</Button>
+  <GroupSeparator orientation="horizontal" />
+  <Button variant="outline">Bottom</Button>
+</Group>
+```
+
+### Nested groups
+
+Nest groups to create complex layouts. Nested groups receive spacing automatically:
+
+```tsx
+<Group aria-label="Page navigation">
+  <Group>
+    <Button variant="outline">
+      <ChevronLeftIcon aria-hidden="true" />
+    </Button>
+    <GroupSeparator />
+    <Button variant="outline">
+      <ChevronRightIcon aria-hidden="true" />
+    </Button>
+  </Group>
+  <Group>
+    <Button variant="outline">Export</Button>
+    <GroupSeparator />
+    <Menu>
+      <MenuTrigger
+        render={<Button aria-label="More options" size="icon" variant="outline" />}
+      >
+        <ChevronDownIcon className="size-4" />
+      </MenuTrigger>
+      <MenuPopup align="end">
+        <MenuItem>Download CSV</MenuItem>
+        <MenuItem>Download PDF</MenuItem>
+      </MenuPopup>
+    </Menu>
+  </Group>
+</Group>
+```

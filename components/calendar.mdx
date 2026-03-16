@@ -1,0 +1,172 @@
+---
+title: Calendar
+description: A date picker calendar component built on react-day-picker with full keyboard navigation.
+---
+
+## Overview
+
+The Calendar component renders a full interactive month view for date selection. It is built on top of `react-day-picker` and supports single date, multiple date, and date range selection modes. Navigation arrows and optional dropdown menus allow users to jump between months and years.
+
+<Note>
+  Calendar is typically used as a building block inside the Date Picker pattern. See the [Date Picker](/components/date-picker) page for a complete example.
+</Note>
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/calendar
+```
+
+## Basic usage
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { Calendar } from "@/components/ui/calendar"
+
+export function CalendarDemo() {
+  const [date, setDate] = useState<Date | undefined>(new Date())
+
+  return (
+    <Calendar
+      mode="single"
+      selected={date}
+      onSelect={setDate}
+    />
+  )
+}
+```
+
+## Sub-components
+
+Calendar is a single component that wraps `DayPicker` from `react-day-picker`. All customization is done through props.
+
+## Props
+
+<ParamField path="mode" type="'single' | 'multiple' | 'range'" default="'single'">
+  Selection mode. `single` selects one date, `multiple` allows several independent dates, `range` selects a continuous span.
+</ParamField>
+
+<ParamField path="selected" type="Date | Date[] | DateRange | undefined">
+  The controlled selected date(s). Type depends on `mode`.
+</ParamField>
+
+<ParamField path="onSelect" type="(date: Date | Date[] | DateRange | undefined) => void">
+  Callback fired when the user selects or deselects a date.
+</ParamField>
+
+<ParamField path="defaultMonth" type="Date">
+  The month shown on initial render.
+</ParamField>
+
+<ParamField path="disabled" type="Date[] | ((date: Date) => boolean)">
+  Dates to disable. Accepts an array of specific dates or a predicate function.
+</ParamField>
+
+<ParamField path="showOutsideDays" type="boolean" default="true">
+  Whether to show days from the previous and next month.
+</ParamField>
+
+<ParamField path="captionLayout" type="'label' | 'dropdown' | 'dropdown-months' | 'dropdown-years'">
+  Navigation style. `dropdown` shows month and year selects for faster navigation.
+</ParamField>
+
+<ParamField path="numberOfMonths" type="number" default="1">
+  Number of months to display simultaneously.
+</ParamField>
+
+<ParamField path="fromYear" type="number">
+  Earliest year available in the dropdown navigation.
+</ParamField>
+
+<ParamField path="toYear" type="number">
+  Latest year available in the dropdown navigation.
+</ParamField>
+
+<ParamField path="classNames" type="Partial<ClassNames>">
+  Class name overrides for individual calendar elements. Merged with the defaults.
+</ParamField>
+
+<ParamField path="components" type="Partial<CustomComponents>">
+  Component overrides for individual calendar elements.
+</ParamField>
+
+## Examples
+
+### Date range selection
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import type { DateRange } from "react-day-picker"
+import { Calendar } from "@/components/ui/calendar"
+
+export function RangeCalendar() {
+  const [range, setRange] = useState<DateRange | undefined>()
+
+  return (
+    <Calendar
+      mode="range"
+      selected={range}
+      onSelect={setRange}
+      numberOfMonths={2}
+    />
+  )
+}
+```
+
+### With dropdown navigation
+
+Use `captionLayout="dropdown"` for date-of-birth or historical date selection.
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { Calendar } from "@/components/ui/calendar"
+
+export function DropdownCalendar() {
+  const [date, setDate] = useState<Date | undefined>()
+
+  return (
+    <Calendar
+      mode="single"
+      selected={date}
+      onSelect={setDate}
+      captionLayout="dropdown"
+      fromYear={1920}
+      toYear={new Date().getFullYear()}
+    />
+  )
+}
+```
+
+### With disabled dates
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { Calendar } from "@/components/ui/calendar"
+
+export function DisabledDatesCalendar() {
+  const [date, setDate] = useState<Date | undefined>()
+
+  // Disable weekends
+  const isWeekend = (date: Date) => {
+    const day = date.getDay()
+    return day === 0 || day === 6
+  }
+
+  return (
+    <Calendar
+      mode="single"
+      selected={date}
+      onSelect={setDate}
+      disabled={isWeekend}
+    />
+  )
+}
+```

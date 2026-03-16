@@ -1,0 +1,117 @@
+---
+title: Preview card
+description: A popup that appears when hovering a link, showing a rich preview.
+---
+
+## Overview
+
+Preview card (also exported as `HoverCard`) shows a floating panel when a user hovers over a trigger element. Use it to preview linked content — user profiles, articles, documents — without navigating away.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/preview-card
+```
+
+## Basic usage
+
+```tsx
+import {
+  PreviewCard,
+  PreviewCardPopup,
+  PreviewCardTrigger,
+} from "@/components/ui/preview-card"
+```
+
+```tsx
+<PreviewCard>
+  <PreviewCardTrigger asChild>
+    <a href="/users/jane">@jane</a>
+  </PreviewCardTrigger>
+  <PreviewCardPopup>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-3">
+        <Avatar>
+          <AvatarImage src="/avatars/jane.jpg" alt="Jane Doe" />
+          <AvatarFallback>JD</AvatarFallback>
+        </Avatar>
+        <div>
+          <p className="font-medium text-sm">Jane Doe</p>
+          <p className="text-muted-foreground text-xs">@jane</p>
+        </div>
+      </div>
+      <p className="text-sm">Product designer and open-source contributor.</p>
+    </div>
+  </PreviewCardPopup>
+</PreviewCard>
+```
+
+## Sub-components
+
+### PreviewCard
+
+Root component. Alias for `PreviewCard.Root` from Base UI. Also exported as `HoverCard`.
+
+### PreviewCardTrigger
+
+Trigger element that reveals the popup on hover. Alias for `PreviewCard.Trigger` from Base UI. Also exported as `HoverCardTrigger`.
+
+### PreviewCardPopup
+
+Floating popup container. Also exported as `HoverCardContent`.
+
+<ParamField path="props.align" type="'start' | 'center' | 'end'" default="'center'">
+  Alignment relative to the trigger.
+</ParamField>
+
+<ParamField path="props.sideOffset" type="number" default="4">
+  Distance from the trigger in pixels.
+</ParamField>
+
+<ParamField path="props.anchor" type="PreviewCard.Positioner.Props['anchor']">
+  Custom anchor element or ref to position the popup against.
+</ParamField>
+
+## Examples
+
+### User profile preview
+
+```tsx
+<PreviewCard>
+  <PreviewCardTrigger asChild>
+    <button className="font-medium underline underline-offset-2">@jane</button>
+  </PreviewCardTrigger>
+  <PreviewCardPopup>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-3">
+        <Avatar>
+          <AvatarImage src="/avatars/jane.jpg" alt="" />
+          <AvatarFallback>JD</AvatarFallback>
+        </Avatar>
+        <div>
+          <p className="font-semibold text-sm">Jane Doe</p>
+          <p className="text-muted-foreground text-xs">Joined January 2022</p>
+        </div>
+      </div>
+      <p className="text-sm">42 followers · 18 following</p>
+    </div>
+  </PreviewCardPopup>
+</PreviewCard>
+```
+
+### Positioned to the right
+
+```tsx
+<PreviewCard>
+  <PreviewCardTrigger asChild>
+    <a href="/docs/api">API reference</a>
+  </PreviewCardTrigger>
+  <PreviewCardPopup align="start">
+    <p className="text-sm">Browse the full API reference for all components.</p>
+  </PreviewCardPopup>
+</PreviewCard>
+```
+
+<Note>
+  Preview cards are only shown on devices that support hover (pointer devices). Do not place critical information exclusively inside a preview card.
+</Note>

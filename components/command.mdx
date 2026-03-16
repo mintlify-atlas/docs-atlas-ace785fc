@@ -1,0 +1,291 @@
+---
+title: Command
+description: A command palette component for searching and executing commands, built on Dialog and Autocomplete.
+---
+
+## Overview
+
+The Command component provides a keyboard-accessible command palette. It renders an always-open autocomplete that users navigate with arrow keys and activate with Enter. Use it in a `CommandDialog` for a modal overlay triggered by a keyboard shortcut (typically `Cmd+K`), or embed `Command` inline with `CommandPanel` for a persistent search interface.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/command
+```
+
+## Basic usage
+
+```tsx
+import {
+  Command,
+  CommandDialog,
+  CommandDialogPopup,
+  CommandDialogTrigger,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import { Button } from "@/components/ui/button"
+
+const items = [
+  { value: "linear", label: "Linear" },
+  { value: "figma", label: "Figma" },
+  { value: "slack", label: "Slack" },
+]
+
+export function CommandDemo() {
+  return (
+    <CommandDialog>
+      <CommandDialogTrigger render={<Button variant="outline" />}>
+        Open Command Palette
+      </CommandDialogTrigger>
+      <CommandDialogPopup>
+        <Command items={items}>
+          <CommandInput placeholder="Type a command or search..." />
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandList>
+            {(item) => (
+              <CommandItem key={item.value} value={item.value}>
+                {item.label}
+              </CommandItem>
+            )}
+          </CommandList>
+        </Command>
+      </CommandDialogPopup>
+    </CommandDialog>
+  )
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Command` | Root autocomplete with command palette defaults (`autoHighlight="always"`, `keepHighlight`, `open`). |
+| `CommandDialog` | Dialog root for the modal overlay. Alias for `Dialog.Root` from Base UI. |
+| `CommandDialogTrigger` | Button that opens the dialog. |
+| `CommandDialogPopup` | Full modal popup container with backdrop and centered viewport. |
+| `CommandDialogBackdrop` | Semi-transparent overlay behind the dialog. |
+| `CommandDialogViewport` | Positioning container for the popup. |
+| `CommandInput` | Search input with a built-in search icon. |
+| `CommandList` | Scrollable item list. |
+| `CommandItem` | Individual command item. |
+| `CommandEmpty` | Shown when no items match. |
+| `CommandGroup` | Groups related items. |
+| `CommandGroupLabel` | Label for a group. |
+| `CommandCollection` | Wraps items within a group. |
+| `CommandSeparator` | Horizontal rule between groups. |
+| `CommandShortcut` | Displays keyboard shortcuts aligned to the right of an item. |
+| `CommandPanel` | Styled container for embedding Command outside a dialog. |
+| `CommandFooter` | Footer row for hints and shortcut references. |
+
+## Props
+
+### Command
+
+<ParamField path="items" type="readonly unknown[]" required>
+  Items to display and filter.
+</ParamField>
+
+<ParamField path="autoHighlight" type="boolean | 'always'" default="'always'">
+  Automatically highlights the first matching item.
+</ParamField>
+
+<ParamField path="keepHighlight" type="boolean" default="true">
+  Maintains highlight state while the list is visible.
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: unknown) => void">
+  Callback fired when the user selects an item.
+</ParamField>
+
+### CommandDialog
+
+<ParamField path="open" type="boolean">
+  Controlled open state of the dialog.
+</ParamField>
+
+<ParamField path="onOpenChange" type="(open: boolean) => void">
+  Callback fired when the dialog open state changes.
+</ParamField>
+
+### CommandInput
+
+<ParamField path="placeholder" type="string">
+  Placeholder text shown when the input is empty.
+</ParamField>
+
+### CommandItem
+
+<ParamField path="value" type="unknown" required>
+  The value of the item, used for filtering.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Prevents the item from being selected.
+</ParamField>
+
+## Examples
+
+### With keyboard shortcut
+
+Bind `Cmd+K` to open the command palette.
+
+```tsx
+"use client"
+
+import { useEffect, useState } from "react"
+import {
+  Command,
+  CommandDialog,
+  CommandDialogPopup,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+
+const items = [
+  { value: "new-file", label: "New File" },
+  { value: "open-settings", label: "Open Settings" },
+  { value: "toggle-theme", label: "Toggle Theme" },
+]
+
+export function KeyboardCommand() {
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setOpen((prev) => !prev)
+      }
+    }
+    document.addEventListener("keydown", handler)
+    return () => document.removeEventListener("keydown", handler)
+  }, [])
+
+  return (
+    <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialogPopup>
+        <Command items={items}>
+          <CommandInput placeholder="Type a command..." />
+          <CommandEmpty>No results.</CommandEmpty>
+          <CommandList>
+            {(item) => (
+              <CommandItem key={item.value} value={item.value}>
+                {item.label}
+              </CommandItem>
+            )}
+          </CommandList>
+        </Command>
+      </CommandDialogPopup>
+    </CommandDialog>
+  )
+}
+```
+
+### With grouped items and shortcuts
+
+```tsx
+import React from "react"
+import {
+  Command,
+  CommandCollection,
+  CommandEmpty,
+  CommandGroup,
+  CommandGroupLabel,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandPanel,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command"
+
+const grouped = [
+  {
+    value: "Suggestions",
+    items: [
+      { value: "calendar", label: "Calendar", shortcut: "C" },
+      { value: "search", label: "Search Docs", shortcut: "S" },
+    ],
+  },
+  {
+    value: "Settings",
+    items: [
+      { value: "profile", label: "Profile", shortcut: "P" },
+      { value: "billing", label: "Billing", shortcut: "B" },
+    ],
+  },
+]
+
+export function GroupedCommand() {
+  return (
+    <CommandPanel>
+      <Command items={grouped}>
+        <CommandInput placeholder="Search..." />
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandList>
+          {(group, i) => (
+            <React.Fragment key={group.value}>
+              <CommandGroup items={group.items}>
+                <CommandGroupLabel>{group.value}</CommandGroupLabel>
+                <CommandCollection>
+                  {(item) => (
+                    <CommandItem key={item.value} value={item.value}>
+                      {item.label}
+                      <CommandShortcut>{item.shortcut}</CommandShortcut>
+                    </CommandItem>
+                  )}
+                </CommandCollection>
+              </CommandGroup>
+              {i < grouped.length - 1 && <CommandSeparator />}
+            </React.Fragment>
+          )}
+        </CommandList>
+      </Command>
+    </CommandPanel>
+  )
+}
+```
+
+### Standalone (without dialog)
+
+Embed the Command component directly in a page using `CommandPanel`.
+
+```tsx
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandPanel,
+} from "@/components/ui/command"
+
+const items = [
+  { value: "inbox", label: "Inbox" },
+  { value: "sent", label: "Sent" },
+  { value: "drafts", label: "Drafts" },
+]
+
+export function StandaloneCommand() {
+  return (
+    <CommandPanel className="w-full max-w-md">
+      <Command items={items}>
+        <CommandInput placeholder="Search mailbox..." />
+        <CommandEmpty>No results.</CommandEmpty>
+        <CommandList>
+          {(item) => (
+            <CommandItem key={item.value} value={item.value}>
+              {item.label}
+            </CommandItem>
+          )}
+        </CommandList>
+      </Command>
+    </CommandPanel>
+  )
+}
+```

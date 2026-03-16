@@ -1,0 +1,151 @@
+---
+title: Field
+description: Provides labelling, description, and validation messaging for a single form control.
+---
+
+<ComponentPreview name="p-field-1" />
+
+## Overview
+
+`Field` wraps Base UI's `Field` primitive family. It connects a label, an input, a description, and an error message using accessible HTML attributes automatically. The `FieldError` component only renders when the associated control is invalid.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/field
+```
+
+## Basic usage
+
+```tsx
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+```
+
+```tsx
+<Field>
+  <FieldLabel>Email</FieldLabel>
+  <Input name="email" type="email" required />
+  <FieldDescription>We’ll never share your email.</FieldDescription>
+  <FieldError>Please enter a valid email address.</FieldError>
+</Field>
+```
+
+## Props
+
+### Field
+
+Root component. Renders a `<div>` with flex column layout.
+
+<ParamField path="name" type="string">
+  Associates this field with a form control by name. Used by `Form` to surface server errors.
+</ParamField>
+
+<ParamField path="...props" type="FieldPrimitive.Root.Props">
+  All props from Base UI's `Field.Root` are supported.
+</ParamField>
+
+### FieldLabel
+
+Label for the field control. Styled wrapper for `Field.Label` from Base UI.
+
+<ParamField path="...props" type="FieldPrimitive.Label.Props">
+  All props from Base UI's `Field.Label` are supported.
+</ParamField>
+
+### FieldDescription
+
+Supplementary description text rendered below the control.
+
+<ParamField path="...props" type="FieldPrimitive.Description.Props">
+  All props from Base UI's `Field.Description` are supported.
+</ParamField>
+
+### FieldError
+
+Error message rendered when the field is invalid. Hidden when the field is valid.
+
+<ParamField path="show" type='"valid" | "invalid" | "always"'>
+  Controls when the error is shown. Defaults to `"invalid"`.
+</ParamField>
+
+<ParamField path="...props" type="FieldPrimitive.Error.Props">
+  All props from Base UI's `Field.Error` are supported.
+</ParamField>
+
+### FieldItem
+
+A flex container for inline field layouts.
+
+### FieldControl
+
+Alias for `Field.Control` from Base UI. Forwards `aria-invalid`, `aria-describedby`, and `id` to a custom control.
+
+### FieldValidity
+
+Alias for `Field.Validity` from Base UI. Renders children with the current validity state.
+
+## Examples
+
+### Required field
+
+<ComponentPreview name="p-field-2" />
+
+### Disabled field
+
+<ComponentPreview name="p-field-3" />
+
+### With error
+
+Enter an invalid email address and press Enter to see the error.
+
+<ComponentPreview name="p-field-4" />
+
+### With validity
+
+<ComponentPreview name="p-field-5" />
+
+### Input group
+
+<ComponentPreview name="p-field-6" />
+
+### Textarea field
+
+<ComponentPreview name="p-field-10" />
+
+### Select field
+
+<ComponentPreview name="p-field-11" />
+
+### Checkbox field
+
+<ComponentPreview name="p-field-12" />
+
+### Checkbox group field
+
+<ComponentPreview name="p-field-13" />
+
+### Radio group field
+
+<ComponentPreview name="p-field-14" />
+
+### Switch field
+
+<ComponentPreview name="p-field-15" />
+
+### Slider field
+
+<ComponentPreview name="p-field-16" />
+
+### Number field
+
+<ComponentPreview name="p-field-17" />
+
+### Complete form example
+
+<ComponentPreview name="p-field-18" />

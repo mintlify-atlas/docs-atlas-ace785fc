@@ -1,0 +1,139 @@
+---
+title: Alert dialog
+description: A dialog that interrupts the user and requires a response before proceeding.
+---
+
+## Overview
+
+Alert dialog is used for destructive or irreversible actions that require explicit user confirmation. Unlike `Dialog`, it cannot be dismissed by clicking the backdrop — the user must choose an action.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/alert-dialog
+```
+
+## Basic usage
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogClose,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogPopup,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+```
+
+```tsx
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="destructive" />}>
+    Delete account
+  </AlertDialogTrigger>
+  <AlertDialogPopup>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone. Your account and all associated data will
+        be permanently deleted.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogClose render={<Button variant="ghost" />}>Cancel</AlertDialogClose>
+      <AlertDialogClose render={<Button variant="destructive" />}>
+        Delete account
+      </AlertDialogClose>
+    </AlertDialogFooter>
+  </AlertDialogPopup>
+</AlertDialog>
+```
+
+## Sub-components
+
+### AlertDialog
+
+Root component. Alias for `AlertDialog.Root` from Base UI.
+
+### AlertDialogTrigger
+
+Trigger that opens the alert dialog. Use the `render` prop to compose with a `Button`.
+
+### AlertDialogPopup
+
+Popup container for the dialog content. Also exported as `AlertDialogContent`.
+
+<ParamField path="props.bottomStickOnMobile" type="boolean" default="true">
+  When true, the dialog sticks to the bottom of the screen on mobile viewports.
+</ParamField>
+
+### AlertDialogHeader
+
+Container for the title and description. Centers text on mobile, left-aligns on desktop.
+
+### AlertDialogTitle
+
+Dialog heading. Alias for `AlertDialog.Title` from Base UI.
+
+### AlertDialogDescription
+
+Dialog description text. Alias for `AlertDialog.Description` from Base UI.
+
+### AlertDialogFooter
+
+Footer section for action buttons.
+
+<ParamField path="props.variant" type="'default' | 'bare'" default="'default'">
+  `default` adds a border and muted background. `bare` removes both.
+</ParamField>
+
+### AlertDialogClose
+
+Button that closes the dialog. Alias for `AlertDialog.Close` from Base UI. Use the `render` prop to compose with `Button`.
+
+### AlertDialogPortal
+
+Portal for rendering outside the DOM hierarchy. Alias for `AlertDialog.Portal` from Base UI.
+
+### AlertDialogBackdrop
+
+Backdrop overlay. Also exported as `AlertDialogOverlay`.
+
+## Examples
+
+### Confirmation before delete
+
+```tsx
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="destructive" size="sm" />}>
+    Remove member
+  </AlertDialogTrigger>
+  <AlertDialogPopup>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Remove team member?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This person will lose access to the workspace immediately.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogClose render={<Button variant="ghost" />}>Cancel</AlertDialogClose>
+      <AlertDialogClose render={<Button variant="destructive" />}>Remove</AlertDialogClose>
+    </AlertDialogFooter>
+  </AlertDialogPopup>
+</AlertDialog>
+```
+
+### Bare footer variant
+
+```tsx
+<AlertDialogFooter variant="bare">
+  <AlertDialogClose render={<Button variant="ghost" />}>Go back</AlertDialogClose>
+  <AlertDialogClose render={<Button variant="destructive" />}>Confirm</AlertDialogClose>
+</AlertDialogFooter>
+```
+
+<Note>
+  Alert dialogs should only be used when the action is genuinely dangerous or irreversible. For less critical confirmations, use a standard `Dialog`.
+</Note>

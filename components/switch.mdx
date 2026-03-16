@@ -1,0 +1,90 @@
+---
+title: Switch
+description: A toggle control that indicates whether a setting is on or off.
+---
+
+<ComponentPreview name="p-switch-1" />
+
+## Overview
+
+`Switch` wraps Base UI's `Switch.Root` primitive with a built-in animated thumb. Wrap it in a `Label` to associate visible label text.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/switch
+```
+
+## Basic usage
+
+```tsx
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+```
+
+```tsx
+<Label>
+  <Switch />
+  Marketing emails
+</Label>
+```
+
+## Customizing size
+
+The switch dimensions are driven by the `--thumb-size` CSS variable. Override it with Tailwind classes on the `Switch` component:
+
+```tsx
+<Switch className="[--thumb-size:--spacing(3)]" />
+```
+
+The default sizes are `[--thumb-size:--spacing(5)]` on mobile and `sm:[--thumb-size:--spacing(4)]` on larger viewports.
+
+## Props
+
+<ParamField path="checked" type="boolean">
+  Controlled checked state.
+</ParamField>
+
+<ParamField path="defaultChecked" type="boolean">
+  Initial checked state for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onCheckedChange" type="(checked: boolean) => void">
+  Callback fired when the state changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Prevents interaction and applies reduced opacity.
+</ParamField>
+
+<ParamField path="name" type="string">
+  Name submitted with form data.
+</ParamField>
+
+<ParamField path="...props" type="SwitchPrimitive.Root.Props">
+  All props from Base UI's `Switch.Root` are supported.
+</ParamField>
+
+## Examples
+
+For accessible labelling and validation, wrap switches with the `Field` component. See the related example: [Switch field](/components/field#switch-field).
+
+### Disabled
+
+<ComponentPreview name="p-switch-2" />
+
+### With description
+
+<ComponentPreview name="p-switch-3" />
+
+### Customizing size
+
+<ComponentPreview name="p-switch-6" />
+
+### Card style
+
+<ComponentPreview name="p-switch-4" />
+
+### Form integration
+
+<ComponentPreview name="p-switch-5" />

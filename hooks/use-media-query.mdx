@@ -1,0 +1,181 @@
+---
+title: useMediaQuery
+description: Reactive media query hook with Tailwind-like breakpoint syntax and SSR safety.
+---
+
+A React hook that subscribes to a CSS media query and reactively returns whether it currently matches. Built on `useSyncExternalStore` for SSR safety and concurrent mode compatibility. Returns `false` during server rendering.
+
+## Installation
+
+<Tabs>
+  <Tab title="CLI">
+    ```bash
+    npx shadcn@latest add @coss/use-media-query
+    ```
+  </Tab>
+  <Tab title="Manual">
+    <Steps>
+      <Step title="Copy the source">
+        Copy the hook implementation into your project at `hooks/use-media-query.ts`.
+
+        ```ts
+        "use client";
+
+        import { useCallback, useSyncExternalStore } from "react";
+
+        const BREAKPOINTS = {
+          "2xl": 1536,
+          "3xl": 1600,
+          "4xl": 2000,
+          lg: 1024,
+          md: 800,
+          sm: 640,
+          xl: 1280,
+        } as const;
+
+        type Breakpoint = keyof typeof BREAKPOINTS;
+
+        type BreakpointQuery =
+          | Breakpoint
+          | `max-${Breakpoint}`
+          | `${Breakpoint}:max-${Breakpoint}`;
+
+        export type MediaQueryInput = {
+          min?: Breakpoint | number;
+          max?: Breakpoint | number;
+          pointer?: "coarse" | "fine";
+        };
+
+        export function useMediaQuery(
+          query: BreakpointQuery | MediaQueryInput | (string & {}),
+        ): boolean {
+          // ... implementation
+        }
+
+        export function useIsMobile(): boolean {
+          return useMediaQuery("max-md");
+        }
+        ```
+      </Step>
+      <Step title="Update import paths">
+        Adjust the import path in your components to match your project structure.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Usage
+
+### Breakpoint shorthand
+
+Use Tailwind variant syntax to match breakpoints. TypeScript provides full autocomplete for breakpoint names.
+
+```tsx
+import { useMediaQuery } from "@/hooks/use-media-query";
+
+// Viewport >= breakpoint (like the md: Tailwind prefix)
+const isDesktop = useMediaQuery("md");
+
+// Viewport < breakpoint (like max-md:)
+const isMobile = useMediaQuery("max-md");
+
+// Between two breakpoints (like md:max-lg:)
+const isTablet = useMediaQuery("md:max-lg");
+```
+
+### Object API
+
+Use the object form for pointer detection, pixel values, or combined queries.
+
+```tsx
+// Touch device detection
+const isTouch = useMediaQuery({ pointer: "coarse" });
+
+// Breakpoint + pointer combined
+const isMobileTouch = useMediaQuery({ max: "md", pointer: "coarse" });
+
+// Custom pixel values
+const isNarrow = useMediaQuery({ max: 600 });
+```
+
+### Raw CSS media query
+
+Pass any valid CSS media query string as an escape hatch.
+
+```tsx
+const prefersDark = useMediaQuery("(prefers-color-scheme: dark)");
+const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+```
+
+### Conditional rendering
+
+Mount different components based on viewport size:
+
+```tsx
+function Layout() {
+  const isDesktop = useMediaQuery("lg");
+
+  return isDesktop ? <DesktopNav /> : <MobileNav />;
+}
+```
+
+### Convenience export
+
+The hook exports `useIsMobile` for compatibility with shadcn's `use-mobile` pattern:
+
+```tsx
+import { useIsMobile } from "@/hooks/use-media-query";
+
+const isMobile = useIsMobile(); // equivalent to useMediaQuery("max-md")
+```
+
+## Breakpoints
+
+The hook includes a static breakpoint map. Default values:
+
+| Name | Value |
+|------|-------|
+| `sm` | 640px |
+| `md` | 800px |
+| `lg` | 1024px |
+| `xl` | 1280px |
+| `2xl` | 1536px |
+| `3xl` | 1600px |
+| `4xl` | 2000px |
+
+<Warning>
+  If you override breakpoints in your Tailwind CSS `@theme`, you must update the `BREAKPOINTS` constant in the hook to match. Mismatched values will cause the hook to return incorrect results.
+</Warning>
+
+## API
+
+### Signature
+
+```ts
+function useMediaQuery(
+  query: BreakpointQuery | MediaQueryInput | string
+): boolean;
+```
+
+### Parameters
+
+#### String queries
+
+| Pattern | Example | Matches |
+|---------|---------|---------|
+| `"{bp}"` | `"md"` | Viewport ≥ breakpoint |
+| `"max-{bp}"` | `"max-md"` | Viewport < breakpoint |
+| `"{bp}:max-{bp}"` | `"md:max-lg"` | Between two breakpoints |
+| `"(...)"` | `"(prefers-color-scheme: dark)"` | Raw CSS media query |
+
+#### Object queries
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `min` | `Breakpoint \| number` | Min-width as a breakpoint name or pixel value |
+| `max` | `Breakpoint \| number` | Max-width as a breakpoint name or pixel value |
+| `pointer` | `"coarse" \| "fine"` | Pointer type — `coarse` for touch, `fine` for mouse/trackpad |
+
+### Return value
+
+Returns `boolean` — `true` when the query matches, `false` otherwise. Always returns `false` during SSR.

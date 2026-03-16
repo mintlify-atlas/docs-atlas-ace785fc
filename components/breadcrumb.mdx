@@ -1,0 +1,152 @@
+---
+title: Breadcrumb
+description: Displays the hierarchy of the current page location as navigable links.
+---
+
+## Overview
+
+Breadcrumb renders an accessible `<nav>` element with a structured list of links showing the path to the current page. It supports custom separators, ellipsis for collapsed paths, and the `render` prop for framework-specific link components.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/breadcrumb
+```
+
+## Basic usage
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+```
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## Sub-components
+
+### Breadcrumb
+
+Root `<nav>` element with `aria-label="breadcrumb"`.
+
+### BreadcrumbList
+
+Ordered list (`<ol>`) for breadcrumb items. Handles wrapping and spacing.
+
+### BreadcrumbItem
+
+List item (`<li>`) wrapper for each breadcrumb entry.
+
+### BreadcrumbLink
+
+Navigable link element. Supports the `render` prop for custom link components such as Next.js `Link`.
+
+<ParamField path="props.render" type="React.ReactElement">
+  Render as a different element. Use this to integrate framework-specific routers.
+</ParamField>
+
+**With Next.js Link:**
+
+```tsx
+<BreadcrumbLink render={<Link href="/" />}>Home</BreadcrumbLink>
+```
+
+### BreadcrumbPage
+
+Non-interactive `<span>` for the current page. Includes `aria-current="page"`.
+
+### BreadcrumbSeparator
+
+Visual separator between items (`<li aria-hidden="true">`). Defaults to a chevron right icon. Pass children to use a custom separator:
+
+```tsx
+<BreadcrumbSeparator>/</BreadcrumbSeparator>
+```
+
+### BreadcrumbEllipsis
+
+Ellipsis indicator for collapsed sections of a long path. Renders a horizontal ellipsis icon with screen-reader text "More".
+
+## Examples
+
+### With collapsed items
+
+Use `BreadcrumbEllipsis` to represent intermediate pages that are hidden:
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbEllipsis />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Button</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### With custom separator
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator>/</BreadcrumbSeparator>
+    <BreadcrumbItem>
+      <BreadcrumbPage>Dashboard</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### With home icon
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink aria-label="Home" render={<Link href="/" />}>
+        <HomeIcon aria-hidden="true" className="size-4" />
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Settings</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```

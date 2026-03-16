@@ -1,0 +1,124 @@
+---
+title: Toolbar
+description: A container for grouping action controls like buttons, toggles, and inputs.
+---
+
+## Overview
+
+Toolbar renders a horizontal strip of controls. Built on Base UI's Toolbar primitive, it provides correct keyboard navigation (arrow keys move focus between items) and semantic ARIA roles. Use it for editor toolbars, filter bars, and action panels.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/toolbar
+```
+
+## Basic usage
+
+```tsx
+import {
+  Toolbar,
+  ToolbarButton,
+  ToolbarGroup,
+  ToolbarSeparator,
+} from "@/components/ui/toolbar"
+```
+
+```tsx
+<Toolbar aria-label="Text formatting">
+  <ToolbarGroup>
+    <ToolbarButton render={<Toggle />} aria-label="Bold">
+      <BoldIcon aria-hidden="true" />
+    </ToolbarButton>
+    <ToolbarButton render={<Toggle />} aria-label="Italic">
+      <ItalicIcon aria-hidden="true" />
+    </ToolbarButton>
+  </ToolbarGroup>
+  <ToolbarSeparator />
+  <ToolbarGroup>
+    <ToolbarButton render={<Toggle />} aria-label="Align left">
+      <AlignLeftIcon aria-hidden="true" />
+    </ToolbarButton>
+    <ToolbarButton render={<Toggle />} aria-label="Align center">
+      <AlignCenterIcon aria-hidden="true" />
+    </ToolbarButton>
+  </ToolbarGroup>
+</Toolbar>
+```
+
+## Sub-components
+
+### Toolbar
+
+Root container. Styled wrapper for `Toolbar.Root` from Base UI. Renders as a rounded card with a border.
+
+<ParamField path="props.orientation" type="'horizontal' | 'vertical'" default="'horizontal'">
+  Orientation of the toolbar. Controls arrow-key navigation direction.
+</ParamField>
+
+### ToolbarButton
+
+A toolbar-aware button. Styled wrapper for `Toolbar.Button` from Base UI. Use the `render` prop to compose with `Button`, `Toggle`, or other components.
+
+### ToolbarLink
+
+A toolbar-aware link. Styled wrapper for `Toolbar.Link` from Base UI.
+
+### ToolbarInput
+
+A toolbar-aware input. Styled wrapper for `Toolbar.Input` from Base UI. Removes the input from the toolbar's arrow-key navigation so users can type freely.
+
+### ToolbarGroup
+
+Groups related toolbar items. Styled wrapper for `Toolbar.Group` from Base UI. Adds `flex items-center gap-1`.
+
+### ToolbarSeparator
+
+Visual divider between toolbar sections. Styled wrapper for `Toolbar.Separator` from Base UI.
+
+## Examples
+
+### Text editor toolbar
+
+```tsx
+<Toolbar aria-label="Text editor controls">
+  <ToolbarGroup>
+    <ToolbarButton render={<Button size="icon" variant="ghost" aria-label="Bold" />}>
+      <BoldIcon aria-hidden="true" />
+    </ToolbarButton>
+    <ToolbarButton render={<Button size="icon" variant="ghost" aria-label="Italic" />}>
+      <ItalicIcon aria-hidden="true" />
+    </ToolbarButton>
+    <ToolbarButton render={<Button size="icon" variant="ghost" aria-label="Underline" />}>
+      <UnderlineIcon aria-hidden="true" />
+    </ToolbarButton>
+  </ToolbarGroup>
+  <ToolbarSeparator />
+  <ToolbarGroup>
+    <ToolbarButton
+      render={<Button size="icon" variant="ghost" aria-label="Insert link" />}
+    >
+      <LinkIcon aria-hidden="true" />
+    </ToolbarButton>
+  </ToolbarGroup>
+</Toolbar>
+```
+
+### Toolbar with input
+
+`ToolbarInput` removes the element from arrow-key navigation so users can type freely:
+
+```tsx
+<Toolbar aria-label="Search and filter">
+  <ToolbarInput render={<Input placeholder="Search..." type="search" />} />
+  <ToolbarSeparator />
+  <ToolbarButton render={<Button variant="ghost" size="sm" />}>
+    <FilterIcon aria-hidden="true" />
+    Filter
+  </ToolbarButton>
+</Toolbar>
+```
+
+<Note>
+  Always provide `aria-label` on the `Toolbar` root to describe its purpose to screen reader users.
+</Note>

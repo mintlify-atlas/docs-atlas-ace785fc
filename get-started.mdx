@@ -1,0 +1,115 @@
+---
+title: Get started
+description: Add your first coss ui component to a React project with Tailwind CSS v4.
+---
+
+This guide covers the essentials for adding **coss ui** components to your React application, using either the shadcn CLI or manual copy-paste.
+
+## Prerequisites
+
+coss ui components are built with [Tailwind CSS v4](https://tailwindcss.com/). Before you begin, make sure you have a React project set up with Tailwind CSS v4.
+
+## Adding components
+
+You can add components **automatically with the shadcn CLI** or **manually by copying the source**. Both methods work for primitives, particles, and atoms.
+
+### New project (recommended)
+
+For new projects, use the **coss style** preset to initialize everything in one command:
+
+```bash
+npx shadcn@latest init @coss/style
+```
+
+This installs all UI components, the neutral color system, sidebar variables, font variables, and base styles. Components like Dialog and AlertDialog use `font-heading` for titles — the style preset provides sensible fallbacks, and you can customize fonts via `next/font` in your layout.
+
+### Existing project
+
+To add components to an existing project:
+
+<CodeGroup>
+
+```bash Add all UI primitives
+npx shadcn@latest add @coss/ui
+```
+
+```bash Add full theme (colors, sidebar, fonts)
+npx shadcn@latest add @coss/style
+```
+
+```bash Add only color tokens
+npx shadcn@latest add @coss/ui @coss/colors-neutral
+```
+
+</CodeGroup>
+
+See the [Styling](/styling) guide for more details on theme tokens.
+
+### Manual install
+
+<Steps>
+  <Step title="Find a component">
+    Browse the [Components](/components/button) or [Particles](/particles/overview) pages to find what you need.
+  </Step>
+  <Step title="Copy the code">
+    Open the **Code** tab on the component page and copy the source.
+  </Step>
+  <Step title="Create a file">
+    Create a new file in your project (e.g., `components/ui/button.tsx`) and paste the code.
+  </Step>
+  <Step title="Install dependencies">
+    Install any dependencies listed on the component's page.
+  </Step>
+  <Step title="Import and use">
+    Import the component in your app and start using it.
+  </Step>
+</Steps>
+
+## Styling
+
+Components are styled with the design token system used at **Cal.com**, defined by CSS variables and implemented with Tailwind CSS. The variables are the same as shadcn/ui and are fully customizable — modify them in your global stylesheet (e.g., `app/globals.css`) to match your design system.
+
+coss ui introduces a few additional tokens for more granular control:
+
+| Token | Usage |
+|---|---|
+| `--destructive-foreground` | Destructive-outline buttons, destructive menu items, badges, field errors |
+| `--info` / `--info-foreground` | Info-colored badges, toast types, and alerts |
+| `--success` / `--success-foreground` | Success-colored badges, toast types, and alerts |
+| `--warning` / `--warning-foreground` | Warning-colored badges, toast types, and alerts |
+
+<Warning>
+  If you manually copy components, you must also import these additional tokens in your CSS file (e.g., `app/globals.css`). When using the CLI, tokens are automatically configured for you.
+</Warning>
+
+## Primitive exports
+
+Components that wrap Base UI primitives re-export the underlying primitive. Use the styled component when the defaults work, or the primitive when you need a different composition or styling.
+
+```tsx
+import { Slider, SliderValue, SliderPrimitive } from "@coss/ui/components/slider";
+```
+
+In a monorepo with a shared UI package, apps can import from that package — Base UI stays in one place with no need to add it to each app.
+
+## Base UI re-exports
+
+When you only need `useRender`, `mergeProps`, `CSPProvider`, or `DirectionProvider`, import them from `@coss/ui/base-ui/*` instead of adding `@base-ui/react` as a direct dependency:
+
+```ts
+import { useRender } from "@coss/ui/base-ui/use-render";
+import { mergeProps } from "@coss/ui/base-ui/merge-props";
+import { CSPProvider } from "@coss/ui/base-ui/csp-provider";
+import { DirectionProvider } from "@coss/ui/base-ui/direction-provider";
+```
+
+<Tip>
+  This is especially useful in monorepos: packages that already depend on `@coss/ui` can use these utilities without adding `@base-ui/react` as a separate dependency. You avoid duplicate installs, keep versions in sync, and simplify your dependency tree.
+</Tip>
+
+## Working with LLMs
+
+The documentation is structured to be AI-friendly, so language models can understand, reason about, and modify components:
+
+- A `llms.txt` file at `/ui/llms.txt` maps the documentation and component structure for your AI agent.
+- A **Copy Markdown** button on every page lets you feed content directly into your AI workflows.

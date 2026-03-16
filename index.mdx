@@ -1,97 +1,92 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "coss ui"
+description: "A modern, accessible React UI component library built on Base UI primitives, styled with Tailwind CSS. Copy, paste, and own your components."
 ---
 
-## Setting up
+## The everything-but-AI UI stack
 
-Get your documentation site up and running in minutes.
+**coss ui** is a collection of beautifully designed, accessible, and composable components for your React apps. Built on top of [Base UI](https://base-ui.com/) and styled with [Tailwind CSS](https://tailwindcss.com/), it's designed for you to copy, paste, and own.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+We're building the component library that powers [Cal.com](https://cal.com) — in the open, for everyone.
 
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Get started" icon="rocket" href="/get-started">
+    Add your first component in minutes with the shadcn CLI or by copying the source code.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Components" icon="puzzle-piece" href="/components/button">
+    Browse 50+ accessible UI primitives — buttons, inputs, dialogs, tables, and more.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Particles" icon="sparkles" href="/particles/overview">
+    Pre-assembled UI patterns that combine multiple primitives into ready-to-use solutions.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Styling guide" icon="palette" href="/styling">
+    Learn how to customize colors, fonts, and tokens to match your design system.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## How it works
 
-Everything you need to create world-class documentation.
+Our approach is simple: **you should own your code.** Inspired by the copy-paste ethos of shadcn/ui, you get the source — no black-box package abstractions.
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+<CardGroup cols={3}>
+  <Card title="Primitives" icon="layers">
+    Low-level accessible building blocks powered by Base UI. Handle a11y, keyboard navigation, and focus management without dictating design.
   </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
+  <Card title="Particles" icon="atom">
+    Pre-assembled components — forms, tables, date pickers — that combine multiple primitives into ready-to-use patterns.
   </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
+  <Card title="Atoms" icon="bolt">
+    API-enhanced particles that connect UI to external services. Think scheduling, auth flows, and more — out of the box.
   </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+</CardGroup>
 
-## Need inspiration?
+## Quick install
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<CodeGroup>
+```bash New project
+npx shadcn@latest init @coss/style
+```
+
+```bash Add to existing project
+npx shadcn@latest add @coss/ui
+```
+
+```bash Add theme tokens
+npx shadcn@latest add @coss/style
+```
+</CodeGroup>
+
+<Note>
+  coss ui requires a React project with **Tailwind CSS v4**. See the [Get Started](/get-started) guide for full setup instructions.
+</Note>
+
+## What's included
+
+<CardGroup cols={2}>
+  <Card title="50+ UI primitives" icon="grid-2">
+    Button, Input, Dialog, Menu, Select, Table, Tabs, Accordion, and many more — all accessible and keyboard-navigable.
+  </Card>
+  <Card title="Full TypeScript support" icon="code">
+    Complete type definitions. Every prop, variant, and export is typed with TypeScript.
+  </Card>
+  <Card title="Tailwind CSS v4" icon="paintbrush">
+    Styled with semantic design tokens that work beautifully in light and dark mode.
+  </Card>
+  <Card title="shadcn CLI compatible" icon="terminal">
+    Use the shadcn CLI to add components directly to your project with one command.
+  </Card>
+  <Card title="Migration from Radix/shadcn" icon="arrows-rotate">
+    Comprehensive migration guide for teams moving from Radix UI or shadcn/ui.
+  </Card>
+  <Card title="AI-friendly docs" icon="brain">
+    Structured for LLMs with llms.txt support, so your AI tools understand the component API.
+  </Card>
+</CardGroup>
+
+## Built on the shoulders of giants
+
+<Info>
+  coss ui builds on **Base UI** — not as a port from Radix, but designed from the ground up with Base UI's robust, accessible primitives. Production-tested on [Cal.com](https://cal.com) and [coss.com](https://coss.com).
+</Info>
+
+Special thanks to [Tailwind CSS](https://tailwindcss.com/), [Base UI](https://base-ui.com/), [shadcn/ui](https://ui.shadcn.com/), and [Fumadocs](https://fumadocs.dev/) for the tools and inspiration that make this possible.

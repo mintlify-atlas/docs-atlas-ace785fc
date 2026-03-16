@@ -1,0 +1,396 @@
+---
+title: Input particles
+description: Search inputs, inputs with addons, password toggles, clearable inputs, and URL bar patterns.
+---
+
+Input particles are focused compositions built on the `Input` and `InputGroup` primitives. They cover the most common input patterns you encounter in real applications.
+
+## Basic input
+
+The simplest particle: a plain `Input` with an explicit `type` attribute.
+
+```tsx
+// p-input-1.tsx — Basic text input
+import { Input } from "@/registry/default/ui/input";
+
+export default function Particle() {
+  return <Input aria-label="Enter text" placeholder="Enter text" type="text" />;
+}
+```
+
+<Note>
+  Always specify `type` explicitly on `Input` and `InputGroupInput`. Even for text inputs, use `type="text"` for clarity and consistency.
+</Note>
+
+## Input with label and description
+
+Wrap inputs with `Field` components to add labels, descriptions, and error messages with proper accessibility associations.
+
+```tsx
+// p-field-1.tsx — Input with label and description
+import {
+  Field,
+  FieldDescription,
+  FieldLabel,
+} from "@/registry/default/ui/field";
+import { Input } from "@/registry/default/ui/input";
+
+export default function Particle() {
+  return (
+    <Field>
+      <FieldLabel>Name</FieldLabel>
+      <Input placeholder="Enter your name" type="text" />
+      <FieldDescription>Visible on your profile</FieldDescription>
+    </Field>
+  );
+}
+```
+
+## Search inputs
+
+The most common input group pattern. Use `InputGroupAddon` to attach a search icon.
+
+<CodeGroup>
+
+```tsx p-input-group-1.tsx (icon on right)
+import { SearchIcon } from "lucide-react";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/default/ui/input-group";
+
+export default function Particle() {
+  return (
+    <InputGroup>
+      <InputGroupInput aria-label="Search" placeholder="Search" type="search" />
+      <InputGroupAddon>
+        <SearchIcon aria-hidden="true" />
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}
+```
+
+```tsx p-input-group-20.tsx (icon on left)
+import { SearchIcon } from "lucide-react";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/default/ui/input-group";
+
+export default function Particle() {
+  return (
+    <InputGroup>
+      <InputGroupAddon>
+        <SearchIcon aria-hidden="true" />
+      </InputGroupAddon>
+      <InputGroupInput aria-label="Search" placeholder="Search" type="search" />
+    </InputGroup>
+  );
+}
+```
+
+</CodeGroup>
+
+<Note>
+  `InputGroupAddon` must come **after** `InputGroupInput` in the DOM for focus behavior to work correctly. The `align` prop controls visual placement, not DOM order.
+</Note>
+
+## Inputs with text addons
+
+Use `InputGroupText` to show static text prefixes or suffixes — like a URL scheme or domain.
+
+<CodeGroup>
+
+```tsx p-input-group-3.tsx (suffix)
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from "@/registry/default/ui/input-group";
+
+export default function Particle() {
+  return (
+    <InputGroup>
+      <InputGroupInput
+        aria-label="Set your URL"
+        className="*:[input]:ps-0!"
+        placeholder="coss"
+        type="search"
+      />
+      <InputGroupAddon>
+        <InputGroupText>i.cal.com/</InputGroupText>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}
+```
+
+```tsx p-input-group-5.tsx (prefix + suffix)
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from "@/registry/default/ui/input-group";
+
+export default function Particle() {
+  return (
+    <InputGroup>
+      <InputGroupInput
+        aria-label="Enter your domain"
+        className="*:[input]:px-0!"
+        placeholder="coss"
+        type="text"
+      />
+      <InputGroupAddon>
+        <InputGroupText>https://</InputGroupText>
+      </InputGroupAddon>
+      <InputGroupAddon align="inline-end">
+        <InputGroupText>.com</InputGroupText>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}
+```
+
+</CodeGroup>
+
+## Password inputs
+
+Password inputs with a visibility toggle use `useState` to switch between `type="password"` and `type="text"`.
+
+```tsx
+// p-input-9.tsx — Password with visibility toggle
+"use client";
+
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/registry/default/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/default/ui/input-group";
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipTrigger,
+} from "@/registry/default/ui/tooltip";
+
+export default function Particle() {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <InputGroup>
+      <InputGroupInput
+        aria-label="Password with toggle visibility"
+        placeholder="Enter your password"
+        type={showPassword ? "text" : "password"}
+      />
+      <InputGroupAddon align="inline-end">
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => setShowPassword(!showPassword)}
+                size="icon-xs"
+                variant="ghost"
+              />
+            }
+          >
+            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+          </TooltipTrigger>
+          <TooltipPopup>
+            {showPassword ? "Hide password" : "Show password"}
+          </TooltipPopup>
+        </Tooltip>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}
+```
+
+For a simpler password input with requirements tooltip (no visibility toggle):
+
+```tsx
+// p-input-group-7.tsx — Password with info tooltip
+"use client";
+
+import { InfoIcon } from "lucide-react";
+import { Button } from "@/registry/default/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/default/ui/input-group";
+import {
+  Popover,
+  PopoverPopup,
+  PopoverTrigger,
+} from "@/registry/default/ui/popover";
+
+export default function Particle() {
+  return (
+    <InputGroup>
+      <InputGroupInput
+        aria-label="Password"
+        placeholder="Password"
+        type="password"
+      />
+      <InputGroupAddon align="inline-end">
+        <Popover>
+          <PopoverTrigger
+            openOnHover
+            render={
+              <Button
+                aria-label="Password requirements"
+                size="icon-xs"
+                variant="ghost"
+              />
+            }
+          >
+            <InfoIcon />
+          </PopoverTrigger>
+          <PopoverPopup side="top" tooltipStyle>
+            <p>Min. 8 characters</p>
+          </PopoverPopup>
+        </Popover>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}
+```
+
+## Clearable inputs
+
+Show a clear button only when the input has a value.
+
+```tsx
+// p-input-group-22.tsx — Input with clear button
+"use client";
+
+import { XIcon } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/registry/default/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/default/ui/input-group";
+
+export default function Particle() {
+  const [value, setValue] = useState("Clear me");
+
+  return (
+    <InputGroup>
+      <InputGroupInput
+        aria-label="Text input with clear button"
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Enter text"
+        type="text"
+        value={value}
+      />
+      {value && (
+        <InputGroupAddon align="inline-end">
+          <Button
+            aria-label="Clear input"
+            onClick={() => setValue("")}
+            size="icon-xs"
+            variant="ghost"
+          >
+            <XIcon aria-hidden="true" />
+          </Button>
+        </InputGroupAddon>
+      )}
+    </InputGroup>
+  );
+}
+```
+
+## Input with badge
+
+Attach a `Badge` to an input group as a label or status indicator.
+
+```tsx
+// p-input-group-10.tsx — Search with badge
+import { Badge } from "@/registry/default/ui/badge";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/default/ui/input-group";
+
+export default function Particle() {
+  return (
+    <InputGroup>
+      <InputGroupInput placeholder="Type to search…" type="search" />
+      <InputGroupAddon align="inline-end">
+        <Badge variant="info">Badge</Badge>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}
+```
+
+## Newsletter / email capture
+
+An email input with an inline submit arrow button.
+
+```tsx
+// p-input-group-15.tsx — Email capture with submit button
+import { ArrowRightIcon } from "lucide-react";
+import { Button } from "@/registry/default/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/default/ui/input-group";
+
+export default function Particle() {
+  return (
+    <InputGroup>
+      <InputGroupInput
+        aria-label="Subscribe to our newsletter"
+        disabled
+        placeholder="Your best email"
+        type="email"
+      />
+      <InputGroupAddon align="inline-end">
+        <Button aria-label="Subscribe" disabled size="icon-xs" variant="ghost">
+          <ArrowRightIcon aria-hidden="true" />
+        </Button>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}
+```
+
+## Loading state
+
+Disable the input and show a spinner while an async operation is running.
+
+```tsx
+// p-input-12.tsx — Input with loading spinner
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/registry/default/ui/input-group";
+import { Spinner } from "@/registry/default/ui/spinner";
+
+export default function Particle() {
+  return (
+    <InputGroup>
+      <InputGroupInput disabled placeholder="Processing…" type="search" />
+      <InputGroupAddon>
+        <Spinner />
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}
+```

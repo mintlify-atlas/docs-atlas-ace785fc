@@ -1,0 +1,314 @@
+---
+title: Combobox
+description: A filterable input combined with a dropdown list of selectable items, supporting single and multiple selection.
+---
+
+## Overview
+
+The Combobox component combines a text input with a filterable popup list. Users can type to narrow down options and select one or more values. In multiple selection mode, selected values appear as removable chips inside the input area.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/combobox
+```
+
+## Basic usage
+
+### Single selection
+
+```tsx
+import {
+  Combobox,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxPopup,
+} from "@/components/ui/combobox"
+
+const items = [
+  { value: "apple", label: "Apple" },
+  { value: "banana", label: "Banana" },
+  { value: "orange", label: "Orange" },
+  { value: "grape", label: "Grape" },
+]
+
+export function ComboboxDemo() {
+  return (
+    <Combobox items={items}>
+      <ComboboxInput placeholder="Select a fruit..." />
+      <ComboboxPopup>
+        <ComboboxEmpty>No results found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item) => (
+            <ComboboxItem key={item.value} value={item}>
+              {item.label}
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxPopup>
+    </Combobox>
+  )
+}
+```
+
+### Multiple selection
+
+```tsx
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxPopup,
+  ComboboxValue,
+} from "@/components/ui/combobox"
+
+export function MultipleCombobox() {
+  return (
+    <Combobox items={items} multiple>
+      <ComboboxChips>
+        <ComboboxValue>
+          {(value: typeof items) => (
+            <>
+              {value?.map((item) => (
+                <ComboboxChip key={item.value} aria-label={item.label}>
+                  {item.label}
+                </ComboboxChip>
+              ))}
+              <ComboboxChipsInput
+                aria-label="Select a fruit"
+                placeholder={value.length > 0 ? undefined : "Select fruits..."}
+              />
+            </>
+          )}
+        </ComboboxValue>
+      </ComboboxChips>
+      <ComboboxPopup>
+        <ComboboxEmpty>No results found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item) => (
+            <ComboboxItem key={item.value} value={item}>
+              {item.label}
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxPopup>
+    </Combobox>
+  )
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Combobox` | Root component. Manages state and provides context to children. |
+| `ComboboxInput` | Input field for single selection mode. Includes optional trigger and clear buttons. |
+| `ComboboxChips` | Input container for multiple selection mode. Displays selected chips. |
+| `ComboboxChipsInput` | Bare text input for use inside `ComboboxChips`. |
+| `ComboboxChip` | Individual chip representing a selected value in multiple mode. |
+| `ComboboxChipRemove` | Remove button inside a chip. |
+| `ComboboxPopup` | Floating popup container rendered in a portal. |
+| `ComboboxList` | Scrollable list of items inside the popup. |
+| `ComboboxItem` | Individual selectable item with a check indicator. |
+| `ComboboxEmpty` | Shown when no items match the current filter. |
+| `ComboboxGroup` | Groups related items. |
+| `ComboboxGroupLabel` | Label for an item group. |
+| `ComboboxSeparator` | Horizontal rule between groups or items. |
+| `ComboboxTrigger` | Toggle button to open/close the popup. |
+| `ComboboxClear` | Button to clear the current value. |
+| `ComboboxValue` | Provides access to the current value for custom rendering. |
+| `ComboboxStatus` | Displays async status messages. |
+| `ComboboxCollection` | Wraps items within a group for rendering. |
+| `ComboboxRow` | Renders items in a horizontal row layout. |
+
+## Props
+
+### Combobox
+
+<ParamField path="items" type="readonly unknown[]" required>
+  Items to display in the popup list.
+</ParamField>
+
+<ParamField path="multiple" type="boolean" default="false">
+  Enables multiple item selection.
+</ParamField>
+
+<ParamField path="value" type="unknown">
+  Controlled selected value.
+</ParamField>
+
+<ParamField path="defaultValue" type="unknown">
+  Initial selected value (uncontrolled).
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: unknown) => void">
+  Callback fired when the selection changes.
+</ParamField>
+
+<ParamField path="open" type="boolean">
+  Controls whether the popup is open.
+</ParamField>
+
+<ParamField path="onOpenChange" type="(open: boolean) => void">
+  Callback fired when the popup open state changes.
+</ParamField>
+
+### ComboboxInput
+
+<ParamField path="size" type="'sm' | 'default' | 'lg'" default="'default'">
+  Size variant of the input.
+</ParamField>
+
+<ParamField path="startAddon" type="React.ReactNode">
+  Element rendered at the leading edge of the input.
+</ParamField>
+
+<ParamField path="showTrigger" type="boolean" default="true">
+  Displays a chevron toggle button.
+</ParamField>
+
+<ParamField path="showClear" type="boolean" default="false">
+  Displays a clear button when a value is present.
+</ParamField>
+
+<ParamField path="triggerProps" type="Combobox.Trigger.Props">
+  Props forwarded to the trigger button.
+</ParamField>
+
+<ParamField path="clearProps" type="Combobox.Clear.Props">
+  Props forwarded to the clear button.
+</ParamField>
+
+### ComboboxChip
+
+<ParamField path="removeProps" type="Combobox.ChipRemove.Props">
+  Props forwarded to the chip's remove button.
+</ParamField>
+
+## Examples
+
+### With grouped items
+
+```tsx
+import {
+  Combobox,
+  ComboboxCollection,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxGroupLabel,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxPopup,
+  ComboboxSeparator,
+} from "@/components/ui/combobox"
+
+const grouped = [
+  {
+    value: "fruits",
+    items: [
+      { value: "apple", label: "Apple" },
+      { value: "banana", label: "Banana" },
+    ],
+  },
+  {
+    value: "vegetables",
+    items: [
+      { value: "carrot", label: "Carrot" },
+      { value: "broccoli", label: "Broccoli" },
+    ],
+  },
+]
+
+export function GroupedCombobox() {
+  return (
+    <Combobox items={grouped}>
+      <ComboboxInput placeholder="Search..." />
+      <ComboboxPopup>
+        <ComboboxEmpty>No results.</ComboboxEmpty>
+        <ComboboxList>
+          {(group, i) => (
+            <>
+              <ComboboxGroup key={group.value} items={group.items}>
+                <ComboboxGroupLabel>{group.value}</ComboboxGroupLabel>
+                <ComboboxCollection>
+                  {(item) => (
+                    <ComboboxItem key={item.value} value={item}>
+                      {item.label}
+                    </ComboboxItem>
+                  )}
+                </ComboboxCollection>
+              </ComboboxGroup>
+              {i < grouped.length - 1 && <ComboboxSeparator />}
+            </>
+          )}
+        </ComboboxList>
+      </ComboboxPopup>
+    </Combobox>
+  )
+}
+```
+
+### With start icon
+
+```tsx
+import { SearchIcon } from "lucide-react"
+import { Combobox, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList, ComboboxPopup } from "@/components/ui/combobox"
+
+export function ComboboxWithIcon() {
+  return (
+    <Combobox items={items}>
+      <ComboboxInput
+        placeholder="Search fruits..."
+        startAddon={<SearchIcon />}
+        showTrigger={false}
+      />
+      <ComboboxPopup>
+        <ComboboxEmpty>No results.</ComboboxEmpty>
+        <ComboboxList>
+          {(item) => <ComboboxItem key={item.value} value={item}>{item.label}</ComboboxItem>}
+        </ComboboxList>
+      </ComboboxPopup>
+    </Combobox>
+  )
+}
+```
+
+### Controlled value
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { Combobox, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList, ComboboxPopup } from "@/components/ui/combobox"
+
+const items = [
+  { value: "apple", label: "Apple" },
+  { value: "banana", label: "Banana" },
+]
+
+export function ControlledCombobox() {
+  const [value, setValue] = useState<(typeof items)[0] | null>(null)
+
+  return (
+    <div className="space-y-2">
+      <Combobox items={items} value={value} onValueChange={setValue}>
+        <ComboboxInput placeholder="Select a fruit..." />
+        <ComboboxPopup>
+          <ComboboxEmpty>No results.</ComboboxEmpty>
+          <ComboboxList>
+            {(item) => <ComboboxItem key={item.value} value={item}>{item.label}</ComboboxItem>}
+          </ComboboxList>
+        </ComboboxPopup>
+      </Combobox>
+      {value && <p className="text-sm text-muted-foreground">Selected: {value.label}</p>}
+    </div>
+  )
+}
+```

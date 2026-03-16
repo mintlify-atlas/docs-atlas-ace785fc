@@ -1,0 +1,117 @@
+---
+title: Tooltip
+description: A small popup that appears on hover or focus to provide a hint for sighted users.
+---
+
+## Overview
+
+Tooltip shows a short text label when a user hovers or focuses an element. Use it to label icon-only buttons or provide brief contextual hints. For interactive content, use `Popover` instead.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/tooltip
+```
+
+## Basic usage
+
+```tsx
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+```
+
+```tsx
+<Tooltip>
+  <TooltipTrigger render={<Button size="icon" variant="ghost" aria-label="Settings" />}>
+    <SettingsIcon aria-hidden="true" />
+  </TooltipTrigger>
+  <TooltipPopup>Settings</TooltipPopup>
+</Tooltip>
+```
+
+## Sub-components
+
+### Tooltip
+
+Root component. Alias for `Tooltip.Root` from Base UI.
+
+### TooltipTrigger
+
+Trigger element that shows the tooltip on hover and focus. Alias for `Tooltip.Trigger` from Base UI.
+
+### TooltipPopup
+
+Floating tooltip popup. Also exported as `TooltipContent`.
+
+<ParamField path="props.side" type="'top' | 'bottom' | 'left' | 'right'" default="'top'">
+  Side of the trigger to position the tooltip.
+</ParamField>
+
+<ParamField path="props.align" type="'start' | 'center' | 'end'" default="'center'">
+  Alignment relative to the trigger.
+</ParamField>
+
+<ParamField path="props.sideOffset" type="number" default="4">
+  Distance from the trigger in pixels.
+</ParamField>
+
+### TooltipProvider
+
+Groups multiple tooltips so that subsequent tooltips open instantly after the first one. Wraps `Tooltip.Provider` from Base UI.
+
+### TooltipCreateHandle
+
+Creates a handle for detached triggers, allowing multiple triggers to share one tooltip popup with animated transitions.
+
+## Examples
+
+### Labeling an icon button
+
+Tooltips are most commonly used to label icon-only buttons:
+
+```tsx
+<Tooltip>
+  <TooltipTrigger render={<Button size="icon" variant="ghost" aria-label="Copy" />}>
+    <CopyIcon aria-hidden="true" />
+  </TooltipTrigger>
+  <TooltipPopup>Copy to clipboard</TooltipPopup>
+</Tooltip>
+```
+
+### Grouped tooltips
+
+Wrap related tooltips in `TooltipProvider` to make them open instantly after the first:
+
+```tsx
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger render={<Button size="icon" variant="ghost" aria-label="Bold" />}>
+      <BoldIcon aria-hidden="true" />
+    </TooltipTrigger>
+    <TooltipPopup>Bold</TooltipPopup>
+  </Tooltip>
+  <Tooltip>
+    <TooltipTrigger render={<Button size="icon" variant="ghost" aria-label="Italic" />}>
+      <ItalicIcon aria-hidden="true" />
+    </TooltipTrigger>
+    <TooltipPopup>Italic</TooltipPopup>
+  </Tooltip>
+</TooltipProvider>
+```
+
+### Positioned below
+
+```tsx
+<Tooltip>
+  <TooltipTrigger render={<Button variant="outline" />}>Hover me</TooltipTrigger>
+  <TooltipPopup side="bottom">Tooltip on the bottom</TooltipPopup>
+</Tooltip>
+```
+
+<Warning>
+  Tooltips are not shown on touch devices. Never put information in a tooltip that users must act on — use visible text or a `Popover` instead.
+</Warning>

@@ -1,0 +1,180 @@
+---
+title: Avatar
+description: A circular image element with a text fallback for representing a user or entity.
+---
+
+## Overview
+
+`Avatar` wraps Base UI's `Avatar` primitive to display a user or entity image with an automatic fallback. When the image fails to load — or no `src` is provided — `AvatarFallback` renders instead, typically showing initials or an icon. Use it in navigation bars, comment threads, user lists, or anywhere you need a compact identity representation.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/avatar
+```
+
+## Basic usage
+
+```tsx
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+export default function Example() {
+  return (
+    <Avatar>
+      <AvatarImage src="/avatars/user.png" alt="Jane Doe" />
+      <AvatarFallback>JD</AvatarFallback>
+    </Avatar>
+  )
+}
+```
+
+## Variants
+
+`Avatar` has no CVA variants. Size and shape are controlled via `className`.
+
+### With image
+
+```tsx
+<Avatar>
+  <AvatarImage src="https://example.com/avatar.jpg" alt="Alex" />
+  <AvatarFallback>AL</AvatarFallback>
+</Avatar>
+```
+
+### Fallback only
+
+```tsx
+<Avatar>
+  <AvatarFallback>JD</AvatarFallback>
+</Avatar>
+```
+
+### Custom sizes
+
+The default size is `size-8` (32 px). Override using Tailwind size utilities.
+
+```tsx
+<div className="flex items-center gap-3">
+  <Avatar className="size-6">
+    <AvatarFallback className="text-[10px]">XS</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>MD</AvatarFallback>
+  </Avatar>
+  <Avatar className="size-12">
+    <AvatarFallback>LG</AvatarFallback>
+  </Avatar>
+  <Avatar className="size-16">
+    <AvatarFallback>XL</AvatarFallback>
+  </Avatar>
+</div>
+```
+
+### Custom radius
+
+```tsx
+<Avatar className="rounded-md">
+  <AvatarImage src="/avatars/user.png" alt="User" />
+  <AvatarFallback>AB</AvatarFallback>
+</Avatar>
+```
+
+### Grouped avatars
+
+```tsx
+<div className="flex -space-x-2">
+  {users.map((user) => (
+    <Avatar key={user.id} className="ring-2 ring-background">
+      <AvatarImage src={user.src} alt={user.name} />
+      <AvatarFallback>{user.initials}</AvatarFallback>
+    </Avatar>
+  ))}
+</div>
+```
+
+## Props
+
+### Avatar
+
+`Avatar` accepts all props from `Avatar.Root.Props` in Base UI.
+
+<ParamField path="className" type="string">
+  Additional CSS classes. Use Tailwind `size-*` utilities to change the avatar dimensions and `rounded-*` to change the shape. Default size is `size-8`; default shape is `rounded-full`.
+</ParamField>
+
+### AvatarImage
+
+`AvatarImage` accepts all props from `Avatar.Image.Props` in Base UI.
+
+<ParamField path="src" type="string">
+  The URL of the avatar image.
+</ParamField>
+
+<ParamField path="alt" type="string">
+  Descriptive alt text for the image. Required for accessibility when the image conveys the user's identity.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes. Defaults to `size-full object-cover`.
+</ParamField>
+
+### AvatarFallback
+
+`AvatarFallback` accepts all props from `Avatar.Fallback.Props` in Base UI.
+
+<ParamField path="className" type="string">
+  Additional CSS classes for the fallback container. Renders as a `<span>` with a muted background and centered content.
+</ParamField>
+
+## Examples
+
+### User profile header
+
+```tsx
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+<div className="flex items-center gap-3">
+  <Avatar className="size-10">
+    <AvatarImage src="/user.jpg" alt="Sarah Connor" />
+    <AvatarFallback>SC</AvatarFallback>
+  </Avatar>
+  <div>
+    <p className="font-medium text-sm">Sarah Connor</p>
+    <p className="text-muted-foreground text-xs">sarah@example.com</p>
+  </div>
+</div>
+```
+
+### Avatar with badge indicator
+
+```tsx
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+<div className="relative inline-flex">
+  <Avatar>
+    <AvatarImage src="/user.jpg" alt="Online user" />
+    <AvatarFallback>JD</AvatarFallback>
+  </Avatar>
+  <span
+    aria-label="Online"
+    className="absolute bottom-0 right-0 size-2.5 rounded-full bg-green-500 ring-2 ring-background"
+  />
+</div>
+```
+
+### Fallback with icon
+
+```tsx
+import { UserIcon } from "lucide-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+
+<Avatar className="size-10">
+  <AvatarFallback>
+    <UserIcon aria-hidden="true" className="size-5 text-muted-foreground" />
+  </AvatarFallback>
+</Avatar>
+```
+
+<Note>
+  Base UI's `Avatar.Fallback` delays rendering until it determines the image has failed to load, which prevents a flash of fallback content when the image loads quickly.
+</Note>

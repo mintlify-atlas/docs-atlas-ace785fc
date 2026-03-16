@@ -1,0 +1,96 @@
+---
+title: Input
+description: A styled text input element.
+---
+
+<ComponentPreview name="p-input-1" />
+
+## Overview
+
+`Input` wraps Base UI's `Input` primitive in a styled container that handles borders, focus rings, validation states, and autofill styling. The inner input element can be swapped for a native `<input>` using the `nativeInput` prop.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/input
+```
+
+## Basic usage
+
+```tsx
+import { Input } from "@/components/ui/input"
+```
+
+```tsx
+<Input type="text" placeholder="Enter text" />
+```
+
+<Note>
+  Always specify the `type` attribute explicitly, even for text inputs. This ensures consistent behavior and accessibility across browsers.
+</Note>
+
+## Sizes
+
+The `size` prop controls the input height.
+
+| Size      | Description                              |
+| --------- | ---------------------------------------- |
+| `sm`      | Small height (30px / 26px on sm)         |
+| `default` | Default height (34px / 30px on sm)       |
+| `lg`      | Large height (38px / 34px on sm)         |
+
+Passing a number to `size` forwards the value to the native `size` attribute (character width), not the visual height.
+
+## Props
+
+<ParamField path="type" type="string">
+  The input type. Always specify this explicitly (e.g., `"text"`, `"email"`, `"password"`, `"search"`, `"file"`).
+</ParamField>
+
+<ParamField path="size" type='"sm" | "default" | "lg" | number'>
+  Visual height of the input. Passing a number sets the native `size` attribute instead. Defaults to `"default"`.
+</ParamField>
+
+<ParamField path="unstyled" type="boolean">
+  When `true`, removes the wrapper styling (border, shadow, background). Used internally by `InputGroupInput`. Defaults to `false`.
+</ParamField>
+
+<ParamField path="nativeInput" type="boolean">
+  When `true`, renders a native `<input>` element instead of Base UI's `Input` primitive. Defaults to `false`.
+</ParamField>
+
+<ParamField path="...props" type="InputPrimitive.Props">
+  All props from Base UI's `Input` primitive are supported, including `name`, `value`, `defaultValue`, `disabled`, `required`, `aria-invalid`, and standard input attributes.
+</ParamField>
+
+## Examples
+
+For accessible labelling and validation, wrap inputs with the `Field` component. See [Field](/components/field) for examples.
+
+### Small size
+
+<ComponentPreview name="p-input-2" />
+
+### Large size
+
+<ComponentPreview name="p-input-3" />
+
+### Disabled
+
+<ComponentPreview name="p-input-4" />
+
+### File
+
+<ComponentPreview name="p-input-5" />
+
+### With label
+
+<ComponentPreview name="p-input-6" />
+
+### With button
+
+<ComponentPreview name="p-input-7" />
+
+### Form integration
+
+<ComponentPreview name="p-form-1" />

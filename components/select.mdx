@@ -1,0 +1,194 @@
+---
+title: Select
+description: A dropdown for choosing a single value from a predefined list.
+---
+
+<ComponentPreview name="p-select-1" />
+
+## Overview
+
+`Select` wraps Base UI's `Select` primitive family. Unlike shadcn/ui's Select, items are passed to the root via an `items` prop and rendered manually inside `SelectPopup`. This gives full control over item rendering while keeping the selection model in sync.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/select
+```
+
+## Basic usage
+
+```tsx
+import {
+  Select,
+  SelectItem,
+  SelectPopup,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+```
+
+```tsx
+const items = [
+  { label: "Select framework", value: null },
+  { label: "Next.js", value: "next" },
+  { label: "Vite", value: "vite" },
+  { label: "Astro", value: "astro" },
+]
+
+<Select items={items}>
+  <SelectTrigger>
+    <SelectValue />
+  </SelectTrigger>
+  <SelectPopup>
+    {items.map((item) => (
+      <SelectItem key={item.value} value={item}>
+        {item.label}
+      </SelectItem>
+    ))}
+  </SelectPopup>
+</Select>
+```
+
+<Note>
+  `Select` is an alias for `SelectPrimitive.Root` from Base UI. The `items` prop is required — it tells the select which value object corresponds to the current selection.
+</Note>
+
+## Props
+
+### Select
+
+Root component. Alias for `Select.Root` from Base UI.
+
+<ParamField path="items" type="object[]">
+  Array of item objects available for selection. Each object is used as the `value` prop on `SelectItem`.
+</ParamField>
+
+<ParamField path="value" type="object | null">
+  Controlled selected item object.
+</ParamField>
+
+<ParamField path="defaultValue" type="object | null">
+  Initial selected item object for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: object | null) => void">
+  Callback fired when the selection changes.
+</ParamField>
+
+### SelectTrigger
+
+Trigger button that opens the dropdown.
+
+<ParamField path="size" type='"sm" | "default" | "lg"'>
+  Controls the height of the trigger. Defaults to `"default"`.
+</ParamField>
+
+### SelectValue
+
+Displays the label of the currently selected item, or a placeholder when nothing is selected.
+
+### SelectPopup
+
+Positioned popup containing the list of options. Also exported as `SelectContent`.
+
+<ParamField path="side" type='"top" | "bottom" | "left" | "right"'>
+  Preferred side for the popup. Defaults to `"bottom"`.
+</ParamField>
+
+<ParamField path="sideOffset" type="number">
+  Distance in pixels from the trigger. Defaults to `4`.
+</ParamField>
+
+<ParamField path="align" type='"start" | "center" | "end"'>
+  Alignment of the popup relative to the trigger. Defaults to `"start"`.
+</ParamField>
+
+<ParamField path="alignItemWithTrigger" type="boolean">
+  When `true`, scrolls the popup so the selected item aligns with the trigger. Defaults to `true`.
+</ParamField>
+
+### SelectItem
+
+Individual option with a built-in selection indicator.
+
+<ParamField path="value" type="object">
+  The item object from the `items` array. This is what gets set as the select's value when chosen.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Prevents the item from being selected.
+</ParamField>
+
+### SelectGroup
+
+Groups related items together. Alias for `Select.Group` from Base UI.
+
+### SelectGroupLabel
+
+Label displayed at the top of a `SelectGroup`.
+
+### SelectLabel
+
+Label for all options in the popup. Clicking it focuses the trigger without opening the popup.
+
+### SelectSeparator
+
+Visual horizontal rule between items or groups.
+
+### SelectButton
+
+A standalone button styled like `SelectTrigger`. Use it as the `render` prop on other trigger components to give them a select-like appearance.
+
+```tsx
+<ComboboxTrigger render={<SelectButton />}>
+  <ComboboxValue placeholder="Select a fruit" />
+</ComboboxTrigger>
+```
+
+<ParamField path="size" type='"sm" | "default" | "lg"'>
+  Controls the height. Defaults to `"default"`.
+</ParamField>
+
+## Examples
+
+For accessible labelling and validation, wrap selects with the `Field` component. See the related example: [Select field](/components/field#select-field).
+
+### Small size
+
+<ComponentPreview name="p-select-2" />
+
+### Large size
+
+<ComponentPreview name="p-select-3" />
+
+### Disabled
+
+<ComponentPreview name="p-select-4" />
+
+### Without item alignment
+
+<ComponentPreview name="p-select-5" />
+
+### With groups
+
+<ComponentPreview name="p-select-6" />
+
+### With label
+
+<ComponentPreview name="p-select-23" />
+
+### Multiple selection
+
+<ComponentPreview name="p-select-7" />
+
+### With icon
+
+<ComponentPreview name="p-select-8" />
+
+### Options with icon
+
+<ComponentPreview name="p-select-9" />
+
+### Form integration
+
+<ComponentPreview name="p-select-11" />

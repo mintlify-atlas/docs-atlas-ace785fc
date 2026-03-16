@@ -1,0 +1,284 @@
+---
+title: Autocomplete
+description: A search-as-you-type input with a filterable dropdown list, built on Base UI Autocomplete.
+---
+
+## Overview
+
+The Autocomplete component combines a text input with a scrollable popup of selectable items. As the user types, the list filters to matching options. Use it for tag inputs, user search, command-driven fields, or any input where the user chooses from a large set of values.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/autocomplete
+```
+
+## Basic usage
+
+```tsx
+import {
+  Autocomplete,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+} from "@/components/ui/autocomplete"
+
+const frameworks = [
+  { value: "next", label: "Next.js" },
+  { value: "remix", label: "Remix" },
+  { value: "astro", label: "Astro" },
+  { value: "vite", label: "Vite" },
+]
+
+export function AutocompleteDemo() {
+  return (
+    <Autocomplete items={frameworks}>
+      <AutocompleteInput placeholder="Search frameworks..." />
+      <AutocompletePopup>
+        <AutocompleteEmpty>No frameworks found.</AutocompleteEmpty>
+        <AutocompleteList>
+          {(item) => (
+            <AutocompleteItem key={item.value} value={item}>
+              {item.label}
+            </AutocompleteItem>
+          )}
+        </AutocompleteList>
+      </AutocompletePopup>
+    </Autocomplete>
+  )
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Autocomplete` | Root component. Alias for `Autocomplete.Root` from Base UI. |
+| `AutocompleteInput` | Text input field with optional trigger, clear button, and start addon. |
+| `AutocompletePopup` | Floating popup container rendered in a portal. |
+| `AutocompleteList` | Scrollable list of items rendered inside the popup. |
+| `AutocompleteItem` | Individual selectable item. |
+| `AutocompleteEmpty` | Shown when the filtered list is empty. |
+| `AutocompleteGroup` | Groups related items together. |
+| `AutocompleteGroupLabel` | Label rendered at the top of a group. |
+| `AutocompleteSeparator` | Horizontal rule between groups or items. |
+| `AutocompleteTrigger` | Optional toggle button to open/close the popup. |
+| `AutocompleteClear` | Button to clear the current input value. |
+| `AutocompleteValue` | Provides access to the current value for custom rendering. |
+| `AutocompleteStatus` | Displays async status messages (e.g. loading, error). |
+| `AutocompleteRow` | Renders items in a horizontal row layout. |
+| `AutocompleteCollection` | Wraps items within a group for rendering. |
+
+## Props
+
+### Autocomplete
+
+<ParamField path="items" type="readonly unknown[]" required>
+  The array of items to display. Can be flat or grouped.
+</ParamField>
+
+<ParamField path="value" type="unknown">
+  The controlled selected value.
+</ParamField>
+
+<ParamField path="defaultValue" type="unknown">
+  The initial selected value (uncontrolled).
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: unknown) => void">
+  Callback fired when the selected value changes.
+</ParamField>
+
+<ParamField path="inputValue" type="string">
+  The controlled input text value.
+</ParamField>
+
+<ParamField path="onInputChange" type="(value: string) => void">
+  Callback fired when the input text changes.
+</ParamField>
+
+<ParamField path="open" type="boolean">
+  Controls whether the popup is open.
+</ParamField>
+
+<ParamField path="autoHighlight" type="boolean | 'always'">
+  Controls automatic highlighting of the first matching item.
+</ParamField>
+
+### AutocompleteInput
+
+<ParamField path="size" type="'sm' | 'default' | 'lg'" default="'default'">
+  Size variant of the input field.
+</ParamField>
+
+<ParamField path="startAddon" type="React.ReactNode">
+  Element rendered at the leading edge of the input, such as an icon.
+</ParamField>
+
+<ParamField path="showTrigger" type="boolean" default="false">
+  Displays a chevron toggle button at the trailing edge.
+</ParamField>
+
+<ParamField path="showClear" type="boolean" default="false">
+  Displays an X clear button at the trailing edge when a value is entered.
+</ParamField>
+
+<ParamField path="triggerProps" type="Autocomplete.Trigger.Props">
+  Props forwarded to the internal trigger button.
+</ParamField>
+
+<ParamField path="clearProps" type="Autocomplete.Clear.Props">
+  Props forwarded to the internal clear button.
+</ParamField>
+
+### AutocompletePopup
+
+<ParamField path="side" type="'top' | 'bottom' | 'left' | 'right'" default="'bottom'">
+  Which side of the trigger the popup appears on.
+</ParamField>
+
+<ParamField path="sideOffset" type="number" default="4">
+  Distance in pixels between the trigger and the popup.
+</ParamField>
+
+<ParamField path="align" type="'start' | 'center' | 'end'" default="'start'">
+  Alignment of the popup relative to the trigger.
+</ParamField>
+
+## Examples
+
+### With start icon
+
+```tsx
+import { SearchIcon } from "lucide-react"
+import {
+  Autocomplete,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+} from "@/components/ui/autocomplete"
+
+const users = [
+  { value: "alice", label: "Alice Johnson" },
+  { value: "bob", label: "Bob Smith" },
+  { value: "carol", label: "Carol White" },
+]
+
+export function AutocompleteWithIcon() {
+  return (
+    <Autocomplete items={users}>
+      <AutocompleteInput
+        placeholder="Search users..."
+        startAddon={<SearchIcon />}
+      />
+      <AutocompletePopup>
+        <AutocompleteEmpty>No users found.</AutocompleteEmpty>
+        <AutocompleteList>
+          {(user) => (
+            <AutocompleteItem key={user.value} value={user}>
+              {user.label}
+            </AutocompleteItem>
+          )}
+        </AutocompleteList>
+      </AutocompletePopup>
+    </Autocomplete>
+  )
+}
+```
+
+### With grouped items
+
+```tsx
+import {
+  Autocomplete,
+  AutocompleteCollection,
+  AutocompleteEmpty,
+  AutocompleteGroup,
+  AutocompleteGroupLabel,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+  AutocompleteSeparator,
+} from "@/components/ui/autocomplete"
+
+const grouped = [
+  {
+    value: "frameworks",
+    items: [
+      { value: "next", label: "Next.js" },
+      { value: "remix", label: "Remix" },
+    ],
+  },
+  {
+    value: "bundlers",
+    items: [
+      { value: "vite", label: "Vite" },
+      { value: "webpack", label: "Webpack" },
+    ],
+  },
+]
+
+export function GroupedAutocomplete() {
+  return (
+    <Autocomplete items={grouped}>
+      <AutocompleteInput placeholder="Search tools..." />
+      <AutocompletePopup>
+        <AutocompleteEmpty>No results.</AutocompleteEmpty>
+        <AutocompleteList>
+          {(group, i) => (
+            <>
+              <AutocompleteGroup key={group.value} items={group.items}>
+                <AutocompleteGroupLabel>{group.value}</AutocompleteGroupLabel>
+                <AutocompleteCollection>
+                  {(item) => (
+                    <AutocompleteItem key={item.value} value={item}>
+                      {item.label}
+                    </AutocompleteItem>
+                  )}
+                </AutocompleteCollection>
+              </AutocompleteGroup>
+              {i < grouped.length - 1 && <AutocompleteSeparator />}
+            </>
+          )}
+        </AutocompleteList>
+      </AutocompletePopup>
+    </Autocomplete>
+  )
+}
+```
+
+### With clear button
+
+```tsx
+import {
+  Autocomplete,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+} from "@/components/ui/autocomplete"
+
+export function ClearableAutocomplete() {
+  return (
+    <Autocomplete items={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }]}>
+      <AutocompleteInput placeholder="Search..." showClear />
+      <AutocompletePopup>
+        <AutocompleteEmpty>No results.</AutocompleteEmpty>
+        <AutocompleteList>
+          {(item) => (
+            <AutocompleteItem key={item.value} value={item}>
+              {item.label}
+            </AutocompleteItem>
+          )}
+        </AutocompleteList>
+      </AutocompletePopup>
+    </Autocomplete>
+  )
+}
+```

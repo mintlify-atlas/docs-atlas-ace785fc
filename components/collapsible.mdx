@@ -1,0 +1,174 @@
+---
+title: Collapsible
+description: A simple show/hide container with a trigger and animated panel, built on Base UI Collapsible.
+---
+
+## Overview
+
+The Collapsible component is a lightweight expand/collapse container. Unlike the Accordion, it is a single self-contained unit — it does not group multiple items or enforce mutual exclusion. Use it for inline content that users may want to show or hide: advanced filter panels, additional details, or secondary navigation.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/collapsible
+```
+
+## Basic usage
+
+```tsx
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import { Button } from "@/components/ui/button"
+import { ChevronsUpDownIcon } from "lucide-react"
+
+export function CollapsibleDemo() {
+  return (
+    <Collapsible className="w-80 space-y-2">
+      <div className="flex items-center justify-between">
+        <h4 className="text-sm font-medium">3 repositories starred</h4>
+        <CollapsibleTrigger render={<Button size="icon" variant="ghost" />}>
+          <ChevronsUpDownIcon className="size-4" aria-hidden="true" />
+          <span className="sr-only">Toggle</span>
+        </CollapsibleTrigger>
+      </div>
+      <div className="rounded-md border px-4 py-2 text-sm font-mono">
+        @radix-ui/primitives
+      </div>
+      <CollapsiblePanel className="space-y-2">
+        <div className="rounded-md border px-4 py-2 text-sm font-mono">
+          @radix-ui/colors
+        </div>
+        <div className="rounded-md border px-4 py-2 text-sm font-mono">
+          @stitches/react
+        </div>
+      </CollapsiblePanel>
+    </Collapsible>
+  )
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Collapsible` | Root component. Wraps `Collapsible.Root` from Base UI. Manages open/closed state. |
+| `CollapsibleTrigger` | Button that toggles the panel. Wraps `Collapsible.Trigger` from Base UI. |
+| `CollapsiblePanel` | Animated content area. Height transitions on open and close. Also exported as `CollapsibleContent`. |
+
+## Props
+
+### Collapsible
+
+<ParamField path="open" type="boolean">
+  Controls whether the panel is open. Use with `onOpenChange` for controlled behavior.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean" default="false">
+  Whether the panel is open on initial render (uncontrolled).
+</ParamField>
+
+<ParamField path="onOpenChange" type="(open: boolean) => void">
+  Callback fired when the open state changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  When `true`, prevents the user from opening or closing the panel.
+</ParamField>
+
+### CollapsibleTrigger
+
+Accepts all Base UI `Collapsible.Trigger` props, including the `render` prop for rendering a custom element.
+
+### CollapsiblePanel
+
+Accepts all Base UI `Collapsible.Panel` props. Also exported as `CollapsibleContent`.
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the panel container.
+</ParamField>
+
+## Examples
+
+### Controlled
+
+Manage the open state externally.
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Button } from "@/components/ui/button"
+
+export function ControlledCollapsible() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="space-y-2">
+      <Collapsible open={open} onOpenChange={setOpen}>
+        <CollapsibleTrigger render={<Button variant="outline" />}>
+          {open ? "Hide details" : "Show details"}
+        </CollapsibleTrigger>
+        <CollapsiblePanel className="pt-2">
+          <p className="text-sm text-muted-foreground">
+            This content is only visible when the panel is open.
+          </p>
+        </CollapsiblePanel>
+      </Collapsible>
+    </div>
+  )
+}
+```
+
+### Default open
+
+```tsx
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/components/ui/collapsible"
+
+export function DefaultOpenCollapsible() {
+  return (
+    <Collapsible defaultOpen className="space-y-2">
+      <CollapsibleTrigger className="text-sm font-medium underline underline-offset-4">
+        Hide advanced options
+      </CollapsibleTrigger>
+      <CollapsiblePanel>
+        <p className="text-sm text-muted-foreground">
+          Advanced configuration options appear here.
+        </p>
+      </CollapsiblePanel>
+    </Collapsible>
+  )
+}
+```
+
+### Inside a card
+
+```tsx
+import { Card, CardHeader, CardTitle, CardPanel } from "@/components/ui/card"
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Button } from "@/components/ui/button"
+import { ChevronDownIcon } from "lucide-react"
+
+export function CollapsibleCard() {
+  return (
+    <Card className="w-80">
+      <Collapsible>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Notifications</CardTitle>
+          <CollapsibleTrigger render={<Button size="icon" variant="ghost" />}>
+            <ChevronDownIcon className="size-4" aria-hidden="true" />
+          </CollapsibleTrigger>
+        </CardHeader>
+        <CollapsiblePanel>
+          <CardPanel className="pt-0">
+            <p className="text-sm text-muted-foreground">Manage your notification preferences.</p>
+          </CardPanel>
+        </CollapsiblePanel>
+      </Collapsible>
+    </Card>
+  )
+}
+```

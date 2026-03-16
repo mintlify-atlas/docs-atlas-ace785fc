@@ -1,0 +1,166 @@
+---
+title: Meter
+description: A scalar measurement component for displaying values within a known range, built on Base UI Meter.
+---
+
+## Overview
+
+The Meter component represents a scalar value within a defined range — for example, disk usage, battery level, or a score. Unlike Progress, Meter is not intended for tasks in progress; it measures a static or slowly changing quantity. It supports `low`, `high`, and `optimum` thresholds to semantically describe where a value falls relative to acceptable bounds.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/meter
+```
+
+## Basic usage
+
+```tsx
+import { Meter } from "@/components/ui/meter"
+
+export function MeterDemo() {
+  return <Meter value={65} />
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Meter` | Root component. Renders a `MeterTrack` and `MeterIndicator` automatically when no children are provided. |
+| `MeterLabel` | Accessible label text rendered alongside the meter. |
+| `MeterTrack` | The background track bar. |
+| `MeterIndicator` | The filled indicator bar reflecting the current value. |
+| `MeterValue` | Displays the current value as formatted text. |
+
+## Props
+
+### Meter
+
+<ParamField path="value" type="number" required>
+  The current measured value. Must be between `min` and `max`.
+</ParamField>
+
+<ParamField path="min" type="number" default="0">
+  The minimum value of the range.
+</ParamField>
+
+<ParamField path="max" type="number" default="100">
+  The maximum value of the range.
+</ParamField>
+
+<ParamField path="low" type="number">
+  The upper bound of the low range. Values below this threshold are considered low.
+</ParamField>
+
+<ParamField path="high" type="number">
+  The lower bound of the high range. Values above this threshold are considered high.
+</ParamField>
+
+<ParamField path="optimum" type="number">
+  The optimal value within the range. Guides the browser's rendering hint.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the root element.
+</ParamField>
+
+### MeterLabel
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the label.
+</ParamField>
+
+### MeterTrack
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the track bar.
+</ParamField>
+
+### MeterIndicator
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the indicator bar.
+</ParamField>
+
+### MeterValue
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the value display.
+</ParamField>
+
+## Examples
+
+### With label and value
+
+```tsx
+import {
+  Meter,
+  MeterIndicator,
+  MeterLabel,
+  MeterTrack,
+  MeterValue,
+} from "@/components/ui/meter"
+
+export function LabeledMeter() {
+  return (
+    <Meter value={48} max={100}>
+      <div className="flex justify-between">
+        <MeterLabel>Storage used</MeterLabel>
+        <MeterValue />
+      </div>
+      <MeterTrack>
+        <MeterIndicator />
+      </MeterTrack>
+    </Meter>
+  )
+}
+```
+
+### With thresholds
+
+Define `low`, `high`, and `optimum` to communicate the significance of a value.
+
+```tsx
+import { Meter } from "@/components/ui/meter"
+
+export function ThresholdMeter() {
+  return (
+    <Meter
+      value={85}
+      min={0}
+      max={100}
+      low={25}
+      high={75}
+      optimum={50}
+    />
+  )
+}
+```
+
+### Multiple meters
+
+```tsx
+import { Meter, MeterIndicator, MeterLabel, MeterTrack } from "@/components/ui/meter"
+
+const metrics = [
+  { label: "CPU", value: 34 },
+  { label: "Memory", value: 71 },
+  { label: "Disk", value: 55 },
+]
+
+export function MultipleMeters() {
+  return (
+    <div className="space-y-4 w-64">
+      {metrics.map((metric) => (
+        <Meter key={metric.label} value={metric.value}>
+          <MeterLabel>{metric.label}</MeterLabel>
+          <MeterTrack>
+            <MeterIndicator />
+          </MeterTrack>
+        </Meter>
+      ))}
+    </div>
+  )
+}
+```

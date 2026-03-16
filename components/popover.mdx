@@ -1,0 +1,140 @@
+---
+title: Popover
+description: An accessible popup anchored to a trigger element.
+---
+
+## Overview
+
+Popover renders a floating panel anchored to a trigger. Use it for rich inline content such as forms, settings panels, date pickers, and supplementary information. Unlike `Tooltip`, it requires an explicit click to open and supports interactive content.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/popover
+```
+
+## Basic usage
+
+```tsx
+import {
+  Popover,
+  PopoverClose,
+  PopoverDescription,
+  PopoverPopup,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+```
+
+```tsx
+<Popover>
+  <PopoverTrigger render={<Button variant="outline" />}>
+    Open popover
+  </PopoverTrigger>
+  <PopoverPopup>
+    <PopoverTitle>Settings</PopoverTitle>
+    <PopoverDescription>Adjust your preferences below.</PopoverDescription>
+    {/* popover body */}
+    <PopoverClose render={<Button size="sm" />}>Done</PopoverClose>
+  </PopoverPopup>
+</Popover>
+```
+
+## Sub-components
+
+### Popover
+
+Root component. Alias for `Popover.Root` from Base UI.
+
+### PopoverTrigger
+
+Trigger that opens the popover on click. Use the `render` prop to compose with `Button`.
+
+### PopoverPopup
+
+Floating popup container. Also exported as `PopoverContent`.
+
+<ParamField path="props.side" type="'top' | 'bottom' | 'left' | 'right'" default="'bottom'">
+  Side of the trigger to position the popup.
+</ParamField>
+
+<ParamField path="props.align" type="'start' | 'center' | 'end'" default="'center'">
+  Alignment relative to the trigger.
+</ParamField>
+
+<ParamField path="props.sideOffset" type="number" default="4">
+  Distance from the trigger in pixels.
+</ParamField>
+
+<ParamField path="props.alignOffset" type="number" default="0">
+  Offset along the alignment axis in pixels.
+</ParamField>
+
+<ParamField path="props.tooltipStyle" type="boolean" default="false">
+  Applies compact tooltip-like styling (smaller padding, reduced border radius).
+</ParamField>
+
+### PopoverTitle
+
+Popover heading. Alias for `Popover.Title` from Base UI.
+
+### PopoverDescription
+
+Popover description text. Alias for `Popover.Description` from Base UI.
+
+### PopoverClose
+
+Button that closes the popover. Alias for `Popover.Close` from Base UI.
+
+### PopoverCreateHandle
+
+Creates a handle for detached triggers, enabling animated transitions when a single popover popup is shared across multiple triggers.
+
+## Examples
+
+### Popover with form
+
+```tsx
+<Popover>
+  <PopoverTrigger render={<Button variant="outline" />}>
+    Edit name
+  </PopoverTrigger>
+  <PopoverPopup>
+    <PopoverTitle>Edit your name</PopoverTitle>
+    <div className="mt-3 flex flex-col gap-2">
+      <Input defaultValue="Jane Doe" type="text" />
+      <PopoverClose render={<Button size="sm" />}>Save</PopoverClose>
+    </div>
+  </PopoverPopup>
+</Popover>
+```
+
+### Positioned to the right
+
+```tsx
+<Popover>
+  <PopoverTrigger render={<Button variant="outline" />}>Info</PopoverTrigger>
+  <PopoverPopup side="right" align="start">
+    <PopoverDescription>Additional context about this field.</PopoverDescription>
+  </PopoverPopup>
+</Popover>
+```
+
+### Tooltip-style popover
+
+Use `tooltipStyle` when the popover only displays a short text hint and the trigger is an icon button:
+
+```tsx
+<Popover>
+  <PopoverTrigger render={<Button size="icon" variant="ghost" aria-label="Help" />}>
+    <InfoIcon />
+  </PopoverTrigger>
+  <PopoverPopup tooltipStyle>
+    This field accepts a comma-separated list of values.
+  </PopoverPopup>
+</Popover>
+```
+
+<Note>
+  For read-only hints on hover, prefer `Tooltip`. Use `Popover` when the content is interactive or contains more than one line of text.
+</Note>

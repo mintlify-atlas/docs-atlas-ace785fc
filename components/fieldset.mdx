@@ -1,0 +1,107 @@
+---
+title: Fieldset
+description: Groups related form fields under a common legend.
+---
+
+<ComponentPreview name="p-fieldset-1" />
+
+## Overview
+
+`Fieldset` wraps Base UI's `Fieldset` primitive. It renders a native `<fieldset>` element with a `<legend>`, grouping related fields and propagating the `disabled` state to all contained controls.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/fieldset
+```
+
+## Basic usage
+
+```tsx
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset"
+```
+
+```tsx
+<Fieldset>
+  <FieldsetLegend>Shipping address</FieldsetLegend>
+  {/* Field components go here */}
+</Fieldset>
+```
+
+## Props
+
+### Fieldset
+
+<ParamField path="disabled" type="boolean">
+  Disables all form controls inside the fieldset.
+</ParamField>
+
+<ParamField path="...props" type="FieldsetPrimitive.Root.Props">
+  All props from Base UI's `Fieldset.Root` are supported.
+</ParamField>
+
+### FieldsetLegend
+
+The legend for the fieldset, rendered in a semibold font.
+
+<ParamField path="...props" type="FieldsetPrimitive.Legend.Props">
+  All props from Base UI's `Fieldset.Legend` are supported.
+</ParamField>
+
+## Examples
+
+### With fields
+
+```tsx
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset"
+import { Input } from "@/components/ui/input"
+
+<Fieldset>
+  <FieldsetLegend>Personal details</FieldsetLegend>
+  <Field>
+    <FieldLabel>First name</FieldLabel>
+    <Input type="text" name="firstName" required />
+    <FieldError>Please enter your first name.</FieldError>
+  </Field>
+  <Field>
+    <FieldLabel>Last name</FieldLabel>
+    <Input type="text" name="lastName" required />
+    <FieldError>Please enter your last name.</FieldError>
+  </Field>
+</Fieldset>
+```
+
+### Disabled fieldset
+
+Setting `disabled` on a `Fieldset` propagates to all contained controls:
+
+```tsx
+<Fieldset disabled>
+  <FieldsetLegend>Payment (unavailable)</FieldsetLegend>
+  <Field>
+    <FieldLabel>Card number</FieldLabel>
+    <Input type="text" placeholder="0000 0000 0000 0000" />
+  </Field>
+</Fieldset>
+```
+
+### Checkbox group
+
+Use `Fieldset` to group a set of checkboxes or radio buttons with an accessible legend:
+
+```tsx
+import { Checkbox } from "@/components/ui/checkbox"
+import { CheckboxGroup } from "@/components/ui/checkbox-group"
+import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset"
+import { Label } from "@/components/ui/label"
+
+<Fieldset>
+  <FieldsetLegend>Notifications</FieldsetLegend>
+  <CheckboxGroup defaultValue={["email"]}>
+    <Label><Checkbox value="email" /> Email</Label>
+    <Label><Checkbox value="sms" /> SMS</Label>
+    <Label><Checkbox value="push" /> Push</Label>
+  </CheckboxGroup>
+</Fieldset>
+```

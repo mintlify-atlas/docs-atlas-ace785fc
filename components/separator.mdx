@@ -1,0 +1,114 @@
+---
+title: Separator
+description: A visual and semantic divider between content sections, accessible to screen readers.
+---
+
+## Overview
+
+`Separator` renders a thin horizontal or vertical line that visually and semantically divides content. It wraps the `Separator` primitive from Base UI, which outputs the correct ARIA role so assistive technologies can announce the boundary. Use it between list items, inside menus, or between form sections.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/separator
+```
+
+## Basic usage
+
+```tsx
+import { Separator } from "@/components/ui/separator"
+
+export default function Example() {
+  return (
+    <div>
+      <p>Above the line</p>
+      <Separator />
+      <p>Below the line</p>
+    </div>
+  )
+}
+```
+
+## Variants
+
+`Separator` does not use `cva` variants. Its appearance is controlled by the `orientation` prop.
+
+<Tabs>
+  <Tab title="Horizontal">
+    ```tsx
+    <Separator orientation="horizontal" />
+    ```
+  </Tab>
+  <Tab title="Vertical">
+    ```tsx
+    <div className="flex h-8 items-center gap-4">
+      <span>Left</span>
+      <Separator orientation="vertical" />
+      <span>Right</span>
+    </div>
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+`Separator` accepts all props from `Separator.Props` in Base UI.
+
+<ParamField path="orientation" type='"horizontal" | "vertical"' default="horizontal">
+  The axis along which the separator is drawn. A horizontal separator is a full-width 1 px line; a vertical separator is a self-stretching 1 px column.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged with the default separator styles.
+</ParamField>
+
+## Examples
+
+### Between menu items
+
+```tsx
+import { Separator } from "@/components/ui/separator"
+
+<ul className="space-y-1 text-sm">
+  <li>Profile</li>
+  <li>Settings</li>
+  <Separator />
+  <li className="text-destructive-foreground">Sign out</li>
+</ul>
+```
+
+### Vertical in a toolbar
+
+```tsx
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
+
+<div className="flex items-center gap-1">
+  <Button size="sm" variant="ghost">Bold</Button>
+  <Button size="sm" variant="ghost">Italic</Button>
+  <Separator className="h-5" orientation="vertical" />
+  <Button size="sm" variant="ghost">Align left</Button>
+</div>
+```
+
+### Between form sections
+
+```tsx
+import { Separator } from "@/components/ui/separator"
+
+<form className="space-y-6">
+  <section>
+    <h3 className="mb-3 font-semibold text-sm">Personal info</h3>
+    {/* fields */}
+  </section>
+  <Separator />
+  <section>
+    <h3 className="mb-3 font-semibold text-sm">Notifications</h3>
+    {/* fields */}
+  </section>
+</form>
+```
+
+<Note>
+  The vertical separator uses `self-stretch` by default so it fills the height of its flex container. Override with an explicit height class (e.g., `h-5`) when you need a fixed size.
+</Note>

@@ -1,0 +1,103 @@
+---
+title: Particles
+description: Pre-assembled UI patterns that combine multiple primitives into ready-to-use solutions.
+---
+
+Particles are **pre-assembled UI components** — login forms, search inputs, button groups — that combine multiple coss ui primitives into a single, ready-to-use pattern. They sit between low-level primitives and fully API-connected atoms in the three-tier coss ui model.
+
+## The three-tier model
+
+<CardGroup cols={3}>
+  <Card title="Primitives" icon="layers">
+    Low-level accessible building blocks powered by Base UI. Handle accessibility, keyboard navigation, and focus management without dictating design.
+  </Card>
+  <Card title="Particles" icon="atom">
+    Pre-assembled patterns combining multiple primitives. More opinionated in design but still easy to customize, extend, or break apart.
+  </Card>
+  <Card title="Atoms" icon="bolt">
+    API-enhanced particles connected to external services. Built on top of Cal.com infrastructure for scheduling, auth, and more.
+  </Card>
+</CardGroup>
+
+## How particles differ from primitives
+
+Primitives (`Button`, `Input`, `Dialog`) are individual building blocks that handle a single concern. You compose them yourself.
+
+Particles are **opinionated compositions** — they make design and structure decisions for you. A button particle might include a loading spinner, a keyboard shortcut indicator, and a badge. A form particle wires up field labels, validation errors, and a submit button in one component.
+
+Both are copy-paste — you own the code.
+
+## How to use a particle
+
+<Steps>
+  <Step title="Find a particle">
+    Browse the particle categories in the sidebar. Each particle page shows the source code and a live preview.
+  </Step>
+  <Step title="Copy the source">
+    Copy the full component code. Particles are self-contained `.tsx` files.
+  </Step>
+  <Step title="Add it to your project">
+    Paste it anywhere in your project. Make sure the imported primitives are installed (e.g., `@coss/button`, `@coss/input`).
+  </Step>
+  <Step title="Customize">
+    Edit the file directly. Change variants, layout, copy, or behavior — you own it.
+  </Step>
+</Steps>
+
+## Particle structure
+
+Every particle follows the same conventions:
+
+- **File name**: `p-{component}-{N}.tsx` — e.g., `p-button-18.tsx`, `p-input-group-1.tsx`
+- **Default export**: Always `export default function Particle()`
+- **One pattern per file**: Each particle demonstrates a single focused pattern
+- **`"use client"` only when needed**: Added only when the particle uses React hooks or browser APIs
+
+```tsx
+// p-button-18.tsx — Loading button
+import { Button } from "@/registry/default/ui/button";
+import { Spinner } from "@/registry/default/ui/spinner";
+
+export default function Particle() {
+  return (
+    <Button disabled>
+      <Spinner />
+      Loading...
+    </Button>
+  );
+}
+```
+
+## Naming convention
+
+Particle filenames follow the pattern `p-{component}-{N}`:
+
+- `p-button-1` through `p-button-40` — button patterns
+- `p-input-group-1` through `p-input-group-29` — input group patterns
+- `p-form-1`, `p-form-2` — form patterns
+
+The number is sequential within a category — it does not indicate quality or complexity.
+
+## Particle categories
+
+<CardGroup cols={3}>
+  <Card title="Buttons" icon="cursor-click" href="/particles/buttons">
+    Loading states, icon buttons, button groups, badges, keyboard shortcuts, social login, and more.
+  </Card>
+  <Card title="Inputs" icon="input-text" href="/particles/inputs">
+    Search inputs, inputs with addons, password visibility toggles, clearable inputs, and URL bars.
+  </Card>
+  <Card title="Forms" icon="file-text" href="/particles/forms">
+    Login cards, registration forms, Zod validation, and multi-field form patterns.
+  </Card>
+</CardGroup>
+
+## About atoms
+
+<Note>
+  **Atoms** are API-enhanced particles built in partnership with [Cal.com](https://cal.com). They connect UI directly to external services — scheduling, authentication flows, and more — out of the box. Atoms are coming soon. See the [roadmap](/roadmap) for the latest status.
+</Note>
+
+## Contributing particles
+
+Want to add a particle? See the [contributing guide](/guides/contributing) for the full workflow — including naming conventions, registry metadata, accessibility requirements, and build steps.

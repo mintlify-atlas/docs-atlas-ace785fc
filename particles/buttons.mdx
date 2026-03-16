@@ -1,0 +1,260 @@
+---
+title: Button particles
+description: Ready-to-use button patterns for loading states, icon buttons, groups, badges, keyboard shortcuts, and more.
+---
+
+Button particles are focused compositions built on the `Button` primitive. Each one demonstrates a single pattern you can copy into your project and adapt.
+
+The collection covers 40+ variations across several categories. Browse by pattern type below.
+
+## Basic buttons
+
+The simplest particles: a single `Button` with a variant.
+
+```tsx
+// p-button-1.tsx — Default button
+import { Button } from "@/registry/default/ui/button";
+
+export default function Particle() {
+  return <Button>Button</Button>;
+}
+```
+
+```tsx
+// p-button-2.tsx — Outline button
+import { Button } from "@/registry/default/ui/button";
+
+export default function Particle() {
+  return <Button variant="outline">Button</Button>;
+}
+```
+
+## Buttons with icons
+
+Use `aria-hidden="true"` on decorative icons. For icon-only buttons, add `aria-label` to the button.
+
+```tsx
+// p-button-16.tsx — Button with icon
+import { DownloadIcon } from "lucide-react";
+import { Button } from "@/registry/default/ui/button";
+
+export default function Particle() {
+  return (
+    <Button>
+      <DownloadIcon aria-hidden="true" />
+      Download
+    </Button>
+  );
+}
+```
+
+```tsx
+// p-button-13.tsx — Icon-only button
+import { PlusIcon } from "lucide-react";
+import { Button } from "@/registry/default/ui/button";
+
+export default function Particle() {
+  return (
+    <Button aria-label="Add" size="icon">
+      <PlusIcon aria-hidden="true" />
+    </Button>
+  );
+}
+```
+
+## Loading states
+
+Use the `Spinner` primitive alongside `disabled` to communicate a pending action.
+
+```tsx
+// p-button-18.tsx — Loading button
+import { Button } from "@/registry/default/ui/button";
+import { Spinner } from "@/registry/default/ui/spinner";
+
+export default function Particle() {
+  return (
+    <Button disabled>
+      <Spinner />
+      Loading...
+    </Button>
+  );
+}
+```
+
+For an interactive loading state that triggers on click, use `useState`:
+
+```tsx
+// p-button-35.tsx — Copy button with icon feedback
+"use client";
+
+import { CheckIcon, CopyIcon } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/registry/default/ui/button";
+
+export default function Particle() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText("Text copied!");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <Button
+      aria-label={copied ? "Copied" : "Copy to clipboard"}
+      onClick={handleCopy}
+      size="icon"
+      variant="outline"
+    >
+      {copied ? (
+        <CheckIcon aria-hidden="true" />
+      ) : (
+        <CopyIcon aria-hidden="true" />
+      )}
+    </Button>
+  );
+}
+```
+
+## Buttons with keyboard shortcuts
+
+Use `Kbd` and `KbdGroup` to display keyboard shortcuts inside a button. Each key gets its own `Kbd`. Apply a small negative margin on the wrapper for visual balance.
+
+```tsx
+// p-button-31.tsx — Button with keyboard shortcut
+import { PrinterIcon } from "lucide-react";
+import { Button } from "@/registry/default/ui/button";
+import { Kbd, KbdGroup } from "@/registry/default/ui/kbd";
+
+export default function Particle() {
+  return (
+    <Button variant="outline">
+      <PrinterIcon aria-hidden="true" />
+      Print
+      <KbdGroup className="-me-1">
+        <Kbd>&#8984;</Kbd>
+        <Kbd>P</Kbd>
+      </KbdGroup>
+    </Button>
+  );
+}
+```
+
+<Note>
+  Use `KbdGroup` when displaying two or more keys together. For a single key, use `Kbd` directly with `className="-me-1"` for alignment.
+</Note>
+
+## Buttons with badges
+
+Match the badge `variant` to the button `variant` for visual consistency.
+
+```tsx
+// p-button-32.tsx — Button with notification badge
+import { Badge } from "@/registry/default/ui/badge";
+import { Button } from "@/registry/default/ui/button";
+
+export default function Particle() {
+  return (
+    <Button variant="outline">
+      Messages
+      <Badge className="-me-1" variant="outline">
+        18
+      </Badge>
+    </Button>
+  );
+}
+```
+
+## Button groups
+
+Use the `Group` component to connect buttons visually. `GroupSeparator` is required between every control, including outline buttons.
+
+```tsx
+// p-button-27.tsx — Button group with QR code icon and sign in
+import { QrCodeIcon } from "lucide-react";
+import { Button } from "@/registry/default/ui/button";
+import { Group, GroupSeparator } from "@/registry/default/ui/group";
+
+export default function Particle() {
+  return (
+    <Group>
+      <Button aria-label="QR code" size="icon">
+        <QrCodeIcon aria-hidden="true" />
+      </Button>
+      <GroupSeparator className="bg-primary/72" />
+      <Button>Sign in</Button>
+    </Group>
+  );
+}
+```
+
+## Animated buttons
+
+Use `in-[[data-slot=button]:hover]:` instead of the `group` class pattern to animate children on hover.
+
+```tsx
+// p-button-30.tsx — Button with animated arrow on hover
+import { ArrowRightIcon } from "lucide-react";
+import { Button } from "@/registry/default/ui/button";
+
+export default function Particle() {
+  return (
+    <Button>
+      Get Started
+      <ArrowRightIcon
+        aria-hidden="true"
+        className="in-[[data-slot=button]:hover]:translate-x-0.5 transition-transform"
+      />
+    </Button>
+  );
+}
+```
+
+## Social login buttons
+
+Use icon-only buttons with `aria-label` for social login patterns. These use icons from `@remixicon/react`.
+
+```tsx
+// p-button-24.tsx — Social login icon buttons
+import {
+  RiFacebookFill,
+  RiGithubFill,
+  RiGoogleFill,
+  RiTwitterXFill,
+} from "@remixicon/react";
+import { Button } from "@/registry/default/ui/button";
+
+export default function Particle() {
+  return (
+    <div className="inline-flex flex-wrap gap-2">
+      <Button aria-label="Login with Google" size="icon" variant="outline">
+        <RiGoogleFill aria-hidden="true" />
+      </Button>
+      <Button aria-label="Login with Facebook" size="icon" variant="outline">
+        <RiFacebookFill aria-hidden="true" />
+      </Button>
+      <Button aria-label="Login with X" size="icon" variant="outline">
+        <RiTwitterXFill aria-hidden="true" />
+      </Button>
+      <Button aria-label="Login with GitHub" size="icon" variant="outline">
+        <RiGithubFill aria-hidden="true" />
+      </Button>
+    </div>
+  );
+}
+```
+
+## Numbering reference
+
+Button particles are numbered `p-button-1` through `p-button-40`. The number is sequential — it does not indicate complexity. Use the registry metadata (categories, description) to find patterns by type.
+
+Key categories in the registry:
+
+| Category | Example particles |
+|---|---|
+| `button` | p-button-1 through p-button-40 |
+| `button`, `loading` | p-button-18 |
+| `button`, `group` | p-button-27, p-button-40 |
+| `button`, `badge` | p-button-32 |
+| `button`, `kbd` | p-button-31 |

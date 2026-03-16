@@ -1,0 +1,174 @@
+---
+title: Frame
+description: A framed container that groups one or more content panels inside a shared muted background.
+---
+
+## Overview
+
+`Frame` is a layout wrapper that places content inside a rounded, muted-background shell. Use it to visually distinguish a settings section, a preview area, or any group of related panels from the surrounding page. When you render multiple `FramePanel` children inside a `Frame`, they are separated by automatic spacing.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/frame
+```
+
+## Basic usage
+
+```tsx
+import {
+  Frame,
+  FrameDescription,
+  FrameFooter,
+  FrameHeader,
+  FramePanel,
+  FrameTitle,
+} from "@/components/ui/frame"
+
+export default function Example() {
+  return (
+    <Frame>
+      <FrameHeader>
+        <FrameTitle>Workspace settings</FrameTitle>
+        <FrameDescription>Configure your workspace preferences.</FrameDescription>
+      </FrameHeader>
+      <FramePanel>Content</FramePanel>
+      <FrameFooter>Footer</FrameFooter>
+    </Frame>
+  )
+}
+```
+
+## Variants
+
+`Frame` has no CVA variants. The visual treatment is fixed: a `bg-muted/72` background with 1 unit of padding and a `rounded-2xl` corner radius.
+
+### Single panel
+
+```tsx
+<Frame className="max-w-sm">
+  <FramePanel>
+    <p className="text-sm">A single content panel.</p>
+  </FramePanel>
+</Frame>
+```
+
+### Multiple separated panels
+
+When you include more than one `FramePanel`, they stack with automatic `mt-1` spacing between them.
+
+```tsx
+<Frame className="max-w-sm">
+  <FramePanel>Panel A</FramePanel>
+  <FramePanel>Panel B</FramePanel>
+  <FramePanel>Panel C</FramePanel>
+</Frame>
+```
+
+## Props
+
+### Frame
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged with the default frame styles. The frame renders as a `<div>`.
+</ParamField>
+
+### FramePanel
+
+<ParamField path="className" type="string">
+  Additional CSS classes for the panel. The panel renders as a `<div>` with a white background, border, and subtle shadow.
+</ParamField>
+
+### FrameHeader
+
+<ParamField path="className" type="string">
+  Additional CSS classes. Renders as a `<header>` element with `px-5 py-4` padding.
+</ParamField>
+
+### FrameTitle
+
+<ParamField path="className" type="string">
+  Additional CSS classes. Renders as a `<div>` with `font-semibold text-sm` styling.
+</ParamField>
+
+### FrameDescription
+
+<ParamField path="className" type="string">
+  Additional CSS classes. Renders as a `<div>` with `text-muted-foreground text-sm` styling.
+</ParamField>
+
+### FrameFooter
+
+<ParamField path="className" type="string">
+  Additional CSS classes. Renders as a `<footer>` element with `px-5 py-4` padding.
+</ParamField>
+
+## Examples
+
+### Settings section
+
+```tsx
+import {
+  Frame,
+  FrameDescription,
+  FrameFooter,
+  FrameHeader,
+  FramePanel,
+  FrameTitle,
+} from "@/components/ui/frame"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
+<Frame className="max-w-lg">
+  <FrameHeader>
+    <FrameTitle>Display name</FrameTitle>
+    <FrameDescription>This is your public display name.</FrameDescription>
+  </FrameHeader>
+  <FramePanel>
+    <Input defaultValue="Acme Corp" type="text" />
+  </FramePanel>
+  <FrameFooter>
+    <Button size="sm">Save changes</Button>
+  </FrameFooter>
+</Frame>
+```
+
+### Stacked panels
+
+```tsx
+import { Frame, FramePanel } from "@/components/ui/frame"
+
+<Frame className="max-w-sm">
+  <FramePanel className="flex items-center justify-between">
+    <span className="text-sm">Notifications</span>
+    <span className="text-muted-foreground text-sm">Enabled</span>
+  </FramePanel>
+  <FramePanel className="flex items-center justify-between">
+    <span className="text-sm">Two-factor auth</span>
+    <span className="text-muted-foreground text-sm">Disabled</span>
+  </FramePanel>
+  <FramePanel className="flex items-center justify-between">
+    <span className="text-sm">API access</span>
+    <span className="text-muted-foreground text-sm">Enabled</span>
+  </FramePanel>
+</Frame>
+```
+
+### Preview area
+
+```tsx
+import { Frame, FrameHeader, FramePanel, FrameTitle } from "@/components/ui/frame"
+
+<Frame className="max-w-md">
+  <FrameHeader>
+    <FrameTitle>Preview</FrameTitle>
+  </FrameHeader>
+  <FramePanel className="min-h-40 flex items-center justify-center">
+    <p className="text-muted-foreground text-sm">Component renders here</p>
+  </FramePanel>
+</Frame>
+```
+
+<Note>
+  Unlike `Card`, `Frame` is a plain React component — it does not use Base UI's `useRender` hook and therefore does not accept a `render` prop.
+</Note>

@@ -1,0 +1,160 @@
+---
+title: Scroll area
+description: A native scroll container with custom styled scrollbars and optional fade and gutter effects.
+---
+
+## Overview
+
+`ScrollArea` wraps Base UI's `ScrollArea` primitive to provide a consistent, theme-aware scrolling surface. Use it whenever you need a scrollable region with styled scrollbars — such as sidebars, message lists, or data panels — while keeping the native scroll behavior intact. Two optional props, `scrollFade` and `scrollbarGutter`, let you hint available scroll distance and prevent layout shifts.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/scroll-area
+```
+
+## Basic usage
+
+```tsx
+import { ScrollArea } from "@/components/ui/scroll-area"
+
+export default function Example() {
+  return (
+    <ScrollArea className="h-64 rounded-md border">
+      <div className="p-4">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+        ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+        aliquip ex ea commodo consequat. Duis aute irure dolor in
+        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+      </div>
+    </ScrollArea>
+  )
+}
+```
+
+## Variants
+
+`ScrollArea` has no CVA variants. Behaviour is controlled through boolean props.
+
+<Tabs>
+  <Tab title="Default">
+    ```tsx
+    <ScrollArea className="h-48 rounded-md border">
+      <div className="p-4">Scrollable content…</div>
+    </ScrollArea>
+    ```
+  </Tab>
+  <Tab title="Scroll fade">
+    ```tsx
+    <ScrollArea scrollFade className="h-48 rounded-md border">
+      <div className="p-4">Scrollable content with fade edges…</div>
+    </ScrollArea>
+    ```
+  </Tab>
+  <Tab title="Scrollbar gutter">
+    ```tsx
+    <ScrollArea scrollbarGutter className="h-48 rounded-md border">
+      <div className="p-4">Content with reserved scrollbar space…</div>
+    </ScrollArea>
+    ```
+  </Tab>
+  <Tab title="Horizontal">
+    ```tsx
+    <ScrollArea className="w-full rounded-md border">
+      <div className="flex w-max gap-4 p-4">
+        {Array.from({ length: 20 }, (_, i) => (
+          <div key={i} className="w-32 shrink-0 rounded-md bg-muted p-4 text-sm">
+            Item {i + 1}
+          </div>
+        ))}
+      </div>
+    </ScrollArea>
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+### ScrollArea
+
+`ScrollArea` accepts all props from `ScrollArea.Root.Props` in Base UI in addition to the following.
+
+<ParamField path="scrollFade" type="boolean" default="false">
+  Masks viewport edges so content fades in and out as you scroll, hinting that more content is available.
+</ParamField>
+
+<ParamField path="scrollbarGutter" type="boolean" default="false">
+  Reserves gutter space for the scrollbar when overflow appears, preventing layout shifts as the scrollbar shows or hides.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the root element.
+</ParamField>
+
+### ScrollBar
+
+<ParamField path="orientation" type='"vertical" | "horizontal"' default="vertical">
+  The axis of the scrollbar track.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the scrollbar track.
+</ParamField>
+
+## Examples
+
+### Sidebar with fixed height
+
+```tsx
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+
+const tags = Array.from({ length: 50 }, (_, i) => `v1.${i}.0`)
+
+export default function ChangelogSidebar() {
+  return (
+    <ScrollArea className="h-72 w-48 rounded-md border">
+      <div className="p-4">
+        <h4 className="mb-4 font-semibold text-sm">Versions</h4>
+        {tags.map((tag) => (
+          <>
+            <div key={tag} className="text-sm">{tag}</div>
+            <Separator className="my-2" />
+          </>
+        ))}
+      </div>
+    </ScrollArea>
+  )
+}
+```
+
+### Scroll fade on a message list
+
+```tsx
+import { ScrollArea } from "@/components/ui/scroll-area"
+
+<ScrollArea scrollFade className="h-80 rounded-md border">
+  <ul className="divide-y">
+    {messages.map((msg) => (
+      <li key={msg.id} className="px-4 py-3 text-sm">{msg.text}</li>
+    ))}
+  </ul>
+</ScrollArea>
+```
+
+### Horizontal tag list
+
+```tsx
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Badge } from "@/components/ui/badge"
+
+<ScrollArea className="w-full whitespace-nowrap rounded-md border">
+  <div className="flex gap-2 p-3">
+    {["React", "TypeScript", "Tailwind", "Next.js", "Zod", "Prisma", "tRPC"].map(
+      (tag) => <Badge key={tag} variant="outline">{tag}</Badge>
+    )}
+  </div>
+</ScrollArea>
+```

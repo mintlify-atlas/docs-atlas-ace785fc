@@ -1,0 +1,76 @@
+---
+title: Textarea
+description: A styled multi-line text input element.
+---
+
+<ComponentPreview name="p-textarea-1" />
+
+## Overview
+
+`Textarea` wraps a native `<textarea>` in a styled container that shares the same border, focus ring, and validation states as `Input`. It uses `field-sizing-content` to auto-grow with content by default.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/textarea
+```
+
+## Basic usage
+
+```tsx
+import { Textarea } from "@/components/ui/textarea"
+```
+
+```tsx
+<Textarea placeholder="Enter a message…" />
+```
+
+## Sizes
+
+The `size` prop adjusts padding and the minimum height.
+
+| Size      | Description                                       |
+| --------- | ------------------------------------------------- |
+| `sm`      | Compact padding and reduced minimum height        |
+| `default` | Default padding and minimum height                |
+| `lg`      | Larger vertical padding and increased min height  |
+
+Passing a number to `size` has no visual effect — use the native `rows` attribute to control the number of visible rows instead.
+
+## Props
+
+<ParamField path="size" type='"sm" | "default" | "lg" | number'>
+  Controls padding and minimum height. Defaults to `"default"`.
+</ParamField>
+
+<ParamField path="unstyled" type="boolean">
+  When `true`, removes the wrapper styling (border, shadow, background). Used internally by `InputGroupTextarea`. Defaults to `false`.
+</ParamField>
+
+<ParamField path="...props" type="React.ComponentProps<'textarea'>">
+  All standard `textarea` HTML attributes are supported, including `placeholder`, `rows`, `name`, `value`, `defaultValue`, `disabled`, `required`, and `aria-invalid`.
+</ParamField>
+
+## Examples
+
+For accessible labelling and validation, wrap textareas with the `Field` component. See [Field](/components/field) for examples.
+
+### Small size
+
+<ComponentPreview name="p-textarea-2" />
+
+### Large size
+
+<ComponentPreview name="p-textarea-3" />
+
+### Disabled
+
+<ComponentPreview name="p-textarea-4" />
+
+### With label
+
+<ComponentPreview name="p-textarea-5" />
+
+### Form integration
+
+<ComponentPreview name="p-textarea-6" />

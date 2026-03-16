@@ -1,0 +1,239 @@
+---
+title: Table
+description: A responsive table component for displaying tabular data with header, body, footer, and caption sections.
+---
+
+## Overview
+
+The Table component provides a semantic HTML table structure with consistent styling. Use it to display structured data in rows and columns. It supports captions, headers, footers, and integrates with TanStack Table for complex sorting and filtering use cases.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/table
+```
+
+## Basic usage
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+const invoices = [
+  { id: "INV-001", status: "Paid", method: "Credit Card", amount: "$250.00" },
+  { id: "INV-002", status: "Pending", method: "PayPal", amount: "$150.00" },
+  { id: "INV-003", status: "Unpaid", method: "Bank Transfer", amount: "$350.00" },
+]
+
+export function InvoiceTable() {
+  return (
+    <Table>
+      <TableCaption>A list of recent invoices.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Invoice</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Method</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {invoices.map((invoice) => (
+          <TableRow key={invoice.id}>
+            <TableCell className="font-medium">{invoice.id}</TableCell>
+            <TableCell>{invoice.status}</TableCell>
+            <TableCell>{invoice.method}</TableCell>
+            <TableCell className="text-right">{invoice.amount}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={3}>Total</TableCell>
+          <TableCell className="text-right">$750.00</TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
+  )
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Table` | Root container. Wraps the native `<table>` in a horizontally scrollable `<div>`. |
+| `TableHeader` | Wraps `<thead>`. Contains column heading rows. |
+| `TableBody` | Wraps `<tbody>`. Contains data rows. |
+| `TableFooter` | Wraps `<tfoot>`. Contains summary or total rows. |
+| `TableRow` | Wraps `<tr>`. Applies hover and selection styles. |
+| `TableHead` | Wraps `<th>`. Styled column heading cell. |
+| `TableCell` | Wraps `<td>`. Styled data cell. |
+| `TableCaption` | Wraps `<caption>`. Accessible table caption rendered below the table. |
+
+## Props
+
+All sub-components extend their native HTML counterparts and accept all standard HTML attributes.
+
+<ParamField path="Table.className" type="string">
+  Additional CSS classes applied to the `<table>` element.
+</ParamField>
+
+<ParamField path="TableHeader.className" type="string">
+  Additional CSS classes applied to the `<thead>` element.
+</ParamField>
+
+<ParamField path="TableBody.className" type="string">
+  Additional CSS classes applied to the `<tbody>` element.
+</ParamField>
+
+<ParamField path="TableFooter.className" type="string">
+  Additional CSS classes applied to the `<tfoot>` element.
+</ParamField>
+
+<ParamField path="TableRow.className" type="string">
+  Additional CSS classes applied to the `<tr>` element.
+</ParamField>
+
+<ParamField path="TableHead.className" type="string">
+  Additional CSS classes applied to the `<th>` element.
+</ParamField>
+
+<ParamField path="TableCell.className" type="string">
+  Additional CSS classes applied to the `<td>` element.
+</ParamField>
+
+<ParamField path="TableCaption.className" type="string">
+  Additional CSS classes applied to the `<caption>` element.
+</ParamField>
+
+## Examples
+
+### Framed table
+
+Wrap the table in a `Frame` component for a bordered, card-like appearance.
+
+```tsx
+import { Frame } from "@/components/ui/frame"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+export function FramedTable() {
+  return (
+    <Frame>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell className="font-medium">Alice Johnson</TableCell>
+            <TableCell>Admin</TableCell>
+            <TableCell>Active</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">Bob Smith</TableCell>
+            <TableCell>Editor</TableCell>
+            <TableCell>Inactive</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Frame>
+  )
+}
+```
+
+### With TanStack Table
+
+Use `@tanstack/react-table` for sortable, filterable data tables.
+
+```tsx
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+export function SortableTable({ data, columns }) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  })
+
+  return (
+    <Table>
+      <TableHeader>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <TableHead key={header.id}>
+                {flexRender(header.column.columnDef.header, header.getContext())}
+              </TableHead>
+            ))}
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {table.getRowModel().rows.map((row) => (
+          <TableRow key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <TableCell key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+```
+
+### With checkboxes
+
+Add a checkbox column for row selection.
+
+```tsx
+import { Checkbox } from "@/components/ui/checkbox"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+export function SelectableTable() {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>
+            <Checkbox aria-label="Select all" />
+          </TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Email</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell>
+            <Checkbox aria-label="Select row" />
+          </TableCell>
+          <TableCell>Alice Johnson</TableCell>
+          <TableCell>alice@example.com</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  )
+}
+```

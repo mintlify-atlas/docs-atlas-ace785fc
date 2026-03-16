@@ -1,0 +1,507 @@
+---
+title: Migrating from Radix UI / shadcn/ui
+description: A component-by-component guide for moving from Radix-based libraries to coss ui.
+---
+
+coss ui is built on [Base UI](https://base-ui.com/), not Radix UI. The component API is intentionally similar to shadcn/ui, but there are consistent patterns that differ throughout.
+
+<Note>
+  This page is structured to be LLM-friendly. You can paste it into Claude, ChatGPT, or Cursor to help automate conversion of your existing components.
+</Note>
+
+## General migration patterns
+
+### `asChild` → `render` prop
+
+The most pervasive change is replacing Radix's `asChild` with Base UI's `render` prop. This applies to triggers, close buttons, and any component that renders as a custom element.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <DropdownMenuTrigger asChild>
+      <Button>Edit profile</Button>
+    </DropdownMenuTrigger>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <MenuTrigger render={<Button />}>Edit profile</MenuTrigger>
+    ```
+  </Tab>
+</Tabs>
+
+### Component naming
+
+`*Content` components are renamed for clarity:
+
+| shadcn/ui | coss ui | Notes |
+|-----------|---------|-------|
+| `*Content` | `*Popup` | Floating overlays (Dialog, Menu, Popover, etc.) |
+| `*Content` | `*Panel` | Inline content areas (Card, Sheet body, etc.) |
+| Legacy names | kept | `DialogContent`, `CardContent`, etc. still work |
+
+### Prop API differences
+
+| shadcn/ui prop | coss ui prop | Applies to |
+|----------------|--------------|------------|
+| `asChild` | `render={<Component />}` | All trigger/close parts |
+| `onSelect` | `onClick` | `MenuItem` |
+| `type="multiple"` | `multiple={true}` | `Accordion`, `ToggleGroup` |
+| `type="single"` | _(remove)_ | `Accordion`, `ToggleGroup` |
+| `collapsible` | _(remove)_ | `Accordion` |
+
+### Size mapping
+
+coss ui is more compact by default. Use larger sizes to preserve the visual height of shadcn/ui components.
+
+| Component | shadcn/ui size | coss ui equivalent |
+|-----------|----------------|--------------------|
+| Button | `default` (36px) | `lg` (36px) |
+| Button | `sm` (32px) | `default` (32px) |
+| Input | `default` (36px) | `lg` (36px) |
+| Input | `sm` (32px) | `default` (32px) |
+| Select | `default` (36px) | `lg` (36px) |
+| Select | `sm` (32px) | `default` (32px) |
+
+## Component migration guides
+
+### Accordion
+
+Replace `type="multiple"` with `multiple={true}`, remove `type="single"` and `collapsible`, and use arrays for `defaultValue`.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Accordion type="multiple" collapsible defaultValue="item-1">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Title</AccordionTrigger>
+        <AccordionContent>Content</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <Accordion multiple={true} defaultValue={["item-1"]}>
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Title</AccordionTrigger>
+        <AccordionPanel>Content</AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+    ```
+  </Tab>
+</Tabs>
+
+### Button
+
+Replace `asChild` with `render`. See the [size mapping table](#size-mapping) above if you need to preserve shadcn/ui's default 36px height.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Button asChild>
+      <Link href="/login">Login</Link>
+    </Button>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <Button render={<Link href="/login" />}>Login</Button>
+    ```
+  </Tab>
+</Tabs>
+
+coss ui also adds a `destructive-outline` variant and new sizes (`xs`, `xl`, `icon-sm`, `icon-lg`).
+
+### Dialog
+
+Replace `asChild` → `render` on `DialogTrigger` and close buttons. Use `DialogPopup` instead of `DialogContent`, and wrap the body content in `DialogPanel`.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Show Dialog</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Dialog Title</DialogTitle>
+          <DialogDescription>Dialog Description</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="ghost">Cancel</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <Dialog>
+      <DialogTrigger render={<Button variant="outline" />}>
+        Show Dialog
+      </DialogTrigger>
+      <DialogPopup>
+        <DialogHeader>
+          <DialogTitle>Dialog Title</DialogTitle>
+          <DialogDescription>Dialog Description</DialogDescription>
+        </DialogHeader>
+        <DialogPanel>Content</DialogPanel>
+        <DialogFooter>
+          <DialogClose render={<Button variant="ghost" />}>Cancel</DialogClose>
+        </DialogFooter>
+      </DialogPopup>
+    </Dialog>
+    ```
+  </Tab>
+</Tabs>
+
+### Menu (DropdownMenu)
+
+Update the import path and rename components. Replace `onSelect` with `onClick` on menu items.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    // import from "@/components/ui/dropdown-menu"
+    <DropdownMenu>
+      <DropdownMenuTrigger>Open menu</DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem
+          onSelect={() => console.log("Dashboard")}
+        >
+          Dashboard
+        </DropdownMenuItem>
+        <DropdownMenuItem>Settings</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    // import from "@/components/ui/menu"
+    <Menu>
+      <MenuTrigger>Open menu</MenuTrigger>
+      <MenuPopup>
+        <MenuItem onClick={() => console.log("Dashboard")}>
+          Dashboard
+        </MenuItem>
+        <MenuItem>Settings</MenuItem>
+      </MenuPopup>
+    </Menu>
+    ```
+  </Tab>
+</Tabs>
+
+`DropdownMenu*` names remain available as legacy aliases.
+
+### Select
+
+Base UI's Select is data-driven. Pass an `items` array to `Select` instead of composing `SelectItem` children directly inside `SelectContent`.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Select>
+      <SelectTrigger>
+        <SelectValue placeholder="Select a framework" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="next">Next.js</SelectItem>
+        <SelectItem value="vite">Vite</SelectItem>
+        <SelectItem value="astro">Astro</SelectItem>
+      </SelectContent>
+    </Select>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    const items = [
+      { label: "Select a framework", value: null },
+      { label: "Next.js", value: "next" },
+      { label: "Vite", value: "vite" },
+      { label: "Astro", value: "astro" },
+    ];
+
+    <Select items={items}>
+      <SelectTrigger>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectPopup>
+        {items.map((item) => (
+          <SelectItem key={item.value} value={item}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectPopup>
+    </Select>
+    ```
+  </Tab>
+</Tabs>
+
+The `placeholder` prop on `SelectValue` is removed — add a null-value item to `items` instead.
+
+### Collapsible
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Collapsible>
+      <CollapsibleTrigger asChild>
+        <Button>Toggle</Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent>Content here</CollapsibleContent>
+    </Collapsible>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <Collapsible>
+      <CollapsibleTrigger render={<Button />}>Toggle</CollapsibleTrigger>
+      <CollapsiblePanel>Content here</CollapsiblePanel>
+    </Collapsible>
+    ```
+  </Tab>
+</Tabs>
+
+### Tabs
+
+`TabsTrigger` is renamed to `TabsTab` and `TabsContent` to `TabsPanel`. The `TabsList` component gains a `variant` prop (`"default"` or `"underline"`).
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Tabs defaultValue="tab-1">
+      <TabsList>
+        <TabsTrigger value="tab-1">Tab 1</TabsTrigger>
+        <TabsTrigger value="tab-2">Tab 2</TabsTrigger>
+      </TabsList>
+      <TabsContent value="tab-1">Tab 1 content</TabsContent>
+      <TabsContent value="tab-2">Tab 2 content</TabsContent>
+    </Tabs>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <Tabs defaultValue="tab-1">
+      <TabsList>
+        <TabsTab value="tab-1">Tab 1</TabsTab>
+        <TabsTab value="tab-2">Tab 2</TabsTab>
+      </TabsList>
+      <TabsPanel value="tab-1">Tab 1 content</TabsPanel>
+      <TabsPanel value="tab-2">Tab 2 content</TabsPanel>
+    </Tabs>
+    ```
+  </Tab>
+</Tabs>
+
+### Toggle Group
+
+Replace `type="multiple"` with the `multiple` boolean prop. Use `Toggle` instead of `ToggleGroupItem`.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <ToggleGroup type="multiple" defaultValue={["bold"]}>
+      <ToggleGroupItem value="bold">B</ToggleGroupItem>
+      <ToggleGroupItem value="italic">I</ToggleGroupItem>
+    </ToggleGroup>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <ToggleGroup multiple defaultValue={["bold"]}>
+      <Toggle value="bold">B</Toggle>
+      <Toggle value="italic">I</Toggle>
+    </ToggleGroup>
+    ```
+  </Tab>
+</Tabs>
+
+### Tooltip
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button variant="outline">Hover me</Button>
+      </TooltipTrigger>
+      <TooltipContent>Tooltip content</TooltipContent>
+    </Tooltip>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <Tooltip>
+      <TooltipTrigger render={<Button variant="outline" />}>
+        Hover me
+      </TooltipTrigger>
+      <TooltipPopup>Tooltip content</TooltipPopup>
+    </Tooltip>
+    ```
+  </Tab>
+</Tabs>
+
+### Popover
+
+Base UI adds `PopoverTitle`, `PopoverDescription`, and `PopoverClose` as first-class parts.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Open Popover</Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <h2>Popover Title</h2>
+        <p>Popover Description</p>
+      </PopoverContent>
+    </Popover>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <Popover>
+      <PopoverTrigger render={<Button variant="outline" />}>
+        Open Popover
+      </PopoverTrigger>
+      <PopoverPopup>
+        <PopoverTitle>Popover Title</PopoverTitle>
+        <PopoverDescription>Popover Description</PopoverDescription>
+        <PopoverClose render={<Button variant="ghost" />}>Close</PopoverClose>
+      </PopoverPopup>
+    </Popover>
+    ```
+  </Tab>
+</Tabs>
+
+### Alert Dialog
+
+Replace `AlertDialogAction` and `AlertDialogCancel` with `AlertDialogClose`. Wrap body content in `AlertDialogPanel`.
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline">Show Alert Dialog</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction asChild>
+            <Button>Continue</Button>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <AlertDialog>
+      <AlertDialogTrigger render={<Button variant="outline" />}>
+        Show Alert Dialog
+      </AlertDialogTrigger>
+      <AlertDialogPopup>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogPanel>Content</AlertDialogPanel>
+        <AlertDialogFooter>
+          <AlertDialogClose render={<Button variant="ghost" />}>
+            Cancel
+          </AlertDialogClose>
+          <AlertDialogClose render={<Button variant="destructive" />}>
+            Continue
+          </AlertDialogClose>
+        </AlertDialogFooter>
+      </AlertDialogPopup>
+    </AlertDialog>
+    ```
+  </Tab>
+</Tabs>
+
+### Sheet
+
+<Tabs>
+  <Tab title="shadcn/ui">
+    ```tsx
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline">Open Sheet</Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Sheet Title</SheetTitle>
+        </SheetHeader>
+        Content here
+        <SheetFooter>
+          <SheetClose asChild>
+            <Button>Close</Button>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+    ```
+  </Tab>
+  <Tab title="coss ui">
+    ```tsx
+    <Sheet>
+      <SheetTrigger render={<Button variant="outline" />}>
+        Open Sheet
+      </SheetTrigger>
+      <SheetPopup>
+        <SheetHeader>
+          <SheetTitle>Sheet Title</SheetTitle>
+        </SheetHeader>
+        <SheetPanel>Content here</SheetPanel>
+        <SheetFooter>
+          <SheetClose render={<Button />}>Close</SheetClose>
+        </SheetFooter>
+      </SheetPopup>
+    </Sheet>
+    ```
+  </Tab>
+</Tabs>
+
+### Group (ButtonGroup)
+
+`GroupSeparator` is **always required** between controls in a `Group`, including between outline buttons. This differs from shadcn/ui where separators are optional.
+
+Legacy `ButtonGroup*` names remain available.
+
+### Card
+
+Use `CardPanel` in place of `CardContent`. `CardContent` remains for backward compatibility.
+
+### Other notes
+
+- **Slider** — always pass values as arrays (`value={[50]}`, not `value={50}`)
+- **Input** — use `size="lg"` to match shadcn/ui's default 36px height
+- **Textarea** — gains `sm`, `default`, and `lg` size variants
+- **Badge** — use `size="lg"` to match shadcn/ui's fixed badge size
+- **Alert** — gains `info`, `success`, `warning`, and `error` variants
+- **Command** — significantly different API; see the Base UI Autocomplete docs
+- **Toast** — significantly different API; replaces `<Toaster />` with `<ToastProvider>` and uses `toastManager.add()` instead of `toast()`
+- **Preview Card** — renamed from `HoverCard`; update import from `hover-card` to `preview-card`
+- **Radio Group** — use `Radio` going forward; `RadioGroupItem` is kept as a legacy alias
+
+## Additional resources
+
+- [Base UI documentation](https://base-ui.com/) — underlying primitives reference
+- [Component docs](/components) — individual component pages with live examples

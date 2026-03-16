@@ -1,0 +1,246 @@
+---
+title: Card
+description: A content container for grouping related information with optional header, body, and footer sections.
+---
+
+## Overview
+
+`Card` is a flexible surface component for presenting grouped content. Use it to display discrete pieces of information — such as a user profile, a settings section, or a data summary — in a visually bounded container. The `CardFrame` variant wraps multiple cards together into a stacked, framed layout, useful when you need a header action (like an "Add" or "Connect" button) that spans the whole group.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/card
+```
+
+## Basic usage
+
+```tsx
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardPanel,
+  CardTitle,
+} from "@/components/ui/card"
+
+export default function Example() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Account settings</CardTitle>
+        <CardDescription>Manage your account preferences.</CardDescription>
+      </CardHeader>
+      <CardPanel>Content goes here.</CardPanel>
+      <CardFooter>Footer actions</CardFooter>
+    </Card>
+  )
+}
+```
+
+## Variants
+
+### Card with header action
+
+Place a `CardAction` inside `CardHeader` to render a button or link aligned to the top-right of the header.
+
+```tsx
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardHeader,
+  CardPanel,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+
+<Card>
+  <CardHeader>
+    <CardTitle>Team members</CardTitle>
+    <CardDescription>Manage access for your team.</CardDescription>
+    <CardAction>
+      <Button size="sm" variant="outline">Invite</Button>
+    </CardAction>
+  </CardHeader>
+  <CardPanel>Member list</CardPanel>
+</Card>
+```
+
+### CardFrame
+
+Use `CardFrame` to group multiple `Card` children inside a shared framed container. The frame provides a muted background and clips the inner cards into a cohesive stacked layout.
+
+```tsx
+import {
+  Card,
+  CardFrame,
+  CardFrameAction,
+  CardFrameDescription,
+  CardFrameHeader,
+  CardFrameTitle,
+  CardPanel,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { PlusIcon } from "lucide-react"
+
+<CardFrame>
+  <CardFrameHeader>
+    <CardFrameTitle>Integrations</CardFrameTitle>
+    <CardFrameDescription>Connect external services to your workspace.</CardFrameDescription>
+    <CardFrameAction>
+      <Button variant="outline">
+        <PlusIcon aria-hidden="true" />
+        Add
+      </Button>
+    </CardFrameAction>
+  </CardFrameHeader>
+  <Card>
+    <CardPanel>GitHub</CardPanel>
+  </Card>
+  <Card>
+    <CardPanel>Slack</CardPanel>
+  </Card>
+</CardFrame>
+```
+
+## Props
+
+### Card
+
+<ParamField path="render" type="React.ReactElement">
+  Render the card as a different element using Base UI's `useRender` hook. Useful for making a card a link or custom wrapper.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged with the default card styles.
+</ParamField>
+
+### CardHeader
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+### CardTitle
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element (e.g., `<h2>`).
+</ParamField>
+
+### CardDescription
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element.
+</ParamField>
+
+### CardAction
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element. Positioned top-right inside the header via CSS grid.
+</ParamField>
+
+### CardPanel
+
+Also exported as `CardContent`.
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element.
+</ParamField>
+
+### CardFooter
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element.
+</ParamField>
+
+### CardFrame
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element.
+</ParamField>
+
+### CardFrameHeader
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element. Contains title, description, and optionally `CardFrameAction`.
+</ParamField>
+
+### CardFrameTitle
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element.
+</ParamField>
+
+### CardFrameDescription
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element.
+</ParamField>
+
+### CardFrameAction
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element. Placed as a sibling of `CardFrameTitle`/`CardFrameDescription` inside `CardFrameHeader`; automatically positioned top-right via CSS grid.
+</ParamField>
+
+### CardFrameFooter
+
+<ParamField path="render" type="React.ReactElement">
+  Render as a different element.
+</ParamField>
+
+## Examples
+
+### Minimal card
+
+```tsx
+<Card className="max-w-sm">
+  <CardPanel>Simple card with no header or footer.</CardPanel>
+</Card>
+```
+
+### Card with border footer
+
+Add `border-t` to `CardFooter` to visually separate it from the content area.
+
+```tsx
+<Card className="max-w-sm">
+  <CardHeader>
+    <CardTitle>Billing</CardTitle>
+    <CardDescription>Your current plan and usage.</CardDescription>
+  </CardHeader>
+  <CardPanel>
+    <p className="text-sm">Pro plan — 10 GB used of 50 GB</p>
+  </CardPanel>
+  <CardFooter className="border-t">
+    <Button variant="outline" size="sm">Manage plan</Button>
+  </CardFooter>
+</Card>
+```
+
+### Stacked CardFrame with two panels
+
+```tsx
+<CardFrame className="max-w-sm">
+  <CardFrameHeader>
+    <CardFrameTitle>Storage</CardFrameTitle>
+    <CardFrameDescription>Local and cloud storage overview.</CardFrameDescription>
+  </CardFrameHeader>
+  <Card>
+    <CardPanel>Local — 4.2 GB</CardPanel>
+  </Card>
+  <Card>
+    <CardPanel>Cloud — 12.8 GB</CardPanel>
+  </Card>
+</CardFrame>
+```
+
+<Note>
+  `Card` and `CardFrame` both use Base UI's `useRender` hook internally, so they accept a `render` prop for polymorphic rendering rather than `asChild`.
+</Note>

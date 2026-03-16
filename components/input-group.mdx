@@ -1,0 +1,138 @@
+---
+title: Input Group
+description: A flexible component for composing inputs with inline or block addons.
+---
+
+<ComponentPreview name="p-input-group-1" />
+
+## Overview
+
+`InputGroup` combines an input (or textarea) with addons such as icons, text labels, buttons, and badges into a single visually unified control. Addons can appear at any of the four edges of the input.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/input-group
+```
+
+## Basic usage
+
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group"
+```
+
+```tsx
+<InputGroup>
+  <InputGroupInput aria-label="Search" placeholder="Search…" type="search" />
+  <InputGroupAddon>
+    <SearchIcon aria-hidden="true" />
+  </InputGroupAddon>
+</InputGroup>
+```
+
+<Warning>
+  `InputGroupAddon` must always appear **after** the `InputGroupInput` or `InputGroupTextarea` in the DOM. The addon's focus handler uses `querySelector` to find the input element, and will not work if the addon is declared first.
+</Warning>
+
+## Props
+
+### InputGroup
+
+<ParamField path="...props" type="React.ComponentProps<'div'>">
+  All standard `div` attributes are supported. The component renders a `role="group"` element.
+</ParamField>
+
+### InputGroupAddon
+
+<ParamField path="align" type='"inline-start" | "inline-end" | "block-start" | "block-end"'>
+  Position of the addon relative to the input. Use `inline-start` or `inline-end` for side addons, and `block-start` or `block-end` for addons above or below a textarea. Defaults to `"inline-start"`.
+</ParamField>
+
+<ParamField path="...props" type="React.ComponentProps<'div'>">
+  All standard `div` attributes are supported.
+</ParamField>
+
+### InputGroupText
+
+A `<span>` wrapper for plain text or icon content inside an `InputGroupAddon`. Applies muted foreground color and correct icon sizing.
+
+<ParamField path="...props" type="React.ComponentProps<'span'>">
+  All standard `span` attributes are supported.
+</ParamField>
+
+### InputGroupInput
+
+An unstyled `Input` that inherits styling from the parent `InputGroup`.
+
+<ParamField path="type" type="string">
+  The input type. Always specify this explicitly.
+</ParamField>
+
+<ParamField path="...props" type="InputProps">
+  All props from the `Input` component are supported.
+</ParamField>
+
+### InputGroupTextarea
+
+An unstyled `Textarea` that inherits styling from the parent `InputGroup`.
+
+<ParamField path="...props" type="TextareaProps">
+  All props from the `Textarea` component are supported.
+</ParamField>
+
+## Examples
+
+### With end icon
+
+<ComponentPreview name="p-input-group-2" />
+
+### With start text
+
+<ComponentPreview name="p-input-group-3" />
+
+### With end text
+
+<ComponentPreview name="p-input-group-4" />
+
+### With start and end text
+
+<ComponentPreview name="p-input-group-5" />
+
+### With icon button
+
+<ComponentPreview name="p-input-group-8" />
+
+### With button
+
+<ComponentPreview name="p-input-group-9" />
+
+### With badge
+
+<ComponentPreview name="p-input-group-10" />
+
+### With keyboard shortcut
+
+<ComponentPreview name="p-input-group-11" />
+
+### Small size
+
+<ComponentPreview name="p-input-group-13" />
+
+### Large size
+
+<ComponentPreview name="p-input-group-14" />
+
+### Disabled
+
+<ComponentPreview name="p-input-group-15" />
+
+### With textarea
+
+Use `InputGroupTextarea` in place of `InputGroupInput`, and set `align="block-end"` on the addon.
+
+<ComponentPreview name="p-input-group-17" />

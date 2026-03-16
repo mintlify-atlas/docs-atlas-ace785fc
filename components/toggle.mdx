@@ -1,0 +1,102 @@
+---
+title: Toggle
+description: A two-state button that can be toggled on or off.
+---
+
+## Overview
+
+Toggle is a button that maintains a pressed/unpressed state. Use it for formatting controls (bold, italic), view mode switches, and other binary settings. Built on Base UI's Toggle primitive.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/toggle
+```
+
+## Basic usage
+
+```tsx
+import { Toggle } from "@/components/ui/toggle"
+```
+
+```tsx
+<Toggle aria-label="Toggle bold">Bold</Toggle>
+```
+
+```tsx
+<Toggle aria-label="Toggle italic">
+  <ItalicIcon aria-hidden="true" />
+</Toggle>
+```
+
+## Sub-components
+
+### Toggle
+
+Styled wrapper for `Toggle.Root` from Base UI.
+
+<ParamField path="props.variant" type="'default' | 'outline'" default="'default'">
+  `default` uses a transparent border. `outline` renders a visible border with background.
+</ParamField>
+
+<ParamField path="props.size" type="'sm' | 'default' | 'lg'" default="'default'">
+  Controls the height and padding of the toggle.
+</ParamField>
+
+<ParamField path="props.pressed" type="boolean">
+  Controlled pressed state.
+</ParamField>
+
+<ParamField path="props.defaultPressed" type="boolean">
+  Default pressed state (uncontrolled).
+</ParamField>
+
+<ParamField path="props.onPressedChange" type="(pressed: boolean) => void">
+  Called when the pressed state changes.
+</ParamField>
+
+<ParamField path="props.disabled" type="boolean">
+  Prevents interaction and reduces opacity.
+</ParamField>
+
+## Examples
+
+### Default and outline variants
+
+```tsx
+<Toggle>Default</Toggle>
+<Toggle variant="outline">Outline</Toggle>
+```
+
+### Icon toggle
+
+For icon-only toggles, always provide `aria-label`:
+
+```tsx
+<Toggle aria-label="Toggle mute">
+  <MicOffIcon aria-hidden="true" />
+</Toggle>
+```
+
+### Controlled state
+
+```tsx
+const [bold, setBold] = useState(false)
+
+<Toggle
+  aria-label="Toggle bold"
+  pressed={bold}
+  onPressedChange={setBold}
+>
+  <BoldIcon aria-hidden="true" />
+  Bold
+</Toggle>
+```
+
+### Size variants
+
+```tsx
+<Toggle size="sm">Small</Toggle>
+<Toggle size="default">Default</Toggle>
+<Toggle size="lg">Large</Toggle>
+```

@@ -1,0 +1,170 @@
+---
+title: Empty
+description: An empty state component for zero-data views, with optional icon, title, description, and actions.
+---
+
+## Overview
+
+The Empty component provides a consistent layout for screens or sections that have no content to display. Use it when a list is empty, a search returns no results, or a feature has not been configured yet. It accepts an icon or illustration, a title, descriptive text, and an optional call-to-action.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/empty
+```
+
+## Basic usage
+
+```tsx
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Button } from "@/components/ui/button"
+import { InboxIcon } from "lucide-react"
+
+export function EmptyDemo() {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <InboxIcon />
+        </EmptyMedia>
+        <EmptyTitle>No messages</EmptyTitle>
+        <EmptyDescription>
+          You don't have any messages yet. Start a conversation.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button>New message</Button>
+      </EmptyContent>
+    </Empty>
+  )
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Empty` | Root container. Centers content vertically and horizontally with generous padding. |
+| `EmptyHeader` | Groups the media, title, and description together. |
+| `EmptyMedia` | Container for an icon or illustration. Supports `default` and `icon` variants. |
+| `EmptyTitle` | Primary heading in semibold. |
+| `EmptyDescription` | Secondary descriptive text in muted foreground. Supports inline links. |
+| `EmptyContent` | Container for action buttons or additional content below the header. |
+
+## Props
+
+### Empty
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the root container.
+</ParamField>
+
+### EmptyMedia
+
+<ParamField path="variant" type="'default' | 'icon'" default="'default'">
+  Controls the visual treatment of the media area. `icon` renders a bordered, elevated icon container with stacked decorative copies behind it.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the media container.
+</ParamField>
+
+### EmptyTitle
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the title element.
+</ParamField>
+
+### EmptyDescription
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the description element. Inline `<a>` tags are automatically styled.
+</ParamField>
+
+### EmptyContent
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the content container.
+</ParamField>
+
+## Examples
+
+### No icon (text only)
+
+```tsx
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { Button } from "@/components/ui/button"
+
+export function TextOnlyEmpty() {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyTitle>No results found</EmptyTitle>
+        <EmptyDescription>
+          Try adjusting your search or filter to find what you're looking for.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button variant="outline">Clear filters</Button>
+      </EmptyContent>
+    </Empty>
+  )
+}
+```
+
+### With illustration
+
+Pass an `<img>` inside `EmptyMedia` for a custom illustration.
+
+```tsx
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
+import { Button } from "@/components/ui/button"
+
+export function IllustrationEmpty() {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia>
+          <img src="/images/empty-state.svg" alt="" aria-hidden="true" className="size-24" />
+        </EmptyMedia>
+        <EmptyTitle>Your cart is empty</EmptyTitle>
+        <EmptyDescription>
+          Add items to your cart to see them here.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button>Browse catalog</Button>
+      </EmptyContent>
+    </Empty>
+  )
+}
+```
+
+### With link in description
+
+Inline links inside `EmptyDescription` are automatically styled.
+
+```tsx
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+
+export function LinkedEmpty() {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyTitle>No team members</EmptyTitle>
+        <EmptyDescription>
+          You haven't added anyone yet.{" "}
+          <a href="/settings/team">Invite team members</a> to get started.
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  )
+}
+```

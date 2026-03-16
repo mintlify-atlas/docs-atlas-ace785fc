@@ -1,0 +1,193 @@
+---
+title: Toast
+description: A temporary notification that appears on screen to inform users of an event.
+---
+
+## Overview
+
+Toast displays brief, non-blocking notifications. Toasts can be stacked (standard) or anchored to a specific element. Built on Base UI's Toast primitive, the component supports status types, action buttons, and configurable screen positions.
+
+## Installation
+
+<Steps>
+  <Step title="Install the component">
+    ```bash
+    npx shadcn@latest add @coss/toast
+    ```
+  </Step>
+  <Step title="Add providers to your layout">
+    Wrap your app with `ToastProvider`. Add `AnchoredToastProvider` if you need element-anchored toasts.
+
+    ```tsx title="app/layout.tsx"
+    import {
+      AnchoredToastProvider,
+      ToastProvider,
+    } from "@/components/ui/toast"
+
+    export default function RootLayout({ children }) {
+      return (
+        <html lang="en">
+          <body>
+            <ToastProvider>
+              <AnchoredToastProvider>
+                <main>{children}</main>
+              </AnchoredToastProvider>
+            </ToastProvider>
+          </body>
+        </html>
+      )
+    }
+    ```
+  </Step>
+</Steps>
+
+## Basic usage
+
+```tsx
+import { toastManager } from "@/components/ui/toast"
+```
+
+```tsx
+// Show a basic toast
+toastManager.add({
+  title: "Changes saved",
+  description: "Your profile has been updated.",
+})
+```
+
+## Triggering toasts
+
+### Standard toast
+
+Call `toastManager.add()` from anywhere in your app:
+
+```tsx
+toastManager.add({
+  title: "File uploaded",
+  description: "report.pdf was added to your workspace.",
+})
+```
+
+### Toast with status type
+
+Pass a `type` to show a status icon:
+
+```tsx
+toastManager.add({ title: "Saved", type: "success" })
+toastManager.add({ title: "Something went wrong", type: "error" })
+toastManager.add({ title: "Processing...", type: "loading" })
+toastManager.add({ title: "Heads up", type: "warning" })
+toastManager.add({ title: "Did you know?", type: "info" })
+```
+
+Available types: `success`, `error`, `warning`, `info`, `loading`.
+
+### Toast with action button
+
+```tsx
+toastManager.add({
+  title: "Message deleted",
+  actionProps: {
+    children: "Undo",
+    onClick: () => restoreMessage(),
+  },
+})
+```
+
+### Anchored toast
+
+Use `anchoredToastManager` to anchor a toast to a specific element:
+
+```tsx
+import { anchoredToastManager } from "@/components/ui/toast"
+
+function CopyButton() {
+  const ref = useRef<HTMLButtonElement>(null)
+
+  return (
+    <Button
+      ref={ref}
+      onClick={() =>
+        anchoredToastManager.add({
+          title: "Copied!",
+          positionerProps: { anchor: ref.current },
+        })
+      }
+    >
+      Copy
+    </Button>
+  )
+}
+```
+
+For a compact tooltip-style anchored toast, pass `data: { tooltipStyle: true }`. Only `title` is displayed in this mode.
+
+```tsx
+anchoredToastManager.add({
+  title: "Copied!",
+  positionerProps: { anchor: ref.current },
+  data: { tooltipStyle: true },
+})
+```
+
+## Sub-components
+
+### ToastProvider
+
+Provider for stacked toasts. Add it once at the root of your app.
+
+<ParamField path="props.position" type="'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'" default="'bottom-right'">
+  Position of the toast viewport on screen.
+</ParamField>
+
+### AnchoredToastProvider
+
+Provider for element-anchored toasts. Add it alongside `ToastProvider`. Use with `anchoredToastManager`.
+
+### toastManager
+
+Manager object for stacked toasts. Call `toastManager.add(options)` to show a toast.
+
+### anchoredToastManager
+
+Manager object for element-anchored toasts. Call `anchoredToastManager.add(options)` with `positionerProps.anchor` set to a DOM element or ref.
+
+## Examples
+
+### Custom position
+
+```tsx
+<ToastProvider position="top-center">
+  {children}
+</ToastProvider>
+```
+
+### Promise toast
+
+Update a toast as a promise resolves:
+
+```tsx
+const id = toastManager.add({ title: "Saving...", type: "loading" })
+
+try {
+  await saveData()
+  toastManager.update(id, { title: "Saved!", type: "success" })
+} catch {
+  toastManager.update(id, { title: "Failed to save", type: "error" })
+}
+```
+
+### With action
+
+```tsx
+function handleDelete() {
+  deleteItem()
+  toastManager.add({
+    title: "Item deleted",
+    actionProps: {
+      children: "Undo",
+      onClick: undoDelete,
+    },
+  })
+}
+```

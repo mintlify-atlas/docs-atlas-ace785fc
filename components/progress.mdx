@@ -1,0 +1,142 @@
+---
+title: Progress
+description: A progress bar component for displaying task completion, built on Base UI Progress.
+---
+
+## Overview
+
+The Progress component visualizes how far along a task is. It supports a numeric value between 0 and 100, and enters an indeterminate state when `value` is `null`. Use it for file uploads, multi-step wizards, or any loading operation with measurable progress.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/progress
+```
+
+## Basic usage
+
+```tsx
+import { Progress } from "@/components/ui/progress"
+
+export function ProgressDemo() {
+  return <Progress value={60} />
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Progress` | Root component. Renders a `ProgressTrack` and `ProgressIndicator` automatically when no children are provided. |
+| `ProgressLabel` | Accessible label text rendered above the track. |
+| `ProgressTrack` | The background track bar. |
+| `ProgressIndicator` | The filled indicator bar that reflects the current value. |
+| `ProgressValue` | Displays the current value as formatted text (e.g. "60%"). |
+
+## Props
+
+### Progress
+
+<ParamField path="value" type="number | null">
+  Current progress value. Must be between `min` and `max`. Pass `null` for indeterminate state.
+</ParamField>
+
+<ParamField path="min" type="number" default="0">
+  Minimum value of the progress range.
+</ParamField>
+
+<ParamField path="max" type="number" default="100">
+  Maximum value of the progress range.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the root element.
+</ParamField>
+
+### ProgressLabel
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the label.
+</ParamField>
+
+### ProgressTrack
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the track. Override height or background color here.
+</ParamField>
+
+### ProgressIndicator
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the indicator bar.
+</ParamField>
+
+### ProgressValue
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the value display.
+</ParamField>
+
+## Examples
+
+### With label and value display
+
+Compose the sub-components manually to add a label and numeric readout.
+
+```tsx
+import {
+  Progress,
+  ProgressIndicator,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressValue,
+} from "@/components/ui/progress"
+
+export function LabeledProgress() {
+  return (
+    <Progress value={72} className="gap-1">
+      <div className="flex justify-between">
+        <ProgressLabel>Uploading files</ProgressLabel>
+        <ProgressValue />
+      </div>
+      <ProgressTrack>
+        <ProgressIndicator />
+      </ProgressTrack>
+    </Progress>
+  )
+}
+```
+
+### Indeterminate state
+
+Pass `value={null}` when progress cannot be determined.
+
+```tsx
+import { Progress } from "@/components/ui/progress"
+
+export function IndeterminateProgress() {
+  return <Progress value={null} />
+}
+```
+
+### Animated counter
+
+```tsx
+"use client"
+
+import { useEffect, useState } from "react"
+import { Progress } from "@/components/ui/progress"
+
+export function AnimatedProgress() {
+  const [value, setValue] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setValue((v) => (v >= 100 ? 0 : v + 10))
+    }, 800)
+    return () => clearInterval(timer)
+  }, [])
+
+  return <Progress value={value} />
+}
+```

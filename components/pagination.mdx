@@ -1,0 +1,153 @@
+---
+title: Pagination
+description: Page navigation with previous, next, and numbered page links.
+---
+
+## Overview
+
+Pagination provides accessible navigation controls for paged content. It renders an ordered list of links for individual pages, ellipsis for gaps, and previous/next controls. All link components support the `render` prop for framework router integration.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/pagination
+```
+
+## Basic usage
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+```
+
+```tsx
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="?page=1" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="?page=1">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="?page=2" isActive>2</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="?page=3">3</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="?page=10">10</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="?page=3" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```
+
+## Sub-components
+
+### Pagination
+
+Root `<nav>` element with `aria-label="pagination"`. Centers content horizontally.
+
+### PaginationContent
+
+List container (`<ul>`) for pagination items.
+
+### PaginationItem
+
+List item (`<li>`) wrapper for each pagination element.
+
+### PaginationLink
+
+Link for an individual page number. Supports the `render` prop for framework routers.
+
+<ParamField path="props.isActive" type="boolean">
+  Highlights the link as the current page. Adds `aria-current="page"`.
+</ParamField>
+
+<ParamField path="props.size" type="'default' | 'icon'" default="'icon'">
+  Controls the size of the link element.
+</ParamField>
+
+<ParamField path="props.render" type="React.ReactElement">
+  Render as a different element (e.g., Next.js `Link`).
+</ParamField>
+
+### PaginationPrevious
+
+Link to the previous page. Shows a left chevron icon and "Previous" label (hidden on small screens).
+
+### PaginationNext
+
+Link to the next page. Shows "Next" label (hidden on small screens) and a right chevron icon.
+
+### PaginationEllipsis
+
+Ellipsis indicator for skipped page ranges. Includes screen-reader text "More pages".
+
+## Examples
+
+### With Next.js router
+
+Use the `render` prop on any link component to integrate with Next.js or another router:
+
+```tsx
+<PaginationLink
+  render={<Link href={`?page=${page}`} />}
+  isActive={currentPage === page}
+>
+  {page}
+</PaginationLink>
+```
+
+### Dynamic pagination
+
+```tsx
+const totalPages = 10
+const currentPage = 4
+
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious
+        href={`?page=${currentPage - 1}`}
+        aria-disabled={currentPage === 1}
+      />
+    </PaginationItem>
+    {[1, 2, 3].map((page) => (
+      <PaginationItem key={page}>
+        <PaginationLink
+          href={`?page=${page}`}
+          isActive={page === currentPage}
+        >
+          {page}
+        </PaginationLink>
+      </PaginationItem>
+    ))}
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href={`?page=${totalPages}`}>{totalPages}</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext
+        href={`?page=${currentPage + 1}`}
+        aria-disabled={currentPage === totalPages}
+      />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```

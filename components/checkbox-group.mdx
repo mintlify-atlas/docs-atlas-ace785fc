@@ -1,0 +1,87 @@
+---
+title: Checkbox Group
+description: Provides shared state to a series of checkboxes.
+---
+
+<ComponentPreview name="p-checkbox-group-1" />
+
+## Overview
+
+`CheckboxGroup` wraps Base UI's `CheckboxGroup` primitive and coordinates the `checked` state across multiple `Checkbox` components. Each option should be wrapped in its own `Label`.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/checkbox-group
+```
+
+## Basic usage
+
+```tsx
+import { Checkbox } from "@/components/ui/checkbox"
+import { CheckboxGroup } from "@/components/ui/checkbox-group"
+import { Label } from "@/components/ui/label"
+```
+
+```tsx
+<CheckboxGroup defaultValue={["next"]}>
+  <Label>
+    <Checkbox value="next" />
+    Next.js
+  </Label>
+  <Label>
+    <Checkbox value="vite" />
+    Vite
+  </Label>
+  <Label>
+    <Checkbox value="astro" />
+    Astro
+  </Label>
+</CheckboxGroup>
+```
+
+## Props
+
+### CheckboxGroup
+
+<ParamField path="value" type="string[]">
+  Controlled array of selected values.
+</ParamField>
+
+<ParamField path="defaultValue" type="string[]">
+  Initial selected values for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: string[]) => void">
+  Callback fired when the selected values change.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disables all checkboxes in the group.
+</ParamField>
+
+<ParamField path="...props" type="CheckboxGroupPrimitive.Props">
+  All props from Base UI's `CheckboxGroup` are supported.
+</ParamField>
+
+## Examples
+
+For accessible group labelling and validation, wrap checkbox groups with `Field` and `Fieldset`. See the related example: [Checkbox group field](/components/field#checkbox-group-field).
+
+### With disabled item
+
+<ComponentPreview name="p-checkbox-group-2" />
+
+### Parent checkbox
+
+A parent checkbox can represent the indeterminate state when only some children are checked.
+
+<ComponentPreview name="p-checkbox-group-3" />
+
+### Nested parent checkbox
+
+<ComponentPreview name="p-checkbox-group-4" />
+
+### Form integration
+
+<ComponentPreview name="p-checkbox-group-5" />

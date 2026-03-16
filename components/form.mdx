@@ -1,0 +1,125 @@
+---
+title: Form
+description: A form wrapper that handles submission and surfaces server-side validation errors.
+---
+
+<ComponentPreview name="p-form-1" />
+
+## Overview
+
+`Form` wraps Base UI's `Form` primitive with a flex column layout. It integrates with `Field` and `FieldError` to display server errors next to the relevant fields, and handles form submission via its `onSubmit` prop.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/form
+```
+
+## Basic usage
+
+```tsx
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Form } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+```
+
+```tsx
+<Form
+  onSubmit={(event) => {
+    // handle submission
+  }}
+>
+  <Field>
+    <FieldLabel>Email</FieldLabel>
+    <Input name="email" type="email" required />
+    <FieldError>Please enter a valid email.</FieldError>
+  </Field>
+</Form>
+```
+
+## Server-side errors
+
+`Form` accepts an `errors` prop — an object mapping field names to arrays of error strings. Pass server errors after submission to display them next to the corresponding `Field`:
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Form } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+
+export function SignupForm() {
+  const [errors, setErrors] = useState<Record<string, string[]>>({})
+
+  return (
+    <Form
+      errors={errors}
+      onSubmit={async (event) => {
+        const data = new FormData(event.currentTarget)
+        const result = await submitSignup(data)
+        if (result.errors) {
+          setErrors(result.errors)
+        }
+      }}
+    >
+      <Field name="email">
+        <FieldLabel>Email</FieldLabel>
+        <Input name="email" type="email" required />
+        <FieldError />
+      </Field>
+      <Button type="submit">Sign up</Button>
+    </Form>
+  )
+}
+```
+
+## Using with Zod
+
+Validate form data server-side with Zod and return structured errors:
+
+```tsx
+import { z } from "zod"
+
+const schema = z.object({
+  email: z.string().email("Please enter a valid email."),
+  password: z.string().min(8, "Password must be at least 8 characters."),
+})
+
+async function submitSignup(data: FormData) {
+  const result = schema.safeParse(Object.fromEntries(data))
+  if (!result.success) {
+    return {
+      errors: result.error.flatten().fieldErrors as Record<string, string[]>,
+    }
+  }
+  // proceed with valid data…
+}
+```
+
+## Props
+
+### Form
+
+<ParamField path="errors" type="Record<string, string[]>">
+  Server-side error map. Keys are field `name` values; each value is an array of error strings shown in the corresponding `FieldError`.
+</ParamField>
+
+<ParamField path="onSubmit" type="(event: React.FormEvent<HTMLFormElement>) => void">
+  Submission handler. Called after native validation passes.
+</ParamField>
+
+<ParamField path="...props" type="FormPrimitive.Props">
+  All props from Base UI's `Form` primitive are supported, including standard `form` HTML attributes.
+</ParamField>
+
+## Examples
+
+### Basic form
+
+<ComponentPreview name="p-form-1" />
+
+### Using with Zod
+
+<ComponentPreview name="p-form-2" />

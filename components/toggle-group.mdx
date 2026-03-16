@@ -1,0 +1,151 @@
+---
+title: Toggle group
+description: A group of toggle buttons that share a common state.
+---
+
+## Overview
+
+Toggle group provides shared state to a series of toggle buttons. It supports single and multiple selection, horizontal and vertical orientations, and inherits variant and size from the group context. Built on Base UI's ToggleGroup primitive.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/toggle-group
+```
+
+## Basic usage
+
+```tsx
+import { Toggle, ToggleGroup } from "@/components/ui/toggle-group"
+```
+
+```tsx
+<ToggleGroup>
+  <Toggle value="bold" aria-label="Bold">
+    <BoldIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="italic" aria-label="Italic">
+    <ItalicIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="underline" aria-label="Underline">
+    <UnderlineIcon aria-hidden="true" />
+  </Toggle>
+</ToggleGroup>
+```
+
+## Sub-components
+
+### ToggleGroup
+
+Root component. Styled wrapper for `ToggleGroup.Root` from Base UI. Passes `variant` and `size` to child toggles via React context.
+
+<ParamField path="props.variant" type="'default' | 'outline'" default="'default'">
+  Visual style applied to all child toggles.
+</ParamField>
+
+<ParamField path="props.size" type="'sm' | 'default' | 'lg'" default="'default'">
+  Size applied to all child toggles.
+</ParamField>
+
+<ParamField path="props.orientation" type="'horizontal' | 'vertical'" default="'horizontal'">
+  Layout orientation of the group.
+</ParamField>
+
+<ParamField path="props.value" type="string | string[]">
+  Controlled selected value(s).
+</ParamField>
+
+<ParamField path="props.defaultValue" type="string | string[]">
+  Default selected value(s) (uncontrolled).
+</ParamField>
+
+<ParamField path="props.onValueChange" type="(value: string | string[]) => void">
+  Called when the selection changes.
+</ParamField>
+
+<ParamField path="props.multiple" type="boolean">
+  When true, allows multiple toggles to be pressed simultaneously.
+</ParamField>
+
+### Toggle
+
+Individual toggle button inside the group. Inherits `variant` and `size` from `ToggleGroup` context. Also exported as `ToggleGroupItem`.
+
+<ParamField path="props.value" type="string" required>
+  Unique value for this toggle within the group.
+</ParamField>
+
+<ParamField path="props.disabled" type="boolean">
+  Disables this specific toggle.
+</ParamField>
+
+### ToggleGroupSeparator
+
+Visual divider between toggles. Useful for the `outline` variant to mark logical sections.
+
+## Examples
+
+### Outline variant
+
+```tsx
+<ToggleGroup variant="outline">
+  <Toggle value="list" aria-label="List view">
+    <ListIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="grid" aria-label="Grid view">
+    <GridIcon aria-hidden="true" />
+  </Toggle>
+</ToggleGroup>
+```
+
+### Multiple selection
+
+```tsx
+<ToggleGroup multiple defaultValue={["bold"]}>
+  <Toggle value="bold" aria-label="Bold">
+    <BoldIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="italic" aria-label="Italic">
+    <ItalicIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="underline" aria-label="Underline">
+    <UnderlineIcon aria-hidden="true" />
+  </Toggle>
+</ToggleGroup>
+```
+
+### Vertical orientation
+
+```tsx
+<ToggleGroup orientation="vertical" variant="outline">
+  <Toggle value="top" aria-label="Align top">
+    <AlignStartVerticalIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="middle" aria-label="Align middle">
+    <AlignCenterVerticalIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="bottom" aria-label="Align bottom">
+    <AlignEndVerticalIcon aria-hidden="true" />
+  </Toggle>
+</ToggleGroup>
+```
+
+### With separator
+
+```tsx
+<ToggleGroup variant="outline">
+  <Toggle value="bold" aria-label="Bold">
+    <BoldIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="italic" aria-label="Italic">
+    <ItalicIcon aria-hidden="true" />
+  </Toggle>
+  <ToggleGroupSeparator />
+  <Toggle value="left" aria-label="Align left">
+    <AlignLeftIcon aria-hidden="true" />
+  </Toggle>
+  <Toggle value="center" aria-label="Align center">
+    <AlignCenterIcon aria-hidden="true" />
+  </Toggle>
+</ToggleGroup>
+```

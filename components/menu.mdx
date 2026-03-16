@@ -1,0 +1,226 @@
+---
+title: Menu
+description: A dropdown list of actions with keyboard navigation.
+---
+
+## Overview
+
+Menu (also exported as `DropdownMenu`) renders a floating list of actions anchored to a trigger. It supports keyboard navigation, checkable items, radio groups, submenus, and keyboard shortcuts.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/menu
+```
+
+## Basic usage
+
+```tsx
+import {
+  Menu,
+  MenuGroup,
+  MenuGroupLabel,
+  MenuItem,
+  MenuPopup,
+  MenuSeparator,
+  MenuTrigger,
+} from "@/components/ui/menu"
+```
+
+```tsx
+<Menu>
+  <MenuTrigger render={<Button variant="outline" />}>Open menu</MenuTrigger>
+  <MenuPopup>
+    <MenuItem onClick={() => console.log("Edit")}>Edit</MenuItem>
+    <MenuItem onClick={() => console.log("Duplicate")}>Duplicate</MenuItem>
+    <MenuSeparator />
+    <MenuItem variant="destructive" onClick={() => console.log("Delete")}>
+      Delete
+    </MenuItem>
+  </MenuPopup>
+</Menu>
+```
+
+<Note>
+  Use `onClick` on `MenuItem`, not `onSelect`. This is the Base UI API.
+</Note>
+
+## Sub-components
+
+### Menu
+
+Root component. Alias for `Menu.Root` from Base UI. Also exported as `DropdownMenu`.
+
+### MenuTrigger
+
+Trigger that opens the menu. Use the `render` prop to compose with `Button`. Also exported as `DropdownMenuTrigger`.
+
+### MenuPopup
+
+Floating popup container. Also exported as `DropdownMenuContent`.
+
+<ParamField path="props.side" type="'top' | 'bottom' | 'left' | 'right'" default="'bottom'">
+  Side of the trigger to position the popup.
+</ParamField>
+
+<ParamField path="props.align" type="'start' | 'center' | 'end'" default="'center'">
+  Alignment relative to the trigger.
+</ParamField>
+
+<ParamField path="props.sideOffset" type="number" default="4">
+  Distance from the trigger in pixels.
+</ParamField>
+
+<ParamField path="props.alignOffset" type="number">
+  Offset along the alignment axis in pixels.
+</ParamField>
+
+### MenuItem
+
+Individual menu item. Also exported as `DropdownMenuItem`.
+
+<ParamField path="props.variant" type="'default' | 'destructive'" default="'default'">
+  Use `destructive` for dangerous actions such as delete.
+</ParamField>
+
+<ParamField path="props.inset" type="boolean">
+  Adds left padding so icon-less items align with items that have icons.
+</ParamField>
+
+<ParamField path="props.closeOnClick" type="boolean">
+  When true, the menu closes after the item is clicked.
+</ParamField>
+
+### MenuCheckboxItem
+
+Checkable menu item. Also exported as `DropdownMenuCheckboxItem`.
+
+<ParamField path="props.checked" type="boolean | 'mixed'">
+  Controlled checked state.
+</ParamField>
+
+<ParamField path="props.variant" type="'default' | 'switch'" default="'default'">
+  `switch` renders a toggle switch indicator instead of a checkmark. Purely visual — the item remains a checkbox.
+</ParamField>
+
+### MenuRadioGroup
+
+Groups radio items for single selection. Alias for `Menu.RadioGroup` from Base UI. Also exported as `DropdownMenuRadioGroup`.
+
+### MenuRadioItem
+
+Radio-style menu item. Also exported as `DropdownMenuRadioItem`.
+
+### MenuGroup
+
+Groups related items together. Alias for `Menu.Group` from Base UI. Also exported as `DropdownMenuGroup`.
+
+### MenuGroupLabel
+
+Label for a menu group. Also exported as `DropdownMenuLabel`.
+
+<ParamField path="props.inset" type="boolean">
+  Adds left padding to align with items that have icons.
+</ParamField>
+
+### MenuSeparator
+
+Horizontal divider between menu sections. Also exported as `DropdownMenuSeparator`.
+
+### MenuShortcut
+
+Displays a keyboard shortcut at the trailing edge of a menu item. Also exported as `DropdownMenuShortcut`.
+
+### MenuSub
+
+Submenu root. Alias for `Menu.SubmenuRoot` from Base UI. Also exported as `DropdownMenuSub`.
+
+### MenuSubTrigger
+
+Trigger that opens a submenu. Automatically renders a chevron. Also exported as `DropdownMenuSubTrigger`.
+
+<ParamField path="props.inset" type="boolean">
+  Adds left padding to align with items that have icons.
+</ParamField>
+
+### MenuSubPopup
+
+Popup for submenu content. Also exported as `DropdownMenuSubContent`.
+
+<ParamField path="props.align" type="'start' | 'center' | 'end'" default="'start'">
+  Alignment relative to the submenu trigger.
+</ParamField>
+
+<ParamField path="props.sideOffset" type="number" default="0">
+  Distance from the submenu trigger.
+</ParamField>
+
+## Examples
+
+### With icons and keyboard shortcuts
+
+```tsx
+<Menu>
+  <MenuTrigger render={<Button variant="outline" />}>Actions</MenuTrigger>
+  <MenuPopup align="start">
+    <MenuItem onClick={() => {}}>
+      <EditIcon aria-hidden="true" />
+      Edit
+      <MenuShortcut>⌘E</MenuShortcut>
+    </MenuItem>
+    <MenuItem onClick={() => {}}>
+      <CopyIcon aria-hidden="true" />
+      Duplicate
+      <MenuShortcut>⌘D</MenuShortcut>
+    </MenuItem>
+    <MenuSeparator />
+    <MenuItem variant="destructive" onClick={() => {}}>
+      <TrashIcon aria-hidden="true" />
+      Delete
+      <MenuShortcut>⌘⌫</MenuShortcut>
+    </MenuItem>
+  </MenuPopup>
+</Menu>
+```
+
+### With checkbox items
+
+```tsx
+<Menu>
+  <MenuTrigger render={<Button variant="outline" />}>View</MenuTrigger>
+  <MenuPopup>
+    <MenuGroupLabel>Columns</MenuGroupLabel>
+    <MenuCheckboxItem checked={showName} onClick={() => setShowName(!showName)}>
+      Name
+    </MenuCheckboxItem>
+    <MenuCheckboxItem checked={showEmail} onClick={() => setShowEmail(!showEmail)}>
+      Email
+    </MenuCheckboxItem>
+    <MenuCheckboxItem
+      variant="switch"
+      checked={autoSave}
+      onClick={() => setAutoSave(!autoSave)}
+    >
+      Auto-save
+    </MenuCheckboxItem>
+  </MenuPopup>
+</Menu>
+```
+
+### With nested submenu
+
+```tsx
+<Menu>
+  <MenuTrigger render={<Button variant="outline" />}>More</MenuTrigger>
+  <MenuPopup>
+    <MenuItem onClick={() => {}}>Copy link</MenuItem>
+    <MenuSub>
+      <MenuSubTrigger>Share to</MenuSubTrigger>
+      <MenuSubPopup>
+        <MenuItem onClick={() => {}}>Slack</MenuItem>
+        <MenuItem onClick={() => {}}>Email</MenuItem>
+      </MenuSubPopup>
+    </MenuSub>
+  </MenuPopup>
+</Menu>
+```

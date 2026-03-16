@@ -1,0 +1,128 @@
+---
+title: Spinner
+description: A rotating loading indicator for async operations.
+---
+
+## Overview
+
+`Spinner` is a thin wrapper around the `Loader2` icon from `lucide-react` with `animate-spin` applied and the correct ARIA attributes set out of the box. Use it to indicate that an operation is in progress — inside a button, next to an input, or as a full-page loading state. Because it is an SVG icon, you size and color it with standard Tailwind utilities.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/spinner
+```
+
+## Basic usage
+
+```tsx
+import { Spinner } from "@/components/ui/spinner"
+
+export default function Example() {
+  return <Spinner />
+}
+```
+
+## Variants
+
+`Spinner` has no CVA variants. Control its size and color via `className`.
+
+<Tabs>
+  <Tab title="Default">
+    ```tsx
+    <Spinner />
+    ```
+  </Tab>
+  <Tab title="Small">
+    ```tsx
+    <Spinner className="size-4" />
+    ```
+  </Tab>
+  <Tab title="Large">
+    ```tsx
+    <Spinner className="size-8" />
+    ```
+  </Tab>
+  <Tab title="Muted color">
+    ```tsx
+    <Spinner className="text-muted-foreground" />
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+`Spinner` accepts all props from the `Loader2Icon` component in `lucide-react`.
+
+<ParamField path="className" type="string">
+  CSS classes applied to the icon. Use `size-*` to control dimensions and text color utilities (e.g., `text-primary`, `text-muted-foreground`) to change color. Default size is the Lucide default (24 px).
+</ParamField>
+
+## Examples
+
+### Loading button
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { Spinner } from "@/components/ui/spinner"
+import { Button } from "@/components/ui/button"
+
+export function SubmitButton() {
+  const [loading, setLoading] = useState(false)
+
+  const handleClick = async () => {
+    setLoading(true)
+    await new Promise((r) => setTimeout(r, 1500))
+    setLoading(false)
+  }
+
+  return (
+    <Button disabled={loading} onClick={handleClick}>
+      {loading && <Spinner className="size-4" />}
+      {loading ? "Saving…" : "Save changes"}
+    </Button>
+  )
+}
+```
+
+### Spinner inside an input group
+
+```tsx
+import { Spinner } from "@/components/ui/spinner"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+
+<InputGroup>
+  <InputGroupInput
+    aria-label="Search"
+    placeholder="Searching…"
+    type="search"
+  />
+  <InputGroupAddon>
+    <Spinner className="size-4 text-muted-foreground" />
+  </InputGroupAddon>
+</InputGroup>
+```
+
+### Full-page loading state
+
+```tsx
+import { Spinner } from "@/components/ui/spinner"
+
+export function PageLoader() {
+  return (
+    <div className="flex min-h-svh items-center justify-center">
+      <Spinner className="size-8 text-muted-foreground" />
+    </div>
+  )
+}
+```
+
+<Note>
+  `Spinner` sets `role="status"` and `aria-label="Loading"` by default, so screen readers announce the loading state without any extra work. Override `aria-label` if you need a more descriptive message.
+</Note>

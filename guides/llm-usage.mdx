@@ -1,0 +1,95 @@
+---
+title: Using coss ui with AI Tools
+description: How coss ui is structured for AI-assisted development, and how to get the best results from tools like Cursor, Claude, and ChatGPT.
+---
+
+coss ui is designed with AI-assisted workflows in mind. Several structural decisions — in naming, file organization, and documentation — make it straightforward for language models to understand and generate correct component code.
+
+## How to access component docs for LLMs
+
+### llms.txt
+
+The site publishes a machine-readable index at `/ui/llms.txt`. This file lists every component and hook with a brief description and a link to its documentation page. You can feed this file to any LLM as context.
+
+### Copy Markdown button
+
+Every documentation page includes a **Copy Markdown** button. Clicking it copies the page content as plain Markdown, which you can paste directly into a chat window or include in a system prompt.
+
+This is the fastest way to give an AI the exact API surface of a specific component before asking it to write code.
+
+## Why the naming convention helps
+
+Particles follow the convention `p-{component}-{N}.tsx`. Because the name encodes both the component category and a sequential index, an AI can:
+
+- Predict the correct filename for a new particle without hallucinating a path
+- Identify which registry entry to update
+- Understand the category from the name alone
+
+All particles export a single function called `Particle`. This consistent signature means an AI only needs to know one pattern to generate any particle in the library.
+
+## Feeding docs to your AI tool
+
+<CardGroup cols={2}>
+  <Card title="Cursor" icon="code">
+    Add component pages to your context with `@Docs` or paste the Markdown directly into a composer window. Reference `AGENTS.md` from the repo root for the full particle authoring guide.
+  </Card>
+  <Card title="Claude / ChatGPT" icon="message-square">
+    Paste the Markdown from the Copy Markdown button for the component you want to use. For particle authoring, paste the contents of `AGENTS.md` as a system or user message.
+  </Card>
+</CardGroup>
+
+## Prompting an AI to create a particle
+
+The most effective approach is to give the AI the full AGENTS.md content alongside your request. A minimal prompt structure:
+
+```
+[Paste AGENTS.md content here]
+
+Create a new particle for the Button component that shows a loading state.
+The particle should use useState and show a spinner icon while loading.
+Name it p-button-{N}.tsx where N is the next available number.
+```
+
+The AI will then follow the naming convention, add `"use client"` correctly, import from the right paths, and apply the accessibility patterns.
+
+## Component source file structure
+
+Every particle file follows the same shape, which makes it easy for an AI to parse:
+
+```tsx
+// 1. Optional: "use client" if hooks or state are used
+"use client";
+
+// 2. React hook imports (named, not namespace)
+import { useState } from "react";
+
+// 3. Icon imports (specific named imports from lucide-react)
+import { CheckIcon, CopyIcon } from "lucide-react";
+
+// 4. Component imports (always from @/registry/default/ui/)
+import { Button } from "@/registry/default/ui/button";
+
+// 5. Static data defined outside the function
+const items = [
+  { label: "Option A", value: "a" },
+  { label: "Option B", value: "b" },
+];
+
+// 6. Single default export named Particle, no parameters
+export default function Particle() {
+  return (
+    <Button>Click me</Button>
+  );
+}
+```
+
+<Note>
+  Never import `* as React` or use the `React.` namespace. Always use named imports. Never export multiple components from one particle file.
+</Note>
+
+## Tips for best results
+
+- **Include the migration guide** when asking an AI to convert shadcn/ui components. The [migration guide](/guides/radix-migration) page is LLM-friendly by design.
+- **Specify the Base UI API explicitly** — tell the AI to use the `render` prop instead of `asChild`, and `*Popup`/`*Panel` instead of `*Content`.
+- **Reference existing particles** in your prompt for the target category. AI tools produce more consistent output when shown a concrete example from the same category.
+- **Validate with the build commands** after AI-generated code: `bun run registry:validate-deps` will catch missing or incorrect `registryDependencies`.

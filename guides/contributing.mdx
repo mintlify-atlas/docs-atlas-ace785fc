@@ -1,0 +1,228 @@
+---
+title: Contributing
+description: How to contribute components and particles to coss ui.
+---
+
+coss ui consists of two main types of components:
+
+- **UI components** — core reusable primitives (`Button`, `Input`, etc.)
+- **Particles** — composite components that combine one or more UI components
+
+This guide focuses on contributing new particles, which is the most common type of contribution.
+
+## Development setup
+
+coss ui is a bun monorepo. To start the development server for the UI package:
+
+```bash
+bun run dev --filter=ui
+```
+
+## Adding a new particle
+
+<Steps>
+  <Step title="Create the particle file">
+    Particles live in `apps/ui/registry/default/particles/` and follow the naming convention `p-{component}-{N}.tsx`, where `{component}` is the primary component name and `{N}` is the next sequential number within that category.
+
+    Multi-word component names use hyphens: `alert-dialog`, `input-group`, `number-field`.
+
+    **Examples:** `p-button-8.tsx`, `p-input-group-15.tsx`, `p-alert-dialog-2.tsx`
+
+    The file must export a single default function named `Particle`:
+
+    ```tsx
+    // registry/default/particles/p-button-8.tsx
+    import { Button } from "@/registry/default/ui/button"
+
+    export default function Particle() {
+      return (
+        <div className="flex gap-2">
+          <Button variant="outline">Cancel</Button>
+          <Button>Save Changes</Button>
+        </div>
+      )
+    }
+    ```
+
+    Key rules:
+    - Always name the export `Particle`, not `ParticleButton8` or similar
+    - Import components from `@/registry/default/ui/{component}` — never from `@coss/ui/components/`
+    - Import icons from `lucide-react` using specific named imports only
+    - Add `"use client"` only when the particle uses React hooks, state, or browser APIs
+    - Keep each file focused on demonstrating one pattern
+  </Step>
+
+  <Step title="Handle interactivity">
+    Only add `"use client"` when the particle actually needs it:
+
+    <CodeGroup>
+
+    ```tsx stateful.tsx
+    "use client";
+
+    import { useState } from "react";
+    import { Button } from "@/registry/default/ui/button";
+
+    export default function Particle() {
+      const [loading, setLoading] = useState(false);
+
+      const handleClick = async () => {
+        setLoading(true);
+        await new Promise((r) => setTimeout(r, 800));
+        setLoading(false);
+      };
+
+      return (
+        <Button disabled={loading} onClick={handleClick}>
+          {loading ? "Loading..." : "Submit"}
+        </Button>
+      );
+    }
+    ```
+
+    ```tsx stateless.tsx
+    import { Button } from "@/registry/default/ui/button";
+
+    export default function Particle() {
+      return <Button>Click me</Button>;
+    }
+    ```
+
+    </CodeGroup>
+
+    Do **not** add `"use client"` for stateless components, components using controlled props, or simple UI compositions.
+  </Step>
+
+  <Step title="Apply accessibility patterns">
+    - Add `aria-label` to icon-only interactive elements (buttons, toggles)
+    - Add `aria-hidden="true"` to decorative icons
+    - Always specify `type` on `Input` and `InputGroupInput` components
+    - Use `useId()` to associate labels with inputs when description text is present
+
+    <CodeGroup>
+
+    ```tsx icon-only-button.tsx
+    import { XIcon } from "lucide-react";
+    import { Button } from "@/registry/default/ui/button";
+
+    export default function Particle() {
+      return (
+        <Button aria-label="Close" size="icon" variant="ghost">
+          <XIcon aria-hidden="true" />
+        </Button>
+      );
+    }
+    ```
+
+    ```tsx button-with-text.tsx
+    import { PlusIcon } from "lucide-react";
+    import { Button } from "@/registry/default/ui/button";
+
+    export default function Particle() {
+      return (
+        <Button>
+          <PlusIcon aria-hidden="true" />
+          Add Item
+        </Button>
+      );
+    }
+    ```
+
+    </CodeGroup>
+
+    <Note>
+      The `Button` component automatically handles icon opacity. Never add `opacity-*` classes to icons inside buttons.
+    </Note>
+  </Step>
+
+  <Step title="Add to the registry">
+    Add your particle to `apps/ui/registry/registry-particles.ts`:
+
+    ```tsx
+    {
+      name: "p-button-8",
+      description: "Button group with cancel and save actions",
+      type: "registry:block",
+      categories: categories("button"),
+      dependencies: ["lucide-react"],     // only if using icons
+      registryDependencies: ["@coss/button"],
+      files: [{ path: "particles/p-button-8.tsx", type: "registry:block" }],
+      meta: {
+        className: "**:data-[slot=preview]:w-full **:data-[slot=preview]:max-w-64",
+      },
+    }
+    ```
+
+    **Required fields:**
+
+    | Field | Description |
+    |-------|-------------|
+    | `name` | Must match the filename without `.tsx` |
+    | `description` | Concise description, 15 words or fewer |
+    | `type` | Always `"registry:block"` |
+    | `categories` | Use the `categories()` helper with names from `registry-categories.ts` |
+    | `registryDependencies` | Array of `@coss/{component}` names for every UI component used |
+    | `files` | Array with one entry: `{ path: "particles/p-button-8.tsx", type: "registry:block" }` |
+
+    **Category names** use spaces, not hyphens: `"input group"`, `"alert dialog"`, `"empty state"`. The `categories()` helper enforces this with TypeScript.
+
+    <Note>
+      Particles using the `Menu` component should include both `"menu"` and `"dropdown"` categories, since many users search for "dropdown".
+    </Note>
+  </Step>
+
+  <Step title="Build and validate">
+    Run these commands from `apps/ui` in order:
+
+    ```bash
+    # Format code and sort imports
+    bun run format:all
+
+    # Validate that registryDependencies match actual imports
+    bun run registry:validate-deps
+
+    # Generate registry JSON files
+    bun run registry:build
+
+    # Sync UI components to the packages folder (only if you modified base UI components)
+    bun run ui:sync
+    ```
+
+    `registry:build` generates `registry/__index__.tsx`, `registry.json`, and individual JSON files in `public/r/` for each particle.
+  </Step>
+
+  <Step title="Optionally add to documentation">
+    To showcase the particle in the component docs, add `<ComponentPreview />` to the relevant MDX file in `content/docs/components/`:
+
+    ```mdx
+    <ComponentPreview name="p-button-8" />
+    ```
+
+    You can override the preview container size with a `className` prop:
+
+    ```mdx
+    <ComponentPreview
+      name="p-button-8"
+      className="[&_.preview>*]:w-full [&_.preview>*]:max-w-80"
+    />
+    ```
+  </Step>
+</Steps>
+
+## Checklist
+
+Before submitting, confirm:
+
+- [ ] File is at `apps/ui/registry/default/particles/p-{component}-{N}.tsx`
+- [ ] Default export is `export default function Particle()`
+- [ ] `"use client"` is present only where hooks or state are used
+- [ ] Components imported from `@/registry/default/ui/{component}`
+- [ ] Icons imported as specific named exports from `lucide-react`
+- [ ] `aria-label` on all icon-only interactive elements
+- [ ] `aria-hidden="true"` on all decorative icons
+- [ ] `type` specified on all `Input` and `InputGroupInput` elements
+- [ ] Semantic color tokens used (e.g., `text-muted-foreground`, not `text-gray-500`)
+- [ ] Entry added to `registry-particles.ts` with valid categories and dependencies
+- [ ] `bun run format:all` passed
+- [ ] `bun run registry:validate-deps` passed
+- [ ] `bun run registry:build` passed

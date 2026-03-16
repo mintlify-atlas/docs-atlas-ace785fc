@@ -1,0 +1,165 @@
+---
+title: Badge
+description: A compact label for status, category, or count information.
+---
+
+## Overview
+
+`Badge` is a small inline label used to convey status, highlight categories, or show counts. It supports eight semantic variants — including `success`, `warning`, `info`, and `error` — so you can communicate meaning through color without writing custom styles. Because it uses Base UI's `useRender` hook, you can render it as any element, including a `<button>` or `<a>` tag.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/badge
+```
+
+## Basic usage
+
+```tsx
+import { Badge } from "@/components/ui/badge"
+
+export default function Example() {
+  return <Badge>New</Badge>
+}
+```
+
+## Variants
+
+### Variant
+
+<Tabs>
+  <Tab title="default">
+    ```tsx
+    <Badge variant="default">Default</Badge>
+    ```
+  </Tab>
+  <Tab title="secondary">
+    ```tsx
+    <Badge variant="secondary">Secondary</Badge>
+    ```
+  </Tab>
+  <Tab title="outline">
+    ```tsx
+    <Badge variant="outline">Outline</Badge>
+    ```
+  </Tab>
+  <Tab title="destructive">
+    ```tsx
+    <Badge variant="destructive">Destructive</Badge>
+    ```
+  </Tab>
+  <Tab title="error">
+    ```tsx
+    <Badge variant="error">Error</Badge>
+    ```
+  </Tab>
+  <Tab title="success">
+    ```tsx
+    <Badge variant="success">Success</Badge>
+    ```
+  </Tab>
+  <Tab title="warning">
+    ```tsx
+    <Badge variant="warning">Warning</Badge>
+    ```
+  </Tab>
+  <Tab title="info">
+    ```tsx
+    <Badge variant="info">Info</Badge>
+    ```
+  </Tab>
+</Tabs>
+
+### Size
+
+<Tabs>
+  <Tab title="sm">
+    ```tsx
+    <Badge size="sm">Small</Badge>
+    ```
+  </Tab>
+  <Tab title="default">
+    ```tsx
+    <Badge size="default">Default</Badge>
+    ```
+  </Tab>
+  <Tab title="lg">
+    ```tsx
+    <Badge size="lg">Large</Badge>
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+<ParamField path="variant" type='"default" | "secondary" | "outline" | "destructive" | "error" | "success" | "warning" | "info"' default="default">
+  The visual style and semantic color of the badge.
+</ParamField>
+
+<ParamField path="size" type='"sm" | "default" | "lg"' default="default">
+  Controls the badge height, padding, and font size.
+</ParamField>
+
+<ParamField path="render" type="React.ReactElement">
+  Render the badge as a different element using Base UI's `useRender` hook. Use this to render a `<button>`, `<a>`, or a router `Link` that looks like a badge.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes merged with the variant styles.
+</ParamField>
+
+## Examples
+
+### Status badges
+
+```tsx
+import { Badge } from "@/components/ui/badge"
+
+<div className="flex flex-wrap gap-2">
+  <Badge variant="success">Deployed</Badge>
+  <Badge variant="warning">Pending</Badge>
+  <Badge variant="error">Failed</Badge>
+  <Badge variant="info">In review</Badge>
+</div>
+```
+
+### Badge as a link
+
+Use the `render` prop to make a badge navigable.
+
+```tsx
+import Link from "next/link"
+import { Badge } from "@/components/ui/badge"
+
+<Badge render={<Link href="/changelog" />} variant="outline">
+  v2.4.0
+</Badge>
+```
+
+### Badge with icon
+
+```tsx
+import { CheckIcon } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+
+<Badge variant="success">
+  <CheckIcon aria-hidden="true" />
+  Verified
+</Badge>
+```
+
+### Count badge inside a button
+
+```tsx
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+
+<Button variant="outline">
+  Notifications
+  <Badge className="-me-1" variant="outline">4</Badge>
+</Button>
+```
+
+<Note>
+  The `error` variant uses the same destructive color as `destructive` but renders with a lower-opacity background (8 % in light, 16 % in dark) — making it suitable for inline status indicators rather than high-emphasis alerts.
+</Note>

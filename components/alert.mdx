@@ -1,0 +1,162 @@
+---
+title: Alert
+description: A callout component for surfacing important messages, warnings, errors, or status updates.
+---
+
+## Overview
+
+The Alert component displays a prominent message that requires the user's attention. It supports five variants — `default`, `info`, `success`, `warning`, and `error` — each with distinct colors and icon tinting. Icons placed inside the root element are treated as semantic content (not decorative), so screen readers announce them.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/alert
+```
+
+## Basic usage
+
+```tsx
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+
+export function AlertDemo() {
+  return (
+    <Alert>
+      <AlertTitle>Heads up!</AlertTitle>
+      <AlertDescription>
+        You can add components and dependencies to your app using the CLI.
+      </AlertDescription>
+    </Alert>
+  )
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Alert` | Root container. Sets `role="alert"` for screen reader announcements. |
+| `AlertTitle` | Primary heading text. Renders as a styled `<div>`. |
+| `AlertDescription` | Secondary descriptive text. Rendered in muted foreground color. |
+| `AlertAction` | Container for action buttons. Positioned to the right on larger screens. |
+
+## Props
+
+### Alert
+
+<ParamField path="variant" type="'default' | 'info' | 'success' | 'warning' | 'error'" default="'default'">
+  Controls the color scheme of the alert. Each variant tints the border, background, and any SVG icon inside the alert.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the alert container.
+</ParamField>
+
+### AlertTitle
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the title `<div>`.
+</ParamField>
+
+### AlertDescription
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the description `<div>`.
+</ParamField>
+
+### AlertAction
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the action container `<div>`.
+</ParamField>
+
+## Examples
+
+### With icon
+
+Icons in alerts are semantic — do not add `aria-hidden="true"`.
+
+```tsx
+import { InfoIcon } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+
+export function InfoAlert() {
+  return (
+    <Alert variant="info">
+      <InfoIcon />
+      <AlertTitle>New feature available</AlertTitle>
+      <AlertDescription>
+        Keyboard shortcuts are now available. Press <kbd>?</kbd> to open the reference.
+      </AlertDescription>
+    </Alert>
+  )
+}
+```
+
+### With action buttons
+
+Use `AlertAction` to place buttons alongside the alert text.
+
+```tsx
+import { TriangleAlertIcon } from "lucide-react"
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+
+export function AlertWithActions() {
+  return (
+    <Alert variant="warning">
+      <TriangleAlertIcon />
+      <AlertTitle>Your session is about to expire</AlertTitle>
+      <AlertDescription>
+        You will be logged out in 5 minutes due to inactivity.
+      </AlertDescription>
+      <AlertAction>
+        <Button size="sm" variant="outline">Dismiss</Button>
+        <Button size="sm">Stay logged in</Button>
+      </AlertAction>
+    </Alert>
+  )
+}
+```
+
+### All variants
+
+```tsx
+import {
+  CheckCircleIcon,
+  InfoIcon,
+  TriangleAlertIcon,
+  XCircleIcon,
+} from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+
+export function AllVariants() {
+  return (
+    <div className="space-y-3">
+      <Alert variant="default">
+        <AlertTitle>Default</AlertTitle>
+        <AlertDescription>This is a default alert.</AlertDescription>
+      </Alert>
+      <Alert variant="info">
+        <InfoIcon />
+        <AlertTitle>Info</AlertTitle>
+        <AlertDescription>This is an informational alert.</AlertDescription>
+      </Alert>
+      <Alert variant="success">
+        <CheckCircleIcon />
+        <AlertTitle>Success</AlertTitle>
+        <AlertDescription>Your changes have been saved.</AlertDescription>
+      </Alert>
+      <Alert variant="warning">
+        <TriangleAlertIcon />
+        <AlertTitle>Warning</AlertTitle>
+        <AlertDescription>This action may have consequences.</AlertDescription>
+      </Alert>
+      <Alert variant="error">
+        <XCircleIcon />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>Something went wrong. Please try again.</AlertDescription>
+      </Alert>
+    </div>
+  )
+}
+```

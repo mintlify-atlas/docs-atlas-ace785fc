@@ -1,0 +1,181 @@
+---
+title: Accordion
+description: A set of collapsible panels with headings and content, built on Base UI Accordion.
+---
+
+## Overview
+
+The Accordion component groups content into expandable and collapsible sections. Use it to reduce visual noise when users need selective access to content — such as FAQs, settings panels, or navigation groups. By default, only one panel can be open at a time; the `multiple` prop allows several panels to be open simultaneously.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/accordion
+```
+
+## Basic usage
+
+```tsx
+import {
+  Accordion,
+  AccordionItem,
+  AccordionPanel,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
+export function AccordionDemo() {
+  return (
+    <Accordion>
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Is it accessible?</AccordionTrigger>
+        <AccordionPanel>
+          Yes. The component follows the WAI-ARIA accordion design pattern.
+        </AccordionPanel>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Is it styled?</AccordionTrigger>
+        <AccordionPanel>
+          Yes. It uses Tailwind CSS with sensible defaults that you can override.
+        </AccordionPanel>
+      </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger>Is it animated?</AccordionTrigger>
+        <AccordionPanel>
+          Yes. The panel height animates on open and close using CSS transitions.
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+## Sub-components
+
+| Component | Description |
+| --- | --- |
+| `Accordion` | Root component. Thin wrapper around `Accordion.Root` from Base UI. |
+| `AccordionItem` | Container for a single accordion entry. Applies bottom border between items. |
+| `AccordionTrigger` | Button that toggles the panel. Includes an auto-rotating chevron indicator. |
+| `AccordionPanel` | Collapsible content area with animated height transition. Also exported as `AccordionContent`. |
+
+## Props
+
+### Accordion
+
+<ParamField path="openMultiple" type="boolean" default="false">
+  When `true`, multiple panels can be open at the same time.
+</ParamField>
+
+<ParamField path="defaultValue" type="string | string[]">
+  The value(s) of the panel(s) that should be open by default (uncontrolled).
+</ParamField>
+
+<ParamField path="value" type="string | string[]">
+  The controlled open panel value(s). Use with `onValueChange` for controlled behavior.
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: string | string[]) => void">
+  Callback fired when the open state changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables all accordion items.
+</ParamField>
+
+### AccordionItem
+
+<ParamField path="value" type="string" required>
+  Unique identifier for the accordion item. Used to match against `Accordion`'s `value` or `defaultValue`.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables this specific item.
+</ParamField>
+
+### AccordionTrigger
+
+Accepts all standard `button` HTML attributes plus Base UI `Accordion.Trigger` props.
+
+### AccordionPanel
+
+Accepts all Base UI `Accordion.Panel` props. Also exported as `AccordionContent`.
+
+## Examples
+
+### Multiple panels open
+
+Pass `openMultiple` to allow more than one panel to be expanded at the same time.
+
+```tsx
+import { Accordion, AccordionItem, AccordionPanel, AccordionTrigger } from "@/components/ui/accordion"
+
+export function MultipleAccordion() {
+  return (
+    <Accordion openMultiple>
+      <AccordionItem value="a">
+        <AccordionTrigger>Section A</AccordionTrigger>
+        <AccordionPanel>Content for section A.</AccordionPanel>
+      </AccordionItem>
+      <AccordionItem value="b">
+        <AccordionTrigger>Section B</AccordionTrigger>
+        <AccordionPanel>Content for section B.</AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+### Controlled
+
+Manage the open state externally with `value` and `onValueChange`.
+
+```tsx
+"use client"
+
+import { useState } from "react"
+import { Accordion, AccordionItem, AccordionPanel, AccordionTrigger } from "@/components/ui/accordion"
+
+export function ControlledAccordion() {
+  const [value, setValue] = useState<string>("faq-1")
+
+  return (
+    <Accordion value={value} onValueChange={setValue}>
+      <AccordionItem value="faq-1">
+        <AccordionTrigger>What is coss/ui?</AccordionTrigger>
+        <AccordionPanel>
+          A component library built on Base UI and Tailwind CSS.
+        </AccordionPanel>
+      </AccordionItem>
+      <AccordionItem value="faq-2">
+        <AccordionTrigger>How do I install it?</AccordionTrigger>
+        <AccordionPanel>
+          Use <code>npx shadcn@latest add @coss/&lt;component&gt;</code> for any component.
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+### Default open item
+
+Use `defaultValue` to expand a panel on initial render without controlled state.
+
+```tsx
+import { Accordion, AccordionItem, AccordionPanel, AccordionTrigger } from "@/components/ui/accordion"
+
+export function DefaultOpenAccordion() {
+  return (
+    <Accordion defaultValue="item-1">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>This is open by default</AccordionTrigger>
+        <AccordionPanel>Content revealed on load.</AccordionPanel>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>This starts closed</AccordionTrigger>
+        <AccordionPanel>Click the trigger to reveal this content.</AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```

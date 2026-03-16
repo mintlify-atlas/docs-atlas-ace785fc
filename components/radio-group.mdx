@@ -1,0 +1,100 @@
+---
+title: Radio Group
+description: A set of radio buttons where only one option can be selected at a time.
+---
+
+<ComponentPreview name="p-radio-group-1" />
+
+## Overview
+
+`RadioGroup` and `Radio` wrap Base UI's `RadioGroup` and `Radio` primitives. The group manages selection state, and each `Radio` renders its own circular indicator. Wrap each option in a `Label` for accessible labelling.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/radio-group
+```
+
+## Basic usage
+
+```tsx
+import { Label } from "@/components/ui/label"
+import { Radio, RadioGroup } from "@/components/ui/radio-group"
+```
+
+```tsx
+<RadioGroup defaultValue="next">
+  <Label>
+    <Radio value="next" />
+    Next.js
+  </Label>
+  <Label>
+    <Radio value="vite" />
+    Vite
+  </Label>
+  <Label>
+    <Radio value="astro" />
+    Astro
+  </Label>
+</RadioGroup>
+```
+
+## Props
+
+### RadioGroup
+
+<ParamField path="value" type="string">
+  Controlled selected value.
+</ParamField>
+
+<ParamField path="defaultValue" type="string">
+  Initial selected value for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: string) => void">
+  Callback fired when the selection changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disables all radio buttons in the group.
+</ParamField>
+
+<ParamField path="...props" type="RadioGroupPrimitive.Props">
+  All props from Base UI's `RadioGroup.Root` are supported.
+</ParamField>
+
+### Radio
+
+Also exported as `RadioGroupItem` for compatibility.
+
+<ParamField path="value" type="string">
+  The value this radio button represents.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disables this radio button.
+</ParamField>
+
+<ParamField path="...props" type="RadioPrimitive.Root.Props">
+  All props from Base UI's `Radio.Root` are supported.
+</ParamField>
+
+## Examples
+
+For accessible labelling and validation, wrap radio groups with the `Field` component. See the related example: [Radio group field](/components/field#radio-group-field).
+
+### Disabled
+
+<ComponentPreview name="p-radio-group-2" />
+
+### With description
+
+<ComponentPreview name="p-radio-group-3" />
+
+### Card style
+
+<ComponentPreview name="p-radio-group-4" />
+
+### Form integration
+
+<ComponentPreview name="p-radio-group-5" />

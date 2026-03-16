@@ -1,0 +1,309 @@
+---
+title: Form particles
+description: Login forms, Zod validation forms, and field composition patterns built on the Form, Field, and Card primitives.
+---
+
+Form particles combine `Form`, `Field`, `Input`, and `Button` primitives into complete, interactive form patterns. They range from a single-field submission to full authentication cards with Zod schema validation.
+
+## Basic form
+
+The simplest form particle: a single field with label, input, error message, and submit button. Uses the `Form` component to handle submission and the `Field` component for accessible label/input pairing.
+
+```tsx
+// p-form-1.tsx — Basic email form with loading state
+"use client";
+
+import type { FormEvent } from "react";
+import { useState } from "react";
+import { Button } from "@/registry/default/ui/button";
+import { Field, FieldError, FieldLabel } from "@/registry/default/ui/field";
+import { Form } from "@/registry/default/ui/form";
+import { Input } from "@/registry/default/ui/input";
+
+export default function Particle() {
+  const [loading, setLoading] = useState(false);
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    setLoading(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setLoading(false);
+    alert(`Email: ${formData.get("email") || ""}`);
+  };
+
+  return (
+    <Form className="max-w-64" onSubmit={onSubmit}>
+      <Field name="email">
+        <FieldLabel>Email</FieldLabel>
+        <Input
+          disabled={loading}
+          placeholder="you@example.com"
+          required
+          type="email"
+        />
+        <FieldError>Please enter a valid email.</FieldError>
+      </Field>
+      <Button disabled={loading} type="submit">
+        Submit
+      </Button>
+    </Form>
+  );
+}
+```
+
+## Form with Zod validation
+
+Pass a Zod `schema` and server-side errors to the `Form` component. Field-level errors surface automatically via `<FieldError />`.
+
+```tsx
+// p-form-2.tsx — Form with Zod schema validation
+"use client";
+
+import type { FormEvent } from "react";
+import { useState } from "react";
+import { z } from "zod";
+import { Button } from "@/registry/default/ui/button";
+import { Field, FieldError, FieldLabel } from "@/registry/default/ui/field";
+import { Form } from "@/registry/default/ui/form";
+import { Input } from "@/registry/default/ui/input";
+
+const schema = z.object({
+  age: z.coerce
+    .number({ message: "Please enter a number." })
+    .positive({ message: "Number must be positive." }),
+  name: z.string().min(1, { message: "Please enter a name." }),
+});
+
+type Errors = Record<string, string | string[]>;
+
+async function submitForm(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+
+  const formData = new FormData(event.currentTarget);
+  const result = schema.safeParse(Object.fromEntries(formData));
+
+  if (!result.success) {
+    const { fieldErrors } = z.flattenError(result.error);
+    return { errors: fieldErrors as Errors };
+  }
+
+  return {
+    errors: {} as Errors,
+  };
+}
+
+export default function Particle() {
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Errors>({});
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    setLoading(true);
+    const response = await submitForm(event);
+    await new Promise((r) => setTimeout(r, 800));
+    setErrors(response.errors);
+    setLoading(false);
+    if (Object.keys(response.errors).length === 0) {
+      alert(
+        `Name: ${String(formData.get("name") || "")}\nAge: ${String(
+          formData.get("age") || "",
+        )}`,
+      );
+    }
+  };
+
+  return (
+    <Form className="max-w-64" errors={errors} onSubmit={onSubmit}>
+      <Field name="name">
+        <FieldLabel>Name</FieldLabel>
+        <Input disabled={loading} placeholder="Enter name" />
+        <FieldError />
+      </Field>
+      <Field name="age">
+        <FieldLabel>Age</FieldLabel>
+        <Input disabled={loading} placeholder="Enter age" />
+        <FieldError />
+      </Field>
+      <Button disabled={loading} type="submit">
+        Submit
+      </Button>
+    </Form>
+  );
+}
+```
+
+<Note>
+  Pass `errors` as an object where keys match `Field` `name` props. `<FieldError />` (with no children) automatically renders the matching error from the `Form` context.
+</Note>
+
+## Authentication card
+
+Combines `Card`, `Form`, `Field`, and `Button` into a login card pattern. This is the most common auth form shape.
+
+```tsx
+// p-card-2.tsx — Login card
+import Link from "next/link";
+import { Button } from "@/registry/default/ui/button";
+import {
+  Card,
+  CardAction,
+  CardHeader,
+  CardPanel,
+  CardTitle,
+} from "@/registry/default/ui/card";
+import { Field, FieldLabel } from "@/registry/default/ui/field";
+import { Form } from "@/registry/default/ui/form";
+import { Input } from "@/registry/default/ui/input";
+
+export default function Particle() {
+  return (
+    <Card className="w-full max-w-xs">
+      <CardHeader>
+        <CardTitle>Login to your account</CardTitle>
+        <CardAction>
+          <Link
+            className="text-muted-foreground text-sm leading-4.5 hover:underline"
+            href="#"
+          >
+            Sign up
+          </Link>
+        </CardAction>
+      </CardHeader>
+      <CardPanel>
+        <Form>
+          <Field>
+            <FieldLabel>Email</FieldLabel>
+            <Input placeholder="Enter your email" type="email" />
+          </Field>
+          <Field>
+            <FieldLabel>Password</FieldLabel>
+            <Input placeholder="Enter your password" type="password" />
+          </Field>
+          <Button className="w-full" type="submit">
+            Login
+          </Button>
+        </Form>
+      </CardPanel>
+    </Card>
+  );
+}
+```
+
+## Authentication card with separators
+
+Adds a bordered header with a description and a security notice in the footer.
+
+```tsx
+// p-card-3.tsx — Login card with header separator and security footer
+import { ShieldAlertIcon } from "lucide-react";
+import { Button } from "@/registry/default/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardPanel,
+  CardTitle,
+} from "@/registry/default/ui/card";
+import { Field, FieldLabel } from "@/registry/default/ui/field";
+import { Form } from "@/registry/default/ui/form";
+import { Input } from "@/registry/default/ui/input";
+
+export default function Particle() {
+  return (
+    <Card className="w-full max-w-xs">
+      <CardHeader className="border-b">
+        <CardTitle>Login to your account</CardTitle>
+        <CardDescription>Enter email and password to login</CardDescription>
+      </CardHeader>
+      <CardPanel>
+        <Form>
+          <Field>
+            <FieldLabel>Email</FieldLabel>
+            <Input placeholder="Enter your email" type="email" />
+          </Field>
+          <Field>
+            <FieldLabel>Password</FieldLabel>
+            <Input placeholder="Enter your password" type="password" />
+          </Field>
+          <Button className="w-full" type="submit">
+            Login
+          </Button>
+        </Form>
+      </CardPanel>
+      <CardFooter className="border-t">
+        <div className="flex gap-1 text-muted-foreground text-xs">
+          <ShieldAlertIcon className="size-3 h-lh shrink-0" />
+          <p>The information you enter is encrypted and stored securely.</p>
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
+```
+
+## Field patterns
+
+The `Field` component handles label/input association automatically. Use it for every form field.
+
+<CodeGroup>
+
+```tsx p-field-1.tsx (with description)
+import {
+  Field,
+  FieldDescription,
+  FieldLabel,
+} from "@/registry/default/ui/field";
+import { Input } from "@/registry/default/ui/input";
+
+export default function Particle() {
+  return (
+    <Field>
+      <FieldLabel>Name</FieldLabel>
+      <Input placeholder="Enter your name" type="text" />
+      <FieldDescription>Visible on your profile</FieldDescription>
+    </Field>
+  );
+}
+```
+
+```tsx p-field-3.tsx (disabled)
+import {
+  Field,
+  FieldDescription,
+  FieldLabel,
+} from "@/registry/default/ui/field";
+import { Input } from "@/registry/default/ui/input";
+
+export default function Particle() {
+  return (
+    <Field disabled>
+      <FieldLabel>Email</FieldLabel>
+      <Input disabled placeholder="Enter your email" type="email" />
+      <FieldDescription>This field is currently disabled.</FieldDescription>
+    </Field>
+  );
+}
+```
+
+</CodeGroup>
+
+## Form component structure
+
+All form particles follow the same compositional structure:
+
+```
+Form
+  Field (name="fieldName")
+    FieldLabel
+    Input / Textarea / Select / ...
+    FieldError (renders matching error from Form context)
+    FieldDescription (optional)
+  Button (type="submit")
+```
+
+- `Form` passes `errors` down to `Field` components via context
+- `Field` `name` must match the key in the `errors` object for `FieldError` to pick it up
+- `FieldError` with no children displays the first error string for that field
+- All inputs inside a `Field` are automatically associated with their `FieldLabel`

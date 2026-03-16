@@ -1,0 +1,84 @@
+---
+title: Checkbox
+description: A control that lets users toggle between checked and unchecked states.
+---
+
+<ComponentPreview name="p-checkbox-1" />
+
+## Overview
+
+`Checkbox` wraps Base UI's `Checkbox.Root` primitive with a built-in visual indicator that renders both a checkmark and an indeterminate dash. Wrap it with a `Label` component to associate a visible label.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/checkbox
+```
+
+## Basic usage
+
+```tsx
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+```
+
+```tsx
+<Label>
+  <Checkbox />
+  Accept terms and conditions
+</Label>
+```
+
+## Props
+
+<ParamField path="checked" type="boolean | 'mixed'">
+  Controlled checked state. Use `'mixed'` for the indeterminate state.
+</ParamField>
+
+<ParamField path="defaultChecked" type="boolean | 'mixed'">
+  Initial checked state for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onCheckedChange" type="(checked: boolean | 'mixed') => void">
+  Callback fired when the checked state changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Prevents interaction and applies reduced opacity.
+</ParamField>
+
+<ParamField path="required" type="boolean">
+  Marks the checkbox as required for form validation.
+</ParamField>
+
+<ParamField path="name" type="string">
+  Name submitted with form data.
+</ParamField>
+
+<ParamField path="value" type="string">
+  Value submitted with form data when checked. Used inside `CheckboxGroup`.
+</ParamField>
+
+<ParamField path="...props" type="CheckboxPrimitive.Root.Props">
+  All props from Base UI's `Checkbox.Root` are supported.
+</ParamField>
+
+## Examples
+
+For accessible labelling and validation, wrap checkboxes with the `Field` component. See the related example: [Checkbox field](/components/field#checkbox-field).
+
+### Disabled
+
+<ComponentPreview name="p-checkbox-2" />
+
+### With description
+
+<ComponentPreview name="p-checkbox-3" />
+
+### Card style
+
+<ComponentPreview name="p-checkbox-4" />
+
+### Form integration
+
+<ComponentPreview name="p-checkbox-5" />

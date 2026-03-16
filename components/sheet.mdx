@@ -1,0 +1,171 @@
+---
+title: Sheet
+description: A flyout panel that slides in from the edge of the screen.
+---
+
+## Overview
+
+Sheet is a side panel built on the same `Dialog` primitive. It slides in from any edge of the screen — right by default. Use it for settings panels, navigation drawers, detail views, and other supplementary content.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/sheet
+```
+
+## Basic usage
+
+```tsx
+import {
+  Sheet,
+  SheetClose,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetPanel,
+  SheetPopup,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+```
+
+```tsx
+<Sheet>
+  <SheetTrigger render={<Button variant="outline" />}>Open sheet</SheetTrigger>
+  <SheetPopup>
+    <SheetHeader>
+      <SheetTitle>Account settings</SheetTitle>
+      <SheetDescription>
+        Manage your account preferences and notifications.
+      </SheetDescription>
+    </SheetHeader>
+    <SheetPanel>
+      {/* sheet body content */}
+    </SheetPanel>
+    <SheetFooter>
+      <SheetClose render={<Button variant="ghost" />}>Cancel</SheetClose>
+      <SheetClose render={<Button />}>Save</SheetClose>
+    </SheetFooter>
+  </SheetPopup>
+</Sheet>
+```
+
+## Sub-components
+
+### Sheet
+
+Root component. Alias for `Dialog.Root` from Base UI.
+
+### SheetTrigger
+
+Trigger that opens the sheet. Use the `render` prop to compose with `Button`.
+
+### SheetPopup
+
+Popup container for the sheet. Handles positioning, animation, and the close button. Also exported as `SheetContent`.
+
+<ParamField path="props.side" type="'right' | 'left' | 'top' | 'bottom'" default="'right'">
+  Which edge of the screen the sheet slides in from.
+</ParamField>
+
+<ParamField path="props.variant" type="'default' | 'inset'" default="'default'">
+  `inset` adds rounded corners and spacing around the sheet on desktop screens.
+</ParamField>
+
+<ParamField path="props.showCloseButton" type="boolean" default="true">
+  When true, renders an X close button in the top-right corner.
+</ParamField>
+
+<ParamField path="props.closeProps" type="Dialog.Close.Props">
+  Props forwarded to the internal close button.
+</ParamField>
+
+### SheetHeader
+
+Container for the sheet title and description.
+
+### SheetTitle
+
+Sheet heading. Alias for `Dialog.Title` from Base UI.
+
+### SheetDescription
+
+Sheet description text. Alias for `Dialog.Description` from Base UI.
+
+### SheetPanel
+
+Scrollable content area. Automatically wraps children in a `ScrollArea`.
+
+<ParamField path="props.scrollFade" type="boolean" default="true">
+  Shows a fade gradient at scroll edges.
+</ParamField>
+
+### SheetFooter
+
+Footer section for action buttons.
+
+<ParamField path="props.variant" type="'default' | 'bare'" default="'default'">
+  `default` adds a border and muted background. `bare` removes both.
+</ParamField>
+
+### SheetClose
+
+Button that closes the sheet. Alias for `Dialog.Close` from Base UI.
+
+### SheetPortal
+
+Portal for rendering outside the DOM hierarchy.
+
+### SheetBackdrop
+
+Backdrop overlay. Also exported as `SheetOverlay`.
+
+## Examples
+
+### Left-side sheet
+
+```tsx
+<Sheet>
+  <SheetTrigger render={<Button variant="outline" />}>Open navigation</SheetTrigger>
+  <SheetPopup side="left">
+    <SheetHeader>
+      <SheetTitle>Navigation</SheetTitle>
+    </SheetHeader>
+    <SheetPanel>
+      <nav>{/* navigation links */}</nav>
+    </SheetPanel>
+  </SheetPopup>
+</Sheet>
+```
+
+### Bottom sheet
+
+```tsx
+<Sheet>
+  <SheetTrigger render={<Button />}>Show filters</SheetTrigger>
+  <SheetPopup side="bottom">
+    <SheetHeader>
+      <SheetTitle>Filter results</SheetTitle>
+    </SheetHeader>
+    <SheetPanel>
+      {/* filter controls */}
+    </SheetPanel>
+    <SheetFooter>
+      <SheetClose render={<Button className="w-full" />}>Apply filters</SheetClose>
+    </SheetFooter>
+  </SheetPopup>
+</Sheet>
+```
+
+### Inset variant
+
+The `inset` variant adds rounded corners and padding on larger screens:
+
+```tsx
+<SheetPopup side="right" variant="inset">
+  <SheetHeader>
+    <SheetTitle>Settings</SheetTitle>
+  </SheetHeader>
+  <SheetPanel>{/* content */}</SheetPanel>
+</SheetPopup>
+```

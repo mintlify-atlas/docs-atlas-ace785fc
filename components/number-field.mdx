@@ -1,0 +1,148 @@
+---
+title: Number Field
+description: A numeric input with increment and decrement buttons and an optional scrub area.
+---
+
+<ComponentPreview name="p-number-field-1" />
+
+## Overview
+
+`NumberField` wraps Base UI's `NumberField` primitive family. It combines a text input with increment and decrement buttons, and optionally a `NumberFieldScrubArea` that lets users click-drag on a label to change the value.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/number-field
+```
+
+## Basic usage
+
+```tsx
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+  NumberFieldScrubArea,
+} from "@/components/ui/number-field"
+```
+
+```tsx
+<NumberField defaultValue={0}>
+  <NumberFieldScrubArea label="Quantity" />
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberField>
+```
+
+## Props
+
+### NumberField
+
+<ParamField path="size" type='"sm" | "default" | "lg"'>
+  Controls the height of the input and buttons via a `data-size` attribute consumed by child components. Defaults to `"default"`.
+</ParamField>
+
+<ParamField path="value" type="number | null">
+  Controlled numeric value.
+</ParamField>
+
+<ParamField path="defaultValue" type="number | null">
+  Initial value for uncontrolled usage.
+</ParamField>
+
+<ParamField path="min" type="number">
+  Minimum allowed value.
+</ParamField>
+
+<ParamField path="max" type="number">
+  Maximum allowed value.
+</ParamField>
+
+<ParamField path="step" type="number">
+  Increment and decrement step amount.
+</ParamField>
+
+<ParamField path="format" type="Intl.NumberFormatOptions">
+  Options for formatting the displayed value using `Intl.NumberFormat`.
+</ParamField>
+
+<ParamField path="onValueChange" type="(value: number | null) => void">
+  Callback fired when the value changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Prevents interaction.
+</ParamField>
+
+<ParamField path="...props" type="NumberFieldPrimitive.Root.Props">
+  All props from Base UI's `NumberField.Root` are supported.
+</ParamField>
+
+### NumberFieldGroup
+
+Container for `NumberFieldDecrement`, `NumberFieldInput`, and `NumberFieldIncrement`.
+
+### NumberFieldInput
+
+The text input that displays and accepts the numeric value.
+
+### NumberFieldDecrement
+
+Button that decrements the value by one step. Renders a minus icon.
+
+### NumberFieldIncrement
+
+Button that increments the value by one step. Renders a plus icon.
+
+### NumberFieldScrubArea
+
+A clickable, draggable label. Dragging left decrements and dragging right increments the value. Must be used inside a `NumberField`.
+
+<ParamField path="label" type="string">
+  The visible label text. Required for accessibility — the component throws if used outside a `NumberField`.
+</ParamField>
+
+## Examples
+
+For accessible labelling and validation, wrap number fields with the `Field` component. See the related example: [Number field](/components/field#number-field).
+
+### Small size
+
+<ComponentPreview name="p-number-field-2" />
+
+### Large size
+
+<ComponentPreview name="p-number-field-3" />
+
+### Disabled
+
+<ComponentPreview name="p-number-field-4" />
+
+### With external label
+
+<ComponentPreview name="p-number-field-5" />
+
+### With scrub area
+
+<ComponentPreview name="p-number-field-6" />
+
+### With range
+
+<ComponentPreview name="p-number-field-7" />
+
+### With formatted value
+
+<ComponentPreview name="p-number-field-8" />
+
+### With step
+
+<ComponentPreview name="p-number-field-9" />
+
+### Form integration
+
+<ComponentPreview name="p-number-field-10" />

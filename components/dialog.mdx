@@ -1,0 +1,184 @@
+---
+title: Dialog
+description: A popup that opens on top of the entire page.
+---
+
+## Overview
+
+Dialog renders a modal popup above all other page content. It includes a backdrop, animated entry/exit, a close button, and optional scroll area for long content. On mobile, the dialog sticks to the bottom of the screen by default.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/dialog
+```
+
+## Basic usage
+
+```tsx
+import {
+  Dialog,
+  DialogClose,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogPanel,
+  DialogPopup,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+```
+
+```tsx
+<Dialog>
+  <DialogTrigger render={<Button variant="outline" />}>Open dialog</DialogTrigger>
+  <DialogPopup>
+    <DialogHeader>
+      <DialogTitle>Edit profile</DialogTitle>
+      <DialogDescription>
+        Make changes to your profile here. Click save when you're done.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogPanel>
+      {/* dialog body content */}
+    </DialogPanel>
+    <DialogFooter>
+      <DialogClose render={<Button variant="ghost" />}>Cancel</DialogClose>
+      <DialogClose render={<Button />}>Save changes</DialogClose>
+    </DialogFooter>
+  </DialogPopup>
+</Dialog>
+```
+
+<Note>
+  Use the `render` prop instead of `asChild` when composing with `Button`. This is the Base UI pattern used throughout coss.
+</Note>
+
+## Sub-components
+
+### Dialog
+
+Root component. Alias for `Dialog.Root` from Base UI.
+
+### DialogTrigger
+
+Trigger that opens the dialog. Use the `render` prop to compose with a `Button` or any other element.
+
+### DialogPopup
+
+Popup container for the dialog. Renders a backdrop, viewport, and the popup panel. Also exported as `DialogContent`.
+
+<ParamField path="props.showCloseButton" type="boolean" default="true">
+  When true, renders an X close button in the top-right corner.
+</ParamField>
+
+<ParamField path="props.bottomStickOnMobile" type="boolean" default="true">
+  When true, the dialog sticks to the bottom of the screen on mobile viewports.
+</ParamField>
+
+<ParamField path="props.closeProps" type="Dialog.Close.Props">
+  Props forwarded to the internal close button. Useful for overriding `aria-label`.
+</ParamField>
+
+### DialogHeader
+
+Container for the dialog title and description. Handles spacing and padding.
+
+### DialogTitle
+
+Dialog heading. Alias for `Dialog.Title` from Base UI.
+
+### DialogDescription
+
+Dialog description text. Alias for `Dialog.Description` from Base UI.
+
+### DialogPanel
+
+Scrollable content area. Automatically wraps children in a `ScrollArea`.
+
+<ParamField path="props.scrollFade" type="boolean" default="true">
+  Shows a fade gradient at scroll edges.
+</ParamField>
+
+### DialogFooter
+
+Footer section for action buttons.
+
+<ParamField path="props.variant" type="'default' | 'bare'" default="'default'">
+  `default` adds a border and muted background. `bare` removes both.
+</ParamField>
+
+### DialogClose
+
+Close button that dismisses the dialog. Alias for `Dialog.Close` from Base UI. Use the `render` prop to compose with `Button`.
+
+### DialogPortal
+
+Portal for rendering outside the DOM hierarchy. Alias for `Dialog.Portal` from Base UI.
+
+### DialogBackdrop
+
+Backdrop overlay. Also exported as `DialogOverlay`.
+
+## Examples
+
+### Dialog with scrollable content
+
+Wrap long content in `DialogPanel` to enable scrolling inside the dialog:
+
+```tsx
+<Dialog>
+  <DialogTrigger render={<Button />}>Open</DialogTrigger>
+  <DialogPopup>
+    <DialogHeader>
+      <DialogTitle>Terms of service</DialogTitle>
+    </DialogHeader>
+    <DialogPanel>
+      {/* Long content — scrolls if it exceeds available height */}
+      <p>Lorem ipsum dolor sit amet...</p>
+    </DialogPanel>
+    <DialogFooter>
+      <DialogClose render={<Button />}>Accept</DialogClose>
+    </DialogFooter>
+  </DialogPopup>
+</Dialog>
+```
+
+### Dialog with bare footer
+
+Use `variant="bare"` on `DialogFooter` to remove the border and background:
+
+```tsx
+<DialogFooter variant="bare">
+  <DialogClose render={<Button variant="ghost" />}>Cancel</DialogClose>
+  <DialogClose render={<Button />}>Confirm</DialogClose>
+</DialogFooter>
+```
+
+### Nested dialogs
+
+Dialogs can be nested. The outer dialog dims when a nested one opens:
+
+```tsx
+<Dialog>
+  <DialogTrigger render={<Button />}>Open outer</DialogTrigger>
+  <DialogPopup>
+    <DialogHeader>
+      <DialogTitle>Outer dialog</DialogTitle>
+    </DialogHeader>
+    <DialogPanel>
+      <Dialog>
+        <DialogTrigger render={<Button variant="outline" />}>Open inner</DialogTrigger>
+        <DialogPopup>
+          <DialogHeader>
+            <DialogTitle>Inner dialog</DialogTitle>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose render={<Button />}>Close</DialogClose>
+          </DialogFooter>
+        </DialogPopup>
+      </Dialog>
+    </DialogPanel>
+  </DialogPopup>
+</Dialog>
+```

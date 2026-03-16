@@ -1,0 +1,162 @@
+---
+title: Button
+description: A button or a component that looks like a button.
+---
+
+<ComponentPreview name="p-button-1" />
+
+## Overview
+
+`Button` is a flexible, accessible button component built on Base UI's `useRender` hook. It supports multiple visual variants and sizes, and can render as any element via the `render` prop.
+
+## Installation
+
+```bash
+npx shadcn@latest add @coss/button
+```
+
+## Basic usage
+
+```tsx
+import { Button } from "@/components/ui/button"
+```
+
+```tsx
+<Button>Click me</Button>
+```
+
+## Variants
+
+The `variant` prop controls the visual style of the button.
+
+| Variant               | Description                                            |
+| --------------------- | ------------------------------------------------------ |
+| `default`             | Primary action button with filled background           |
+| `secondary`           | Secondary action with neutral background               |
+| `outline`             | Bordered button with transparent background            |
+| `ghost`               | No border or background, subtle hover state            |
+| `link`                | Styled as an underlined hyperlink                      |
+| `destructive`         | Filled red button for destructive actions              |
+| `destructive-outline` | Bordered red button for destructive actions            |
+
+## Sizes
+
+The `size` prop controls the button dimensions.
+
+| Size      | Description                              |
+| --------- | ---------------------------------------- |
+| `xs`      | Extra-small height (28px / 24px on sm)   |
+| `sm`      | Small height (32px / 28px on sm)         |
+| `default` | Default height (36px / 32px on sm)       |
+| `lg`      | Large height (40px / 36px on sm)         |
+| `xl`      | Extra-large height (44px / 40px on sm)   |
+| `icon`    | Square icon button (36px / 32px on sm)   |
+| `icon-xs` | Extra-small square icon (28px / 24px)    |
+| `icon-sm` | Small square icon (32px / 28px on sm)    |
+| `icon-lg` | Large square icon (40px / 36px on sm)    |
+| `icon-xl` | Extra-large square icon (44px / 40px)    |
+
+## Props
+
+<ParamField path="variant" type='"default" | "secondary" | "outline" | "ghost" | "link" | "destructive" | "destructive-outline"'>
+  The visual style variant. Defaults to `"default"`.
+</ParamField>
+
+<ParamField path="size" type='"xs" | "sm" | "default" | "lg" | "xl" | "icon" | "icon-xs" | "icon-sm" | "icon-lg" | "icon-xl"'>
+  The size of the button. Defaults to `"default"`.
+</ParamField>
+
+<ParamField path="render" type="React.ReactElement">
+  Render the button as a different element, such as a `Link` component. When set, the `type` attribute is omitted automatically.
+</ParamField>
+
+<ParamField path="...props" type="React.ButtonHTMLAttributes<HTMLButtonElement>">
+  All standard button HTML attributes are supported.
+</ParamField>
+
+## Examples
+
+### Default
+
+<ComponentPreview name="p-button-1" />
+
+### Outline
+
+<ComponentPreview name="p-button-2" />
+
+### Secondary
+
+<ComponentPreview name="p-button-3" />
+
+### Destructive
+
+<ComponentPreview name="p-button-4" />
+
+### Destructive Outline
+
+<ComponentPreview name="p-button-5" />
+
+### Ghost
+
+<ComponentPreview name="p-button-6" />
+
+### Link
+
+<ComponentPreview name="p-button-7" />
+
+### Extra-small size
+
+<ComponentPreview name="p-button-8" />
+
+### Small size
+
+<ComponentPreview name="p-button-9" />
+
+### Large size
+
+<ComponentPreview name="p-button-10" />
+
+### Extra-large size
+
+<ComponentPreview name="p-button-11" />
+
+### Disabled
+
+<ComponentPreview name="p-button-12" />
+
+### Icon
+
+Icon-only buttons require an `aria-label` for accessibility.
+
+<ComponentPreview name="p-button-13" />
+
+### Icon small size
+
+<ComponentPreview name="p-button-14" />
+
+### Icon large size
+
+<ComponentPreview name="p-button-15" />
+
+### With icon
+
+When combining an icon with text, mark the icon `aria-hidden="true"` since the button text already describes the action.
+
+<ComponentPreview name="p-button-16" />
+
+### Render as link
+
+Use the `render` prop to render the button as a different element, such as a Next.js `Link`.
+
+```tsx
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+
+<Button render={<Link href="/login" />}>Login</Button>
+```
+
+<ComponentPreview name="p-button-17" />
+
+### Loading
+
+<ComponentPreview name="p-button-18" />
